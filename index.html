@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alban Billiette — Full stack developer</title>
+<meta name="description" content="Freelance full stack developer. Web apps for small teams, and notes on whatever I’m working on.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300..800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script src="js/transitions.js" defer></script>
+<script src="js/lens.js" defer></script>
+</head>
+<body>
+<div data-root="" style="font-family:'Host Grotesk',system-ui,sans-serif;color:var(--fg,#eeebe4);background:var(--bg,#0f0f0e)">
+<div data-pre="" aria-hidden="true" style="position:fixed;inset:0;z-index:60;background:var(--bg,#0f0f0e);color:var(--fg,#eeebe4);display:flex;align-items:flex-end;justify-content:space-between;gap:24px;padding:0 3vw 4vh;box-sizing:border-box">
+<span style="font-size:14px;color:var(--mute,#b3afa6)">Alban Billiette</span>
+<span data-pre-n="" style="font-size:clamp(64px,12vw,200px);font-weight:600;letter-spacing:-0.06em;line-height:0.8;font-variant-numeric:tabular-nums">0</span>
+</div>
+<a data-nav="about" href="#about" style="position:fixed;left:12px;top:-64px;z-index:50;padding:12px 16px;background:var(--fg,#eeebe4);color:var(--bg,#0f0f0e);font-size:14px;border-radius:4px" class="skip">Skip to content</a>
+<div data-spacer="" style="height:100vh"></div>
+<canvas data-glass="" aria-hidden="true" style="position:fixed;left:0;top:0;width:10px;height:10px;pointer-events:none;z-index:5;opacity:0"></canvas>
+<header style="position:fixed;top:0;left:0;right:0;z-index:4;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;column-gap:16px;padding:22px 3vw;font-size:14px;color:var(--fg,#eeebe4)">
+<a data-nav="top" data-lens="" href="#" style="justify-self:start;display:inline-block;font-weight:600;color:var(--fg,#eeebe4)">Alban Billiette</a>
+<nav style="display:flex;gap:clamp(16px,2.4vw,36px)">
+<a data-nav="work" data-lens="" href="#work" style="display:inline-block;color:var(--fg,#eeebe4)" class="dim">Work</a>
+<a data-lens="" href="notes.html" style="display:inline-block;color:var(--fg,#eeebe4)" class="dim">Notes</a>
+<a data-nav="about" data-lens="" href="#about" style="display:inline-block;color:var(--fg,#eeebe4)" class="dim">About</a>
+<a data-nav="contact" data-lens="" href="#contact" style="display:inline-block;color:var(--fg,#eeebe4)" class="dim">Contact</a>
+</nav>
+<div style="justify-self:end;display:flex;align-items:center;gap:clamp(16px,2.4vw,36px)">
+<a data-lens="" href="#" style="display:inline-block;color:var(--accent,#6e95ff)" class="dim">CV</a>
+<button data-theme-toggle="" type="button" aria-label="Switch theme" style="display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;margin:-15px -15px -15px -13px;font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;color:var(--fg,#eeebe4)" class="dim"><svg data-icon-sun="" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:block"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg><svg data-icon-moon="" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:none"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"></path></svg></button>
+</div>
+</header>
+<div data-sbar="" aria-hidden="true" style="position:fixed;top:0;right:0;bottom:0;width:16px;z-index:30;touch-action:none">
+<div data-sthumb="" style="position:absolute;right:4px;top:0;width:3px;height:60px;border-radius:999px;background:var(--fg,#eeebe4);opacity:0.35;transition:width .2s,opacity .2s,background-color .2s"></div>
+</div>
+<div data-net="" aria-hidden="true" style="position:fixed;right:28px;bottom:24px;z-index:30;display:grid;grid-template-columns:repeat(4,8px);grid-template-rows:repeat(3,8px);gap:2px">
+<span data-face="0" style="grid-row:1;grid-column:2;border-radius:2px;background:var(--line,rgba(238,235,228,0.14));transition:background-color .5s"></span>
+<span data-face="1" style="grid-row:2;grid-column:1;border-radius:2px;background:var(--line,rgba(238,235,228,0.14));transition:background-color .5s"></span>
+<span data-face="2" style="grid-row:2;grid-column:2;border-radius:2px;background:var(--line,rgba(238,235,228,0.14));transition:background-color .5s"></span>
+<span data-face="3" style="grid-row:2;grid-column:3;border-radius:2px;background:var(--line,rgba(238,235,228,0.14));transition:background-color .5s"></span>
+<span data-face="4" style="grid-row:2;grid-column:4;border-radius:2px;background:var(--line,rgba(238,235,228,0.14));transition:background-color .5s"></span>
+<span data-face="5" style="grid-row:3;grid-column:2;border-radius:2px;background:var(--line,rgba(238,235,228,0.14));transition:background-color .5s"></span>
+</div>
+<div data-egg="" role="status" aria-live="polite" style="position:fixed;left:3vw;bottom:24px;z-index:30;font-size:14px;color:var(--fg,#eeebe4);opacity:0;transform:translateY(8px);transition:opacity .4s,transform .4s;pointer-events:none"></div>
+<div data-reveal="" style="position:fixed;left:0;right:0;bottom:0;z-index:0;padding:4vh 3vw 3vh;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;gap:3vh;overflow:hidden;will-change:transform">
+<div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px;font-size:14px;color:var(--mute,#b3afa6)">
+<span data-lens="" style="display:inline-block">© 2026 Alban Billiette</span>
+<div style="display:flex;flex-wrap:wrap;gap:12px 24px">
+<a data-lens="" href="mailto:hello@albanbilliette.dev" style="display:inline-block">Email</a>
+<a data-lens="" href="#" style="display:inline-block">GitHub</a>
+<a data-lens="" href="#" style="display:inline-block">LinkedIn</a>
+</div>
+<a data-nav="top" data-lens="" href="#" style="display:inline-block">Back to top ↑</a>
+</div>
+<span data-wordmark="" data-lens="" style="display:block;font-size:clamp(40px,min(11.5vw,17vh),220px);font-weight:600;letter-spacing:-0.062em;line-height:0.8;margin-left:-0.04em;white-space:nowrap">Alban Billiette</span>
+</div>
+<div data-preview="" data-lens="panel" aria-hidden="true" style="position:fixed;left:0;top:0;width:clamp(200px,20vw,300px);height:clamp(130px,13vw,195px);z-index:3;pointer-events:none;opacity:0;overflow:hidden;background-color:var(--p1,#29261f);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
+<span data-lens="" data-preview-label="" style="position:absolute;left:14px;top:12px;font-size:12px;white-space:nowrap">cover image · 01</span>
+</div>
+<main id="main" data-content="" style="position:fixed;top:0;left:0;width:100%;will-change:transform;z-index:1">
+
+<section data-sec="top" style="position:relative;background:var(--bg,#0f0f0e);height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 3vw 5vh;box-sizing:border-box">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:4vh">
+<div data-rg="" data-rg-delay="0.7" style="max-width:340px;display:flex;flex-direction:column;align-items:flex-start;gap:18px">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--accent,#6e95ff)">Freelance, open to new projects</span>
+<p data-rv="" data-lens="" style="margin:0;font-size:17px;line-height:1.55;font-weight:400">Freelance full stack developer. I make web apps, mostly for small teams, and keep notes on whatever I’m working on.</p>
+</div>
+<div data-rg="" data-rg-delay="0.9" style="display:flex;align-items:center;gap:14px">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Scroll</span>
+<span style="position:relative;display:block;width:1px;height:44px;background:var(--line,rgba(238,235,228,0.14));overflow:hidden"><span data-cue="" style="position:absolute;left:0;top:0;width:1px;height:100%;background:var(--fg,#eeebe4)"></span></span>
+</div>
+</div>
+<h1 data-name="" data-rg="hero" aria-label="Alban Billiette" style="margin:0 0 0 -0.04em;align-self:flex-start;font-size:18vw;font-weight:600;line-height:0.86;letter-spacing:-0.062em;white-space:nowrap"><span data-rv="" data-lens="" style="display:inline-block">A</span><span data-rv="" data-lens="" style="display:inline-block">l</span><span data-rv="" data-lens="" style="display:inline-block">b</span><span data-rv="" data-lens="" style="display:inline-block">a</span><span data-rv="" data-lens="" style="display:inline-block">n</span><span style="display:inline-block;width:0.22em"></span><span data-rv="" data-lens="" style="display:inline-block">B</span><span data-rv="" data-lens="" style="display:inline-block">i</span><span data-rv="" data-lens="" style="display:inline-block">l</span><span data-rv="" data-lens="" style="display:inline-block">l</span><span data-rv="" data-lens="" style="display:inline-block">i</span><span data-rv="" data-lens="" style="display:inline-block">e</span><span data-rv="" data-lens="" style="display:inline-block">t</span><span data-rv="" data-lens="" style="display:inline-block">t</span><span data-rv="" data-lens="" style="display:inline-block">e</span></h1>
+</section>
+
+<section data-sec="about" style="position:relative;background:var(--bg,#0f0f0e);min-height:90vh;padding:14vh 3vw 10vh;box-sizing:border-box;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:1.5vw;align-content:center">
+<div data-rg="" style="grid-column:1 / -1;margin-bottom:6vh"><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">About</span></div>
+<p data-rg="" style="grid-column:1 / span 9;margin:0;font-size:clamp(28px,4.1vw,76px);line-height:1.12;letter-spacing:-0.022em;font-weight:400">
+<span data-rv="" data-lens="" style="display:inline-block">I’m</span> <span data-rv="" data-lens="" style="display:inline-block">Alban.</span> <span data-rv="" data-lens="" style="display:inline-block">I</span> <span data-rv="" data-lens="" style="display:inline-block">work</span> <span data-rv="" data-lens="" style="display:inline-block">across</span> <span data-rv="" data-lens="" style="display:inline-block">the</span> <span data-rv="" data-lens="" style="display:inline-block">whole</span> <span data-rv="" data-lens="" style="display:inline-block">stack,</span> <span data-rv="" data-lens="" style="display:inline-block">but</span> <span data-rv="" data-lens="" style="display:inline-block">the</span> <span data-rv="" data-lens="" style="display:inline-block">part</span> <span data-rv="" data-lens="" style="display:inline-block">I</span> <span data-rv="" data-lens="" style="display:inline-block">enjoy</span> <span data-rv="" data-lens="" style="display:inline-block">most</span> <span data-rv="" data-lens="" style="display:inline-block">is</span> <span data-rv="" data-lens="" style="display:inline-block">the</span> <span data-rv="" data-lens="" style="display:inline-block">one</span> <span data-rv="" data-lens="" style="display:inline-block">people</span> <span data-rv="" data-lens="" style="display:inline-block">actually</span> <span data-rv="" data-lens="" style="display:inline-block">click</span> <span data-rv="" data-lens="" style="display:inline-block">on.</span> <span data-rv="" data-lens="" style="display:inline-block">Outside</span> <span data-rv="" data-lens="" style="display:inline-block">client</span> <span data-rv="" data-lens="" style="display:inline-block">work</span> <span data-rv="" data-lens="" style="display:inline-block">I</span> <span data-rv="" data-lens="" style="display:inline-block">tinker</span> <span data-rv="" data-lens="" style="display:inline-block">with</span> <span data-rv="" data-lens="" style="display:inline-block">hardware,</span> <span data-rv="" data-lens="" style="display:inline-block">try</span> <span data-rv="" data-lens="" style="display:inline-block">new</span> <span data-rv="" data-lens="" style="display:inline-block">tools</span> <span data-rv="" data-lens="" style="display:inline-block">and</span> <span data-rv="" data-lens="" style="display:inline-block">write</span> <span data-rv="" data-lens="" style="display:inline-block">some</span> <span data-rv="" data-lens="" style="display:inline-block">of</span> <span data-rv="" data-lens="" style="display:inline-block">it</span> <span data-rv="" data-lens="" style="display:inline-block">down.</span>
+</p>
+<div data-rg="" style="grid-column:1 / span 9;margin-top:5vh;display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 14px">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--accent,#6e95ff)">Now</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:17px;line-height:1.5">Building a client dashboard and reading about distributed systems.</span>
+</div>
+<div style="grid-column:1 / -1;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:24px 1.5vw;margin-top:7vh">
+<div data-rg="" style="width:clamp(150px,22vw,320px);display:flex;flex-direction:column;gap:10px">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Currently</span>
+<span data-rv="" data-lens="" style="display:block;font-size:16px;line-height:1.62">Freelance full stack developer</span>
+</div>
+<div data-rg="" style="width:clamp(160px,22vw,320px);display:flex;flex-direction:column;gap:10px">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Based in</span>
+<span data-rv="" data-lens="" style="display:block;font-size:16px;line-height:1.62">Europe, working remotely</span>
+</div>
+</div>
+<div style="grid-column:1 / -1;margin-top:10vh">
+<div data-rg="" style="margin-bottom:3vh"><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Achievements</span></div>
+<div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+<div data-rg="" style="display:grid;grid-template-columns:minmax(56px,8vw) minmax(0,1fr);column-gap:2vw;align-items:baseline;padding:2.6vh 0">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">2026</span>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 24px;min-width:0">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(20px,1.9vw,30px);font-weight:500;letter-spacing:-0.02em;line-height:1.2">1st place, AI track</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Northlake Hackathon</span>
+</div>
+</div>
+<div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+<div data-rg="" style="display:grid;grid-template-columns:minmax(56px,8vw) minmax(0,1fr);column-gap:2vw;align-items:baseline;padding:2.6vh 0">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">2025</span>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 24px;min-width:0">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(20px,1.9vw,30px);font-weight:500;letter-spacing:-0.02em;line-height:1.2">Finalist</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Open Data Challenge</span>
+</div>
+</div>
+<div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+<div data-rg="" style="display:grid;grid-template-columns:minmax(56px,8vw) minmax(0,1fr);column-gap:2vw;align-items:baseline;padding:2.6vh 0">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">2025</span>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 24px;min-width:0">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(20px,1.9vw,30px);font-weight:500;letter-spacing:-0.02em;line-height:1.2">Talk at a local JavaScript meetup</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">DevRiver Conf</span>
+</div>
+</div>
+<div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+<div data-rg="" style="display:grid;grid-template-columns:minmax(56px,8vw) minmax(0,1fr);column-gap:2vw;align-items:baseline;padding:2.6vh 0">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">2024</span>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 24px;min-width:0">
+<span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(20px,1.9vw,30px);font-weight:500;letter-spacing:-0.02em;line-height:1.2">Top 5 of 120 teams</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">48h Build Weekend</span>
+</div>
+</div>
+<div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+</div>
+</section>
+
+<section data-sec="stack" style="position:relative;background:var(--bg,#0f0f0e);height:230vh">
+<div data-pin="" style="position:absolute;top:0;left:0;width:100%;height:100vh;overflow:hidden">
+<div style="position:absolute;top:13vh;left:3vw;right:3vw;display:flex;justify-content:space-between">
+<div data-rg=""><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Stack</span></div>
+<div data-rg=""><span data-rv="" data-lens="" data-stack-count="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">01 / 04</span></div>
+</div>
+<div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
+<div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">Interface</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">React · TypeScript · Next.js · Tailwind</div>
+</div>
+<div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
+<div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">API</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">Node.js · REST · tRPC · GraphQL</div>
+</div>
+<div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
+<div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">Data</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">PostgreSQL · Redis · Prisma · SQLite</div>
+</div>
+<div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
+<div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">Infrastructure</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">Docker · Vercel · AWS · GitHub Actions</div>
+</div>
+</div>
+</section>
+
+<section data-sec="work" style="position:relative;background:var(--bg,#0f0f0e);height:170vh">
+<div data-pin="" style="position:absolute;top:0;left:0;width:100%;height:100vh;overflow:hidden">
+<div style="position:absolute;top:13vh;left:3vw;right:3vw;display:flex;justify-content:space-between">
+<div data-rg=""><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Work</span></div>
+<div data-rg=""><span data-rv="" data-lens="" data-work-count="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">01 / 03</span></div>
+</div>
+<div data-track="" style="position:absolute;top:max(19vh,90px);left:0;display:flex;gap:5vw;padding:0 3vw;will-change:transform">
+<article style="flex:none;width:max(56vw,min(84vw,520px))">
+<div data-lens="panel" style="position:relative;height:clamp(190px,min(48vh,60vw),640px);overflow:hidden;background-color:var(--p1,#29261f);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
+<span data-lens="" style="position:absolute;left:22px;top:18px;font-size:14px;white-space:nowrap">project screenshot · 1600 × 1000</span>
+<span data-lens="" style="position:absolute;right:3%;bottom:-0.14em;font-size:min(30vh,22vw);font-weight:600;letter-spacing:-0.06em;line-height:1;white-space:nowrap">01</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 40px;margin-top:3.2vh">
+<h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">Atlas Ledger</h3>
+<div style="max-width:380px;display:flex;flex-direction:column;gap:14px">
+<p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">Real-time ledger and reconciliation for a regional freight network. Event-sourced backend, dashboards that update in under 100 ms.</p>
+<span data-lens="" style="display:block;font-size:14px;line-height:1.5;color:var(--fg,#eeebe4)">Realtime, Event sourcing, Dashboards</span>
+<div style="display:flex;gap:20px;font-size:15px"><a data-lens="" href="#" style="display:inline-block">Live ↗</a><a data-lens="" href="#" style="display:inline-block">Code ↗</a></div>
+</div>
+</div>
+</article>
+<article style="flex:none;width:max(56vw,min(84vw,520px))">
+<div data-lens="panel" style="position:relative;height:clamp(190px,min(48vh,60vw),640px);overflow:hidden;background-color:var(--p2,#1f242a);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
+<span data-lens="" style="position:absolute;left:22px;top:18px;font-size:14px;white-space:nowrap">project screenshot · 1600 × 1000</span>
+<span data-lens="" style="position:absolute;right:3%;bottom:-0.14em;font-size:min(30vh,22vw);font-weight:600;letter-spacing:-0.06em;line-height:1;white-space:nowrap">02</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 40px;margin-top:3.2vh">
+<h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">Moth</h3>
+<div style="max-width:380px;display:flex;flex-direction:column;gap:14px">
+<p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">Offline-first notes app with conflict-free sync across devices. Local database, background replication, end-to-end encryption.</p>
+<span data-lens="" style="display:block;font-size:14px;line-height:1.5;color:var(--fg,#eeebe4)">CRDT, Mobile, Sync</span>
+<div style="display:flex;gap:20px;font-size:15px"><a data-lens="" href="#" style="display:inline-block">Live ↗</a><a data-lens="" href="#" style="display:inline-block">Code ↗</a></div>
+</div>
+</div>
+</article>
+<article style="flex:none;width:max(56vw,min(84vw,520px))">
+<div data-lens="panel" style="position:relative;height:clamp(190px,min(48vh,60vw),640px);overflow:hidden;background-color:var(--p3,#23271e);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
+<span data-lens="" style="position:absolute;left:22px;top:18px;font-size:14px;white-space:nowrap">project screenshot · 1600 × 1000</span>
+<span data-lens="" style="position:absolute;right:3%;bottom:-0.14em;font-size:min(30vh,22vw);font-weight:600;letter-spacing:-0.06em;line-height:1;white-space:nowrap">03</span>
+</div>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 40px;margin-top:3.2vh">
+<h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">Paperweight</h3>
+<div style="max-width:380px;display:flex;flex-direction:column;gap:14px">
+<p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">Evaluation harness for language-model features. Versioned test sets, side-by-side diffs and regression alerts in CI.</p>
+<span data-lens="" style="display:block;font-size:14px;line-height:1.5;color:var(--fg,#eeebe4)">LLM evals, Tooling, CI</span>
+<div style="display:flex;gap:20px;font-size:15px"><a data-lens="" href="#" style="display:inline-block">Live ↗</a><a data-lens="" href="#" style="display:inline-block">Code ↗</a></div>
+</div>
+</div>
+</article>
+</div>
+</div>
+</section>
+
+<section data-sec="writing" style="position:relative;background:var(--bg,#0f0f0e);padding:12vh 3vw 10vh">
+<div style="display:flex;justify-content:space-between;margin-bottom:7vh">
+<div data-rg=""><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Notes</span></div>
+<div data-rg=""><a data-rv="" data-lens="" href="notes.html" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">All notes →</a></div>
+</div>
+<div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+<div data-essay="" role="link" tabindex="0" style="display:grid;grid-template-columns:minmax(32px,8vw) minmax(0,1fr);align-items:baseline;column-gap:2vw;padding:3.6vh 0;cursor:pointer">
+<span data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">01</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:12px">
+<div data-ewrap="" data-rg="" style="min-width:0"><span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(30px,4.6vw,84px);font-weight:450;letter-spacing:-0.035em;line-height:1.06">Rebuilding my homelab, again</span></div>
+<span data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6);white-space:nowrap">Sep 2026 · Hardware · 12 min</span>
+</div>
+</div>
+<div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+<div data-essay="" role="link" tabindex="0" style="display:grid;grid-template-columns:minmax(32px,8vw) minmax(0,1fr);align-items:baseline;column-gap:2vw;padding:3.6vh 0;cursor:pointer">
+<span data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">02</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:12px">
+<div data-ewrap="" data-rg="" style="min-width:0"><span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(30px,4.6vw,84px);font-weight:450;letter-spacing:-0.035em;line-height:1.06">Shipping an AI feature in a weekend</span></div>
+<span data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6);white-space:nowrap">Aug 2026 · AI · 9 min</span>
+</div>
+</div>
+<div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+<div data-essay="" role="link" tabindex="0" style="display:grid;grid-template-columns:minmax(32px,8vw) minmax(0,1fr);align-items:baseline;column-gap:2vw;padding:3.6vh 0;cursor:pointer">
+<span data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">03</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:12px">
+<div data-ewrap="" data-rg="" style="min-width:0"><span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(30px,4.6vw,84px);font-weight:450;letter-spacing:-0.035em;line-height:1.06">A keyboard I built and mostly regret</span></div>
+<span data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6);white-space:nowrap">Jul 2026 · Hardware · 6 min</span>
+</div>
+</div>
+<div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+</section>
+
+<section data-sec="contact" style="position:relative;background:var(--bg,#0f0f0e);min-height:70vh;box-sizing:border-box;padding:10vh 3vw 6vh;display:flex;flex-direction:column">
+<div data-rg=""><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Contact</span></div>
+<div aria-hidden="true" style="flex:1;min-height:56px;display:flex;align-items:center;overflow:hidden;margin:0 -3vw"><span data-marq="" data-lens="" style="display:inline-block;white-space:nowrap;font-size:clamp(40px,min(9vw,13vh),170px);font-weight:600;letter-spacing:-0.05em;line-height:1.1;color:var(--mute,#b3afa6);opacity:0.22;will-change:transform">Full stack — Freelance — Europe, remote — Full stack — Freelance — Europe, remote — Full stack — Freelance — Europe, remote — </span></div>
+<div data-rg="" style="font-size:clamp(48px,min(12.4vw,19vh),260px);font-weight:600;letter-spacing:-0.062em;line-height:0.9;margin-left:-0.04em">
+<div data-hl1=""><span data-rv="" data-lens="" style="display:inline-block;white-space:nowrap">Let’s build</span></div>
+<div><span data-rv="" data-lens="" style="display:inline-block;white-space:nowrap">something</span></div>
+</div>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:28px;margin-top:6vh">
+<div data-rg="" style="display:flex;flex-direction:column;gap:14px"><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Write to me</span><a data-rv="" data-lens="" href="mailto:hello@albanbilliette.dev" style="display:inline-block;font-size:clamp(22px,3.2vw,56px);font-weight:500;letter-spacing:-0.03em;line-height:1.15">hello@albanbilliette.dev</a><a data-rv="" data-lens="" href="#" style="display:inline-block;font-size:17px;color:var(--accent,#6e95ff)">Book a 20-min call →</a></div>
+<div data-rg="" style="display:flex;flex-wrap:wrap;gap:12px 28px;font-size:15px">
+<a data-rv="" data-lens="" href="#" style="display:inline-block;color:var(--accent,#6e95ff)">Download CV (PDF)</a>
+<a data-rv="" data-lens="" href="#" style="display:inline-block">GitHub</a>
+<a data-rv="" data-lens="" href="#" style="display:inline-block">LinkedIn</a>
+<a data-rv="" data-lens="" href="#" style="display:inline-block">Are.na</a>
+<a data-rv="" data-lens="" href="#" style="display:inline-block">RSS</a>
+</div>
+</div>
+</section>
+<div data-reveal-space="" style="height:30vh"></div>
+
+</main>
+</div>
+</body>
+</html>
