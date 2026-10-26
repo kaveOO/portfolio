@@ -1,4 +1,5 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
+import { url } from './paths';
 
 export type Note = CollectionEntry<'notes'>;
 
@@ -8,7 +9,7 @@ export async function getNotes(): Promise<Note[]> {
   return notes.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
-export const noteUrl = (note: Note) => `/notes/${note.id}/`;
+export const noteUrl = (note: Note) => url(`/notes/${note.id}/`);
 
 // Fixed English month names ("Sep", not the locale-dependent "Sept").
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

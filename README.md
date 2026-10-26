@@ -4,17 +4,27 @@ Personal site built with [Astro](https://astro.build), from the "Lens Portfolio"
 
 ```sh
 npm install
-npm run dev       # http://localhost:4321, reloads as you edit (drafts visible)
+npm run dev       # http://localhost:4321/portfolio/, reloads as you edit (drafts visible)
 npm run build     # static site in dist/ (drafts left out)
 npm run preview   # serve dist/ locally
 ```
 
 Astro is pinned to 7.4.1: 7.4.2+ needs Node 22.23.4 or newer.
 
+## Deploying
+
+Every push to `main` builds the site and publishes it to GitHub Pages
+(`.github/workflows/deploy.yml`) at https://kaveoo.github.io/portfolio/. The repo's
+Pages source must be set to "GitHub Actions" (Settings → Pages).
+
+The site lives under `/portfolio/`, so internal links go through `url()` from
+`src/lib/paths.ts` (`url('/notes/')` → `/portfolio/notes/`). If you move to a custom
+domain, set `site` and remove `base` in `astro.config.mjs`.
+
 ## Writing a note
 
 Add a Markdown file to `src/content/notes/`. The file name becomes the URL:
-`src/content/notes/my-first-note.md` → `/notes/my-first-note/`.
+`src/content/notes/my-first-note.md` → `/portfolio/notes/my-first-note/`.
 
 ```md
 ---
@@ -44,12 +54,13 @@ note; converted to WebP and lazy-loaded at build time), and figures with caption
 
 ```html
 <figure>
-<img src="/images/rack.jpg" alt="…">
+<img src="/portfolio/images/rack.jpg" alt="…">
 <figcaption>Caption.</figcaption>
 </figure>
 ```
 
-(`/images/rack.jpg` is a file in `public/images/`; these are served as-is, not converted.)
+(`rack.jpg` is a file in `public/images/`, served as-is, not converted. Plain HTML
+in a note doesn't get the base path added, so prefer the Markdown image syntax.)
 
 The seven notes marked `draft: true` are placeholders from the design. Write them
 or delete them.

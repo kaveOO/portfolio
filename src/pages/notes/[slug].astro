@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
+import { url } from '../../lib/paths';
 import { getNotes, noteUrl, monthYear, fullDate, readingMinutes, relatedNotes, type Note } from '../../lib/notes';
 import '../../styles/note.css';
 
@@ -28,7 +29,7 @@ const related = relatedNotes(note, notes);
 
 <article>
 <div style="padding:9vh 0 6vh;max-width:980px">
-<a href="/notes/" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6);margin-bottom:5vh">← All notes</a>
+<a href={url('/notes/')} style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6);margin-bottom:5vh">← All notes</a>
 <div style="display:flex;flex-wrap:wrap;gap:6px 10px;font-size:15px;color:var(--mute,#b3afa6);margin-bottom:3vh">
 <span>{fullDate(note.data.date)}</span><span aria-hidden="true">·</span><span>{note.data.tag}</span><span aria-hidden="true">·</span><span>{readingMinutes(note)} min read</span>
 </div>
@@ -70,8 +71,8 @@ const related = relatedNotes(note, notes);
 )}
 
 <footer style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 24px;margin-top:10vh;padding:4vh 0 28px;border-top:1px solid var(--line,rgba(238,235,228,0.14));font-size:14px;color:var(--mute,#b3afa6)">
-<a href="/" style="display:inline-flex;align-items:center;min-height:44px;font-size:17px;color:var(--fg,#eeebe4)">← Back to Alban’s site</a>
-<div style="display:flex;gap:24px;align-items:center"><a href="/notes/">All notes</a><span>© 2026 Alban Billiette</span></div>
+<a href={url('/')} style="display:inline-flex;align-items:center;min-height:44px;font-size:17px;color:var(--fg,#eeebe4)">← Back to Alban’s site</a>
+<div style="display:flex;gap:24px;align-items:center"><a href={url('/notes/')}>All notes</a><span>© 2026 Alban Billiette</span></div>
 </footer>
 </div>
 <script src="../../scripts/note.js"></script>

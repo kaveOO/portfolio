@@ -61,13 +61,13 @@ write('src/styles/home.css', f'/* {GENERATED} */\n' + css)
 body = src[src.index('<div ref="{{ rootRef }}"'):src.index('</x-dc>')].rstrip()
 for old, new in [('ref="{{ rootRef }}"', 'data-root=""'),
                  (' style-hover="opacity:0.6"', ' class="dim"'),
-                 (' style-focus="top:12px"', ' class="skip"'),
-                 ('href="Notes.dc.html"', 'href="/notes/"')]:
+                 (' style-focus="top:12px"', ' class="skip"')]:
     body = body.replace(old, new)
+# Braces are Astro expressions; keep any literal ones as text. Expressions are added after this.
+body = re.sub(r'[{}]', lambda m: "{'%s'}" % m.group(0), body)
+body = body.replace('href="Notes.dc.html"', "href={url('/notes/')}")
 if 'style-' in body or '.dc.html' in body:
     sys.exit('sync-design: the design uses an attribute or link this script does not convert yet')
-# Braces are Astro expressions; keep any literal ones as text.
-body = re.sub(r'[{}]', lambda m: "{'%s'}" % m.group(0), body)
 
 # Notes rows: the design has three hand-written rows; render the three latest notes instead.
 row_re = re.compile(r'<div data-essay=[\s\S]*?\n</div>\n</div>\n<div data-lens="" style="height:1px;[^"]*"></div>')
@@ -90,6 +90,7 @@ page = f'''---
 // {GENERATED}
 import Base from '../layouts/Base.astro';
 import {{ getNotes, noteUrl, monthYear, readingMinutes }} from '../lib/notes';
+import {{ url }} from '../lib/paths';
 import '../styles/home.css';
 
 const latest = (await getNotes()).slice(0, 3);

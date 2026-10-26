@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import SiteHeader from '../components/SiteHeader.astro';
+import { url } from '../lib/paths';
 import '../styles/404.css';
 ---
 <Base
@@ -16,8 +17,8 @@ import '../styles/404.css';
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:28px">
 <p style="margin:0;max-width:440px;font-size:clamp(19px,1.6vw,24px);line-height:1.45;text-wrap:pretty">This page doesn’t exist, or it moved. The rest of the site is still here.</p>
 <div style="display:flex;flex-wrap:wrap;gap:12px">
-<a href="/" class="btn-solid" style="display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:999px;background:#eeebe4;color:#0f0f0e;font-size:15px;font-weight:500">Back home</a>
-<a href="/notes/" class="btn-line" style="display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:999px;border:1px solid rgba(238,235,228,0.18);font-size:15px">Read notes</a>
+<a href={url('/')} class="btn-solid" style="display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:999px;background:#eeebe4;color:#0f0f0e;font-size:15px;font-weight:500">Back home</a>
+<a href={url('/notes/')} class="btn-line" style="display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:999px;border:1px solid rgba(238,235,228,0.18);font-size:15px">Read notes</a>
 </div>
 </div>
 </main>
