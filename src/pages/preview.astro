@@ -1,0 +1,37 @@
+---
+// Phone preview: the site's pages side by side in phone-sized frames (design tool, not linked from the site).
+import { getNotes, noteUrl } from '../lib/notes';
+import '../styles/preview.css';
+
+const [latest] = await getNotes();
+const pages = [
+  { label: 'Home', src: '/' },
+  { label: 'Notes', src: '/notes/' },
+  ...(latest ? [{ label: 'Note', src: noteUrl(latest) }] : []),
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Phone preview — Alban Billiette</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div style="font-family:'Host Grotesk',system-ui,sans-serif;padding:56px 64px 80px;min-height:100vh;box-sizing:border-box">
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px;margin-bottom:40px">
+<div style="display:flex;flex-direction:column;gap:8px">
+<h1 style="margin:0;font-size:32px;font-weight:600;letter-spacing:-0.03em">Phone preview</h1>
+<p style="margin:0;font-size:15px;color:#b3afa6">The live site at phone widths. Each screen scrolls on its own.</p>
+</div>
+<!-- Device size buttons: built by preview.js -->
+<div data-sizes="" style="display:flex;gap:8px"></div>
+</div>
+<!-- Phone frames: one per page, built by preview.js -->
+<div data-screens="" data-pages={JSON.stringify(pages)} style="display:flex;flex-wrap:wrap;gap:56px"></div>
+</div>
+<script src="../scripts/preview.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+---
+import Base from '../../layouts/Base.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import { getNotes, noteUrl, monthYear, readingMinutes, topics } from '../../lib/notes';
+import '../../styles/notes.css';
+
+const notes = await getNotes();
+const countLabel = String(notes.length).padStart(2, '0') + (notes.length === 1 ? ' entry' : ' entries');
+---
+<Base title="Notes — Alban Billiette" description="Things I’ve worked on, learned or read about. No schedule, no newsletter.">
+<div style="min-height:100vh;font-family:'Host Grotesk',system-ui,sans-serif;background:var(--bg,#0f0f0e);color:var(--fg,#eeebe4);padding:0 3vw;box-sizing:border-box;display:flex;flex-direction:column">
+<SiteHeader current="notes" />
+
+<section style="padding:14vh 0 8vh;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px">
+<h1 style="margin:0 0 0 -0.04em;font-size:clamp(88px,21vw,340px);font-weight:600;line-height:0.86;letter-spacing:-0.055em">Notes</h1>
+<div style="max-width:360px;display:flex;flex-direction:column;gap:14px;padding-bottom:1.5vw">
+<p style="margin:0;font-size:17px;line-height:1.55">Things I’ve worked on, learned or read about. No schedule, no newsletter.</p>
+<p style="margin:0;font-size:15px;line-height:1.5"><span style="color:var(--accent,#6e95ff)">Now</span>  Building a client dashboard and reading about distributed systems.</p>
+<span data-count="" style="font-size:14px;color:var(--mute,#b3afa6)">{countLabel}</span>
+</div>
+</section>
+
+<!-- Topic filters: built by notes.js once there are 10 or more notes. -->
+<div data-filters="" data-topics={JSON.stringify(['All', ...topics(notes)])} role="group" aria-label="Filter by topic" hidden style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4vh"></div>
+
+<div style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+{notes.map((n) => (
+<a data-tag={n.data.tag} href={noteUrl(n)} class="row" style="display:grid;grid-template-columns:minmax(84px,12vw) minmax(0,1fr);column-gap:2vw;align-items:baseline;padding:3.4vh 0;border-bottom:1px solid var(--line,rgba(238,235,228,0.14));transition:color .25s">
+<span style="font-size:14px;color:var(--mute,#b3afa6)">{monthYear(n.data.date)}</span>
+<span style="display:flex;flex-direction:column;gap:10px;min-width:0">
+<span style="font-size:clamp(26px,3.4vw,58px);font-weight:500;letter-spacing:-0.03em;line-height:1.08;text-wrap:pretty">{n.data.title}{n.data.draft && <span class="draft">Draft</span>}</span>
+<span style="font-size:14px;color:var(--mute,#b3afa6)">{n.data.tag} · {readingMinutes(n)} min</span>
+</span>
+</a>
+))}
+
+<div style="flex:1"></div>
+<footer style="display:flex;justify-content:space-between;gap:16px;padding:12vh 0 24px;font-size:13px;color:var(--mute,#b3afa6)">
+<span>© 2026 Alban Billiette</span>
+<a href="/">← Back to Alban’s site</a>
+</footer>
+</div>
+<script src="../../scripts/notes.js"></script>
+</Base>

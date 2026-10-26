@@ -1,0 +1,29 @@
+---
+import Base from '../layouts/Base.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import '../styles/404.css';
+---
+<Base
+  title="Page not found — Alban Billiette"
+  fonts="https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300..800&display=swap"
+  noindex
+>
+<div style="min-height:100vh;box-sizing:border-box;padding:0 3vw;font-family:'Host Grotesk',system-ui,sans-serif;background:#0f0f0e;color:#eeebe4;display:flex;flex-direction:column">
+<SiteHeader />
+<main style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:5vh;padding:8vh 0">
+<span style="font-size:14px;color:#b3afa6">Error 404</span>
+<h1 aria-label="404" style="margin:0 0 0 -0.04em;font-size:clamp(120px,30vw,460px);font-weight:600;letter-spacing:-0.06em;line-height:0.8"><span aria-hidden="true">404</span><span aria-hidden="true" style="display:inline-block;width:0.13em;height:0.13em;margin-left:0.06em;border-radius:50%;background:#6e95ff;vertical-align:baseline"></span></h1>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:28px">
+<p style="margin:0;max-width:440px;font-size:clamp(19px,1.6vw,24px);line-height:1.45;text-wrap:pretty">This page doesn’t exist, or it moved. The rest of the site is still here.</p>
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+<a href="/" class="btn-solid" style="display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:999px;background:#eeebe4;color:#0f0f0e;font-size:15px;font-weight:500">Back home</a>
+<a href="/notes/" class="btn-line" style="display:inline-flex;align-items:center;min-height:48px;padding:0 22px;border-radius:999px;border:1px solid rgba(238,235,228,0.18);font-size:15px">Read notes</a>
+</div>
+</div>
+</main>
+<footer style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;padding:4vh 0 28px;border-top:1px solid rgba(238,235,228,0.14);font-size:14px;color:#b3afa6">
+<span>© 2026 Alban Billiette</span>
+<a href="mailto:hello@albanbilliette.dev">hello@albanbilliette.dev</a>
+</footer>
+</div>
+</Base>

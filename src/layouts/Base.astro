@@ -1,0 +1,50 @@
+---
+// Page shell shared by every page of the site. The three head scripts run before first paint,
+// so they are emitted as plain (non-module) scripts; ?url still gives them hashed file names.
+import transitionsUrl from '../scripts/transitions.js?url';
+import mobileNavUrl from '../scripts/mobile-nav.js?url';
+import scrollbarUrl from '../scripts/scrollbar.js?url';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Google Fonts stylesheet URL. */
+  fonts?: string;
+  noindex?: boolean;
+  /** Hold the page-transition fade-in until the page sets window.__abReady (the landing page). */
+  waitForReady?: boolean;
+  /** Add the custom scrollbar (the landing page draws its own). */
+  scrollbar?: boolean;
+}
+
+const {
+  title,
+  description,
+  fonts = 'https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@300..800&family=IBM+Plex+Mono:wght@400;500&display=swap',
+  noindex = false,
+  waitForReady = false,
+  scrollbar = true,
+} = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="color-scheme" content="dark">
+<style is:inline>html,body{background:#0f0f0e !important;}</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{title}</title>
+{description && <meta name="description" content={description}>}
+{noindex && <meta name="robots" content="noindex">}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href={fonts} rel="stylesheet">
+{waitForReady && <script is:inline>window.__abWait = 1;</script>}
+<script is:inline src={transitionsUrl}></script>
+<script is:inline src={mobileNavUrl}></script>
+{scrollbar && <script is:inline src={scrollbarUrl}></script>}
+</head>
+<body>
+<slot />
+</body>
+</html>

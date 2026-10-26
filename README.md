@@ -1,0 +1,68 @@
+# Portfolio
+
+Personal site built with [Astro](https://astro.build), from the "Lens Portfolio" Claude Design project.
+
+```sh
+npm install
+npm run dev       # http://localhost:4321, reloads as you edit (drafts visible)
+npm run build     # static site in dist/ (drafts left out)
+npm run preview   # serve dist/ locally
+```
+
+Astro is pinned to 7.4.1: 7.4.2+ needs Node 22.23.4 or newer.
+
+## Writing a note
+
+Add a Markdown file to `src/content/notes/`. The file name becomes the URL:
+`src/content/notes/my-first-note.md` → `/notes/my-first-note/`.
+
+```md
+---
+title: My first note
+date: 2026-10-26
+tag: Building
+description: One or two sentences shown under the title and used for search results.
+draft: true          # optional: visible in `npm run dev`, left out of the build
+readingTime: 6       # optional: minutes; worked out from the word count otherwise
+---
+
+Intro paragraph.
+
+## A section
+
+`##` headings make up the "On this page" list beside the note.
+```
+
+The note shows up on the Notes page, in the latest three on the home page, and
+under "Related notes" on other notes (same tag first). Topic filters appear on
+the Notes page once there are 10 notes.
+
+Supported in the body: paragraphs, `##`/`###` headings, lists, links, `> quotes`,
+inline `code`, fenced code blocks (with a language, e.g. ```` ```bash ````, to get
+the label and Copy button), images (`![alt](./image.jpg)` with the file next to the
+note; converted to WebP and lazy-loaded at build time), and figures with captions:
+
+```html
+<figure>
+<img src="/images/rack.jpg" alt="…">
+<figcaption>Caption.</figcaption>
+</figure>
+```
+
+(`/images/rack.jpg` is a file in `public/images/`; these are served as-is, not converted.)
+
+The seven notes marked `draft: true` are placeholders from the design. Write them
+or delete them.
+
+## Updating from the design
+
+The landing page and the shared scripts are generated from the files in `design/`:
+
+1. Copy the new `Lens Portfolio.dc.html`, `transitions.js`, `mobile-nav.js` and
+   `scrollbar.js` from the Claude Design project into `design/`.
+2. Run `npm run sync:design`. It rewrites `src/pages/index.astro`,
+   `src/styles/home.css` and `src/scripts/{lens,transitions,mobile-nav,scrollbar}.js`.
+   Don't edit those by hand.
+
+The Notes, Note, 404 and phone-preview pages were ported by hand; update them
+directly in `src/`.

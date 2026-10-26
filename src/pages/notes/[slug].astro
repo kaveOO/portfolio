@@ -1,0 +1,78 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import { getNotes, noteUrl, monthYear, fullDate, readingMinutes, relatedNotes, type Note } from '../../lib/notes';
+import '../../styles/note.css';
+
+export async function getStaticPaths() {
+  const notes = await getNotes();
+  return notes.map((note) => ({ params: { slug: note.id }, props: { note, notes } }));
+}
+
+const { note, notes } = Astro.props as { note: Note; notes: Note[] };
+const { Content, headings } = await render(note);
+const toc = headings.filter((h) => h.depth === 2);
+const related = relatedNotes(note, notes);
+---
+<Base
+  title={`${note.data.title} — Alban Billiette`}
+  description={note.data.description}
+  fonts="https://fonts.googleapis.com/css2?family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=IBM+Plex+Mono:wght@400;500&display=swap"
+>
+<div style="min-height:100vh;font-family:'Host Grotesk',system-ui,sans-serif;background:var(--bg,#0f0f0e);color:var(--fg,#eeebe4);padding:0 3vw;box-sizing:border-box">
+<div aria-hidden="true" style="position:fixed;top:0;left:0;right:0;height:2px;z-index:10">
+<div data-bar="" style="height:100%;width:100%;background:var(--accent,#6e95ff);transform-origin:left;transform:scaleX(0)"></div>
+</div>
+<SiteHeader current="notes" />
+
+<article>
+<div style="padding:9vh 0 6vh;max-width:980px">
+<a href="/notes/" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6);margin-bottom:5vh">← All notes</a>
+<div style="display:flex;flex-wrap:wrap;gap:6px 10px;font-size:15px;color:var(--mute,#b3afa6);margin-bottom:3vh">
+<span>{fullDate(note.data.date)}</span><span aria-hidden="true">·</span><span>{note.data.tag}</span><span aria-hidden="true">·</span><span>{readingMinutes(note)} min read</span>
+</div>
+<h1 style="margin:0;font-size:clamp(38px,5.6vw,92px);font-weight:600;line-height:1;letter-spacing:-0.04em;text-wrap:balance">{note.data.title}</h1>
+{note.data.description && <p style="margin:3.5vh 0 0;max-width:640px;font-size:clamp(19px,1.5vw,22px);line-height:1.5;color:#d6d2ca;text-wrap:pretty">{note.data.description}</p>}
+</div>
+
+<div style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
+
+<div style="position:relative">
+{toc.length > 0 && (
+<aside data-toc="" hidden aria-label="On this page" style="position:absolute;left:0;top:8vh;bottom:0;width:190px">
+<nav style="position:sticky;top:110px;display:flex;flex-direction:column;gap:12px;font-size:14px;line-height:1.35">
+<span style="color:var(--mute,#b3afa6)">On this page</span>
+{toc.map((h) => (
+<a href={`#${h.slug}`} aria-current="false" style="display:flex;gap:10px;align-items:baseline;color:var(--mute,#b3afa6);transition:color .25s"><span style="flex:none;width:12px;height:1px;background:var(--mute,#b3afa6);transform:translateY(-4px)"></span>{h.text}</a>
+))}
+</nav>
+</aside>
+)}
+<div class="prose" style="max-width:680px;margin:7vh auto 0;font-size:19px;line-height:1.7;color:#e4e0d8;text-wrap:pretty">
+<Content />
+</div>
+</div>
+</article>
+
+{related.length > 0 && (
+<section aria-labelledby="related" style="max-width:1200px;margin:12vh auto 0">
+<h2 id="related" style="margin:0 0 3vh;font-size:14px;font-weight:400;color:var(--mute,#b3afa6)">Related notes</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:0 3vw">
+{related.map((n) => (
+<a href={noteUrl(n)} style="display:flex;flex-direction:column;gap:12px;padding:4vh 0;border-top:1px solid var(--line,rgba(238,235,228,0.14))">
+<span style="font-size:14px;color:var(--mute,#b3afa6)">{monthYear(n.data.date)} · {n.data.tag} · {readingMinutes(n)} min</span>
+<span style="font-size:clamp(22px,2.2vw,34px);font-weight:500;letter-spacing:-0.025em;line-height:1.15;text-wrap:pretty">{n.data.title}</span>
+</a>
+))}
+</div>
+</section>
+)}
+
+<footer style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:16px 24px;margin-top:10vh;padding:4vh 0 28px;border-top:1px solid var(--line,rgba(238,235,228,0.14));font-size:14px;color:var(--mute,#b3afa6)">
+<a href="/" style="display:inline-flex;align-items:center;min-height:44px;font-size:17px;color:var(--fg,#eeebe4)">← Back to Alban’s site</a>
+<div style="display:flex;gap:24px;align-items:center"><a href="/notes/">All notes</a><span>© 2026 Alban Billiette</span></div>
+</footer>
+</div>
+<script src="../../scripts/note.js"></script>
+</Base>

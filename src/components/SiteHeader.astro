@@ -1,0 +1,19 @@
+---
+// Header for the inner pages (notes, note, 404). The landing page has its own, from the design file.
+interface Props {
+  current?: 'notes';
+}
+const { current } = Astro.props;
+---
+<header style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;column-gap:16px;padding:22px 0;font-size:14px">
+<a href="/" style="justify-self:start;font-weight:600">Alban Billiette</a>
+<nav style="display:flex;gap:clamp(14px,2.4vw,36px)">
+<a href="/#work">Work</a>
+<a href="/notes/" style={current === 'notes' ? 'color:var(--accent,#6e95ff)' : undefined} aria-current={current === 'notes' ? 'page' : undefined}>Notes</a>
+<a href="/#about">About</a>
+<a href="/#contact">Contact</a>
+</nav>
+<div style="justify-self:end;display:flex;align-items:center;gap:clamp(16px,2.4vw,36px)">
+<a href="#" style="color:var(--accent,#6e95ff)" download="Alban-Billiette-CV.pdf" aria-label="Download CV (PDF)">Download CV ↓</a>
+</div>
+</header>

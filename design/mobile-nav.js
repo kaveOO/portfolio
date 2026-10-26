@@ -1,0 +1,22 @@
+(function () {
+  if (window.__abMN) return; window.__abMN = 1;
+  var st = document.createElement('style');
+  st.textContent = '@media (max-width:699px){header a,header button{padding-top:13px !important;padding-bottom:13px !important;margin-top:-13px !important;margin-bottom:-13px !important;}header nav{gap:14px !important;}}';
+  document.head.appendChild(st);
+  function upd() {
+    var h = document.querySelector('header'); if (!h) return;
+    var mob = innerWidth < 700, links = h.querySelectorAll('a');
+    for (var i = 0; i < links.length; i++) {
+      var a = links[i], t = a.textContent.trim();
+      if (!a.dataset.full && (t === 'Alban Billiette' || /CV/.test(t))) a.dataset.full = t;
+      var full = a.dataset.full; if (!full) continue;
+      var short = full === 'Alban Billiette' ? 'AB' : 'CV ↓', want = mob ? short : full;
+      if (a.textContent !== want) a.textContent = want;
+    }
+  }
+  function init() {
+    upd(); addEventListener('resize', upd);
+    new MutationObserver(function () { if (document.querySelector('header')) upd(); }).observe(document.body, { childList: true, subtree: true });
+  }
+  if (document.body) init(); else addEventListener('DOMContentLoaded', init);
+})();

@@ -1,7 +1,0 @@
-html,body{margin:0;padding:0;background:var(--bg,#0f0f0e);color:var(--fg,#eeebe4);-webkit-font-smoothing:antialiased;}
-a{color:inherit;text-decoration:none;}
-a:hover{color:var(--accent,#6e95ff);}
-a:focus-visible{outline:2px solid var(--accent,#6e95ff);outline-offset:4px;border-radius:2px;}
-.copy:hover{background:rgba(238,235,228,0.06);}
-::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal;}
-::selection{background:var(--accent,#6e95ff);color:#fff;}

@@ -1,0 +1,38 @@
+html,body{margin:0;padding:0;background:var(--bg,#0f0f0e);color:var(--fg,#eeebe4);-webkit-font-smoothing:antialiased;}
+a{color:inherit;text-decoration:none;}
+a:hover{color:var(--accent,#6e95ff);}
+a:focus-visible{outline:2px solid var(--accent,#6e95ff);outline-offset:4px;border-radius:2px;}
+::selection{background:var(--accent,#6e95ff);color:#fff;}
+[hidden]{display:none !important;}
+
+/* Note body, written in Markdown. Values follow the Note design. */
+.prose > :first-child{margin-top:0;}
+.prose p{margin:0 0 1.35em;}
+.prose h2{margin:2.2em 0 0.7em;color:var(--fg,#eeebe4);font-size:clamp(25px,2.2vw,32px);font-weight:600;letter-spacing:-0.025em;line-height:1.15;scroll-margin-top:100px;}
+.prose h3{margin:1.8em 0 0.6em;color:var(--fg,#eeebe4);font-size:clamp(20px,1.6vw,24px);font-weight:600;letter-spacing:-0.02em;line-height:1.2;scroll-margin-top:100px;}
+.prose ul,.prose ol{margin:0 0 1.35em;padding-left:1.2em;}
+.prose li+li{margin-top:0.5em;}
+.prose a{color:var(--fg,#eeebe4);text-decoration:underline;text-decoration-color:var(--accent,#6e95ff);text-underline-offset:0.2em;}
+.prose a:hover{color:var(--accent,#6e95ff);}
+.prose strong{color:var(--fg,#eeebe4);font-weight:600;}
+.prose hr{margin:2.4em 0;border:0;height:1px;background:var(--line,rgba(238,235,228,0.14));}
+.prose blockquote{margin:2.2em 0;padding:0 0 0 1.2em;font-size:clamp(23px,2vw,28px);line-height:1.35;font-weight:500;letter-spacing:-0.02em;color:var(--fg,#eeebe4);}
+.prose blockquote p{margin:0;}
+.prose blockquote p+p{margin-top:0.6em;}
+.prose figure{margin:2.4em 0;}
+.prose img{display:block;max-width:100%;height:auto;}
+.prose p > img{margin:2.4em 0;}
+.prose figcaption{margin-top:12px;font-size:14px;color:var(--mute,#b3afa6);}
+/* Placeholder box, e.g. <div class="ph"><span>Photo: …</span></div> inside a <figure>. */
+.prose .ph{height:clamp(200px,32vw,380px);background-color:var(--p1,#29261f);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px);display:flex;align-items:flex-start;padding:18px 20px;box-sizing:border-box;}
+.prose .ph span{font-size:14px;color:var(--mute,#b3afa6);}
+.prose :not(pre) > code{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.86em;padding:0.1em 0.35em;border-radius:4px;background:var(--code,rgba(238,235,228,0.05));color:var(--fg,#eeebe4);}
+
+/* Code blocks: Shiki output, framed by note.js. */
+.prose pre{margin:0 0 1.4em;padding:18px 22px;overflow-x:auto;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:14px;line-height:1.7;color:var(--fg,#eeebe4);background:var(--code,rgba(238,235,228,0.05)) !important;border:1px solid var(--line,rgba(238,235,228,0.14));}
+.prose figure.code{margin:0 0 1.4em;border:1px solid var(--line,rgba(238,235,228,0.14));background:var(--code,rgba(238,235,228,0.05));}
+.prose figure.code pre{margin:0;border:0;background:transparent !important;}
+.prose .code-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 10px 8px 22px;border-bottom:1px solid var(--line,rgba(238,235,228,0.14));font-size:13px;color:var(--mute,#b3afa6);}
+.prose .code-lang{font-family:'IBM Plex Mono',ui-monospace,monospace;}
+.prose .copy{font:inherit;font-size:13px;color:var(--mute,#b3afa6);background:none;border:0;padding:8px 12px;min-height:36px;cursor:pointer;border-radius:4px;}
+.prose .copy:hover{background:rgba(238,235,228,0.06);}
