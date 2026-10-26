@@ -416,7 +416,7 @@ void main(){
   }
 
   componentWillUnmount() {
-    this.dead = true; cancelAnimationFrame(this.raf); if (document.fonts && this.onFonts) document.fonts.removeEventListener('loadingdone', this.onFonts);
+    this.dead = true; cancelAnimationFrame(this.raf); if (this.vhProbe) this.vhProbe.remove(); if (document.fonts && this.onFonts) document.fonts.removeEventListener('loadingdone', this.onFonts);
     removeEventListener('resize', this.onResize); removeEventListener('keydown', this.onKey); removeEventListener('mousemove', this.onMove);
     document.removeEventListener('mouseleave', this.onLeave); document.removeEventListener('focusin', this.onFocus);
     this.ro && this.ro.disconnect();
@@ -433,7 +433,7 @@ void main(){
   }
 
   bind() {
-    this.onResize = () => { if (this.coarse && innerWidth === this.W && Math.abs(innerHeight - this.H) < 160) return; this.layout(); };
+    this.onResize = () => { if (this.coarse && innerWidth === this.W && Math.abs(innerHeight - this.H) < 200) return; this.layout(); };
     this.onMove = e => { this.mouse.x = e.clientX / this.W * 2 - 1; this.mouse.y = e.clientY / this.H * 2 - 1; this.mouse.px = e.clientX; this.mouse.py = e.clientY; };
     this.onLeave = () => { this.mouse.x = 0; this.mouse.y = 0; this.mouse.px = null; };
     addEventListener('resize', this.onResize);
@@ -562,7 +562,8 @@ void main(){
 
   layout() {
     if (!this.root || this.dead) return;
-    const W = innerWidth, H = innerHeight; this.W = W; this.H = H; this.m = Math.min(W * 1.15, H);
+    if (this.coarse && !this.vhProbe) { const pr = document.createElement('div'); pr.setAttribute('aria-hidden', 'true'); pr.style.cssText = 'position:fixed;left:0;top:0;width:0;height:100vh;visibility:hidden;pointer-events:none'; document.body.appendChild(pr); this.vhProbe = pr; }
+    const W = innerWidth, H = this.coarse && this.vhProbe ? Math.max(this.vhProbe.offsetHeight, innerHeight) : innerHeight; this.W = W; this.H = H; this.m = Math.min(W * 1.15, H);
     this.dpr = this.coarse ? Math.min(devicePixelRatio || 1, 1.25) : Math.min(devicePixelRatio || 1, 1.75); this.mDirty = true;
     const mob = W < 700; this.mobile = mob;
     const rvl = this.q('[data-reveal]'), rsp0 = this.q('[data-reveal-space]'), cs0 = this.q('[data-sec="contact"]');
@@ -615,7 +616,7 @@ void main(){
       const nr = name.getBoundingClientRect();
       const capTop = nr.top + y + capMid(name, d);
       const lts = Array.from(name.querySelectorAll('[data-rv]')), iSp = lts.filter(el => el.textContent === 'i').pop();
-      const hR = this.m * (mob ? .16 : .19); this.heroR = hR;
+      const hR = this.m * (mob ? .125 : .15); this.heroR = hR;
       const bI = lts.findIndex(el => el.textContent === 'B');
       if (bI >= 0 && lts[bI + 2]) {
         const bS = lts[bI], lS = lts[bI + 2], x0 = bS.getBoundingClientRect().left, x1 = lS.getBoundingClientRect().right;
@@ -653,10 +654,10 @@ void main(){
     const c = s => s.top + s.h / 2 - H / 2;
     const st = [
       { a: 0, b: H * 0.05, f: () => { const hb = this.heroBox, R = this.heroR || m * (this.mobile ? .1 : .12); return { x: hb ? hb.x : W * .62, y: hb ? hb.y : H * .45, bw: R, bh: R, r: R, tri: 0, rot: 0, mag: 1.14, glow: 0 }; } },
-      { a: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) - H * .1, b: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) + H * .1, f: () => { const b = this.bioBox, yy = b ? Math.min(H * .68, Math.max(H * .32, b.mid - this.y)) : H * .5; return { x: this.mobile ? W * .97 : (b ? b.x : W * .85), y: yy, bw: m * (this.mobile ? .09 : .13), bh: m * (this.mobile ? .09 : .13), r: m * (this.mobile ? .09 : .13), tri: 0, rot: 0, mag: 1.12, glow: 0 }; } },
-      { a: S.stack.top, b: S.stack.top + S.stack.h - H, f: p => ({ x: W * .5, y: H * .5, bw: m * .23, bh: m * .23, r: m * .04, tri: 1, rot: -0.2 + p * 1.1 + 2.0944 * (p < 0.4 ? (p / 0.4) * (p / 0.4) * (3 - 2 * p / 0.4) : 1), mag: 1.02, glow: 0 }) },
-      { a: S.work.top, b: S.work.top + S.work.h - H, f: p => ({ x: W * .5, y: this.panelY || H * .45, bw: m * .16, bh: m * .16, r: m * .16, tri: 0, rot: Math.PI, mag: 1.35, glow: 0 }) },
-      { a: c(S.writing) - H * .12, b: c(S.writing) + H * .12, f: () => { const R = m * (this.mobile ? .085 : .12) * (1 + .14 * (this.hoverAmt || 0)); return { x: W * .97 - R * 1.1, y: this.hoverY == null ? H * .5 : this.hoverY, bw: R, bh: R, r: R, tri: 0, rot: Math.PI, mag: 1.16 + .1 * (this.hoverAmt || 0), glow: 1 + .8 * (this.hoverAmt || 0) }; } },
+      { a: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) - H * .1, b: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) + H * .1, f: () => { const b = this.bioBox, yy = b ? Math.min(H * .68, Math.max(H * .32, b.mid - this.y)) : H * .5; return { x: this.mobile ? W * .97 : (b ? b.x : W * .85), y: yy, bw: m * (this.mobile ? .07 : .1), bh: m * (this.mobile ? .07 : .1), r: m * (this.mobile ? .07 : .1), tri: 0, rot: 0, mag: 1.12, glow: 0 }; } },
+      { a: S.stack.top, b: S.stack.top + S.stack.h - H, f: p => ({ x: W * .5, y: H * .5, bw: m * .18, bh: m * .18, r: m * .03, tri: 1, rot: -0.2 + p * 1.1 + 2.0944 * (p < 0.4 ? (p / 0.4) * (p / 0.4) * (3 - 2 * p / 0.4) : 1), mag: 1.02, glow: 0 }) },
+      { a: S.work.top, b: S.work.top + S.work.h - H, f: p => ({ x: W * .5, y: this.panelY || H * .45, bw: m * .125, bh: m * .125, r: m * .125, tri: 0, rot: Math.PI, mag: 1.35, glow: 0 }) },
+      { a: c(S.writing) - H * .12, b: c(S.writing) + H * .12, f: () => { const R = m * (this.mobile ? .07 : .095) * (1 + .14 * (this.hoverAmt || 0)); return { x: W * .97 - R * 1.1, y: this.hoverY == null ? H * .5 : this.hoverY, bw: R, bh: R, r: R, tri: 0, rot: Math.PI, mag: 1.16 + .1 * (this.hoverAmt || 0), glow: 1 + .8 * (this.hoverAmt || 0) }; } },
       { a: this.maxY - (this.revealH || 0), b: this.maxY, f: p => ({ x: this.contactX || W * .6, y: (this.contactY || H * .5) + (1 - p) * (this.revealH || 0), bw: this.dotR || m * .065, bh: this.dotR || m * .065, r: this.dotR || m * .065, tri: 0, rot: Math.PI, mag: 1.2, glow: .35 }) }
     ];
     for (let i = 1; i < st.length; i++) { st[i].a = Math.max(st[i].a, st[i - 1].b); st[i].b = Math.max(st[i].b, st[i].a); }
@@ -794,8 +795,9 @@ void main(){
 
   renderGlass(now) {
     const gl = this.gl; if (!gl || !this.states) return;
-    if (this.coarse && this.rendered && !this.active && now - this.heroT > 4500) return;
-    this.rendered = true;
+    const moved = Math.abs(this.y - (this.lastRY == null ? -1e9 : this.lastRY)) > 0.01;
+    if (this.coarse && this.rendered && !this.active && !moved && now - this.heroT > 4500) return;
+    this.rendered = true; this.lastRY = this.y;
     const G0 = this.glassAt(this.y), G = this.spring(G0), ms = this.mouse, t = now / 1000;
     const k = this.rm && this.heroOn ? 1 : this.heroOn ? Math.min(1, Math.max(0, (now - this.heroT - 950) / 1700)) : 0;
     const ie = 1 - Math.pow(1 - k, 3), sc = 0.6 + 0.4 * ie, km = k - 1, drop = 1 + 2.6 * km * km * km + 1.6 * km * km;
