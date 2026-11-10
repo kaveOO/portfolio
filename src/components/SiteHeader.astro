@@ -1,16 +1,17 @@
 ---
-// Header for the inner pages (notes, note, 404). The landing page has its own, from the design file.
+// Header for the inner pages (notes, note, case studies, 404). The landing page has its own, from the design file.
 import { url } from '../lib/paths';
 interface Props {
-  current?: 'notes';
+  current?: 'notes' | 'work';
 }
 const { current } = Astro.props;
+const on = (k: Props['current']) => current === k ? { style: 'color:var(--accent,#6e95ff)', 'aria-current': 'page' } : {};
 ---
 <header style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;column-gap:16px;padding:22px 0;font-size:14px">
 <a href={url('/')} style="justify-self:start;font-weight:600">Alban Billiette</a>
 <nav style="display:flex;gap:clamp(14px,2.4vw,36px)">
-<a href={url('/#work')}>Work</a>
-<a href={url('/notes/')} style={current === 'notes' ? 'color:var(--accent,#6e95ff)' : undefined} aria-current={current === 'notes' ? 'page' : undefined}>Notes</a>
+<a href={url('/#work')} {...on('work')}>Work</a>
+<a href={url('/notes/')} {...on('notes')}>Notes</a>
 <a href={url('/#about')}>About</a>
 <a href={url('/#contact')}>Contact</a>
 </nav>

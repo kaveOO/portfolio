@@ -359,7 +359,11 @@ void main(){
     this.qa('[data-sec]').forEach(el => { this.sec[el.dataset.sec] = { el, top: el.offsetTop, h: el.offsetHeight, pin: el.querySelector('[data-pin]') }; });
     this.draws = this.qa('[data-lens]').filter(el => el.dataset.lens === 'panel' || !el.parentElement.closest('[data-lens="panel"]')).map(el => {
       const d = this.cache(el);
-      if (d.type === 'panel') d.kids = Array.from(el.querySelectorAll('[data-lens]')).map(k => this.cache(k));
+      if (d.type === 'panel') {
+        d.kids = Array.from(el.querySelectorAll('[data-lens]')).map(k => this.cache(k));
+        d.img = el.querySelector('img');
+        if (d.img && !d.img.complete) d.img.addEventListener('load', () => { this.mDirty = true; }, { once: true });
+      }
       return d;
     });
     this.words = this.qa('[data-word]').map(el => ({ el, h: el.offsetHeight, kids: Array.from(el.querySelectorAll('[data-lens]')) }));
@@ -368,7 +372,14 @@ void main(){
     this.revealEl = this.q('[data-reveal]'); this.revealLens = this.revealEl ? Array.from(this.revealEl.querySelectorAll('[data-lens]')) : [];
     const rsp = this.q('[data-reveal-space]'); this.revealH = rsp ? rsp.offsetHeight : 0;
     if (this.track) { this.trackW = this.track.scrollWidth; this.cardC = Array.from(this.track.children).map(a => a.offsetLeft + a.offsetWidth / 2); }
-    if (this.panels[0]) { const p = this.panels[0]; this.panelY = this.track.offsetTop + p.offsetTop + p.offsetHeight / 2; }
+    if (this.panels[0]) { const p = this.panels[0]; this.panelY = this.track.offsetTop + p.offsetTop + p.offsetHeight / 2; this.panelX = this.track.offsetLeft + p.offsetLeft + p.offsetWidth * 0.82; }
+    this.esp = this.qa('[data-esp]').map(el => {
+      const p = el.parentElement.querySelector('[data-lens="panel"]'), pad = this.mobile ? 6 : 10, st = el.style;
+      st.left = (p.offsetLeft - pad) + 'px'; st.top = (p.offsetTop - pad) + 'px';
+      st.width = (p.offsetWidth + pad * 2) + 'px'; st.height = (p.offsetHeight + pad * 2) + 'px';
+      if (this.rm) st.transition = 'none';
+      return { el, p, on: false };
+    });
     (this.rows || []).forEach(r => { r.top = r.el.getBoundingClientRect().top + this.y; r.h = r.el.offsetHeight; });
     const y = this.y;
     const capMid = (el, d) => (d.lh - (d.asc + d.desc)) / 2 + d.asc - d.cap;
@@ -417,7 +428,7 @@ void main(){
       { a: 0, b: H * 0.05, f: () => { const hb = this.heroBox, R = this.heroR || m * (this.mobile ? .1 : .12); return { x: hb ? hb.x : W * .62, y: hb ? hb.y : H * .45, bw: R, bh: R, r: R, tri: 0, rot: 0, mag: 1.14, glow: 0 }; } },
       { a: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) - H * .1, b: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) + H * .1, f: () => { const b = this.bioBox, yy = b ? Math.min(H * .68, Math.max(H * .32, b.mid - this.y)) : H * .5; return { x: this.mobile ? W * .97 : (b ? b.x : W * .85), y: yy, bw: m * (this.mobile ? .07 : .1), bh: m * (this.mobile ? .07 : .1), r: m * (this.mobile ? .07 : .1), tri: 0, rot: 0, mag: 1.12, glow: 0 }; } },
       { a: S.stack.top, b: S.stack.top + S.stack.h - H, f: p => ({ x: W * .5, y: H * .5, bw: m * .18, bh: m * .18, r: m * .03, tri: 1, rot: -0.2 + p * 1.1 + 2.0944 * (p < 0.4 ? (p / 0.4) * (p / 0.4) * (3 - 2 * p / 0.4) : 1), mag: 1.02, glow: 0 }) },
-      { a: S.work.top, b: S.work.top + S.work.h - H, f: p => ({ x: W * .5, y: this.panelY || H * .45, bw: m * .125, bh: m * .125, r: m * .125, tri: 0, rot: Math.PI, mag: 1.35, glow: 0 }) },
+      { a: S.work.top, b: S.work.top + S.work.h - H, f: p => ({ x: Math.min(W * .5, this.panelX || W * .5), y: this.panelY || H * .45, bw: m * .125, bh: m * .125, r: m * .125, tri: 0, rot: Math.PI, mag: 1.35, glow: 0 }) },
       { a: c(S.writing) - H * .12, b: c(S.writing) + H * .12, f: () => { const R = m * (this.mobile ? .07 : .095) * (1 + .14 * (this.hoverAmt || 0)); return { x: W * .97 - R * 1.1, y: this.hoverY == null ? H * .5 : this.hoverY, bw: R, bh: R, r: R, tri: 0, rot: Math.PI, mag: 1.16 + .1 * (this.hoverAmt || 0), glow: 1 + .8 * (this.hoverAmt || 0) }; } },
       { a: this.maxY - (this.revealH || 0), b: this.maxY, f: p => ({ x: this.contactX || W * .6, y: (this.contactY || H * .5) + (1 - p) * (this.revealH || 0), bw: this.dotR || m * .065, bh: this.dotR || m * .065, r: this.dotR || m * .065, tri: 0, rot: Math.PI, mag: 1.2, glow: .35 }) }
     ];
@@ -527,10 +538,16 @@ void main(){
     c.translate(-w / 2, -h / 2);
     c.beginPath(); c.rect(0, 0, w, h); c.clip();
     c.fillStyle = d.bg || '#ccc'; c.fillRect(0, 0, w, h);
-    c.strokeStyle = this.theme.line; c.lineWidth = 1; c.beginPath();
-    const stp = 12 * Math.SQRT2;
-    for (let k = 0; k < w + h; k += stp) { c.moveTo(k, 0); c.lineTo(k - h, h); }
-    c.stroke();
+    const img = d.img;
+    if (img && img.complete && img.naturalWidth) {
+      const sc = Math.min(w / img.naturalWidth, h / img.naturalHeight), iw = img.naturalWidth * sc, ih = img.naturalHeight * sc;
+      c.drawImage(img, (w - iw) / 2, (h - ih) / 2, iw, ih);
+    } else {
+      c.strokeStyle = this.theme.line; c.lineWidth = 1; c.beginPath();
+      const stp = 12 * Math.SQRT2;
+      for (let k = 0; k < w + h; k += stp) { c.moveTo(k, 0); c.lineTo(k - h, h); }
+      c.stroke();
+    }
     d.kids.forEach(k => this.drawBox(k, k.el.offsetLeft, k.el.offsetTop, k.el.offsetWidth, k.el.offsetHeight, op));
     c.restore();
   }
@@ -651,6 +668,11 @@ void main(){
       const tx = -p * Math.max(0, this.trackW - W);
       this.track.style.transform = `translate3d(${tx}px,0,0)`;
       const inPin = y >= wk.top - H * 0.3 && y <= wk.top + wk.h - H * 0.7;
+      (this.esp || []).forEach(b => {
+        const r = b.p.getBoundingClientRect(), vis = (Math.min(r.right, W) - Math.max(r.left, 0)) / Math.max(1, r.width);
+        const on = inPin && r.top < H && r.bottom > 0 && vis > 0.6;
+        if (on !== b.on) { b.on = on; b.el.style.opacity = on ? '1' : '0'; b.el.style.transform = on ? 'none' : 'scale(.97)'; }
+      });
       let fl = 0; if (inPin && !this.rm) (this.cardC || []).forEach(c => { const d = (tx + c - W * 0.5) / (W * 0.05); fl = Math.max(fl, Math.exp(-d * d)); });
       this.flash = (this.flash || 0) + (fl - (this.flash || 0)) * 0.2 * f;
       const txt = pad(Math.round(p * (this.panels.length - 1)) + 1) + ' / ' + pad(this.panels.length);

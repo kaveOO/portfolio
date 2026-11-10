@@ -65,6 +65,49 @@ in a note doesn't get the base path added, so prefer the Markdown image syntax.)
 The seven notes marked `draft: true` are placeholders from the design. Write them
 or delete them.
 
+## Adding a project case study
+
+Add a Markdown file to `src/content/projects/` → `/portfolio/work/<file-name>/`.
+See `src/content/projects/assaultcube-dma.md` for a full example.
+
+```md
+---
+title: My project
+order: 2                 # position among case studies (1 = first)
+year: 2026
+context: Personal project
+role: Solo               # optional
+tags: [C, Kernel, WinDbg]
+summary: One or two sentences under the title.
+cover:                   # optional; files in public/images/
+  src: images/my-project.webp
+  avif: images/my-project.avif   # optional sharper version
+  alt: What the screenshot shows
+  width: 1920
+  height: 1080
+video: YouTubeVideoId    # optional; click-to-play "Demo" section
+links:
+  - label: Code on GitHub ↗
+    href: https://github.com/…
+results:                 # optional big numbers; leave out rather than guess
+  - value: 0.3 ms
+    label: per-frame read time
+---
+
+## Goal
+
+## What I built
+
+## What was hard
+```
+
+Each `##` section shows its heading on the left and the content on the right;
+code blocks get the language label and Copy button.
+
+The Work panels on the home page come from the design file, so a new project
+also needs a panel there (ask me, or add it in Claude Design and sync). Link it to
+its case study with `href="work/<file-name>/"`.
+
 ## Updating from the design
 
 The landing page and the shared scripts are generated from the files in `design/`:

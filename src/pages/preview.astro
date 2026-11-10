@@ -2,13 +2,16 @@
 // Phone preview: the site's pages side by side in phone-sized frames (design tool, not linked from the site).
 import { getNotes, noteUrl } from '../lib/notes';
 import { url } from '../lib/paths';
+import { getProjects, projectUrl } from '../lib/projects';
 import '../styles/preview.css';
 
 const [latest] = await getNotes();
+const [project] = await getProjects();
 const pages = [
   { label: 'Home', src: url('/') },
   { label: 'Notes', src: url('/notes/') },
   ...(latest ? [{ label: 'Note', src: noteUrl(latest) }] : []),
+  ...(project ? [{ label: 'Case study', src: projectUrl(project) }] : []),
 ];
 ---
 <!DOCTYPE html>

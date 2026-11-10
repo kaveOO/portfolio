@@ -1,0 +1,108 @@
+---
+// Project case study, from the "Project" design. Content comes from src/content/projects/<slug>.md.
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import { url } from '../../lib/paths';
+import { getProjects, projectUrl, type Project } from '../../lib/projects';
+import '../../styles/note.css';
+import '../../styles/project.css';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({ params: { slug: project.id }, props: { project, i, projects } }));
+}
+
+const { project, i, projects } = Astro.props as { project: Project; i: number; projects: Project[] };
+const { Content } = await render(project);
+const d = project.data;
+const pad = (n: number) => String(n).padStart(2, '0');
+const next = projects.length > 1 ? projects[(i + 1) % projects.length] : null;
+const details = [
+  ['Year', d.year],
+  ['Context', d.context],
+  ['Role', d.role],
+  ['Tags', d.tags.join(' · ')],
+].filter(([, v]) => v);
+const external = (href: string) => /^https?:/.test(href);
+---
+<Base title={`${d.title} — Alban Billiette`} description={d.summary}>
+<div style="min-height:100vh;font-family:'Host Grotesk',system-ui,sans-serif;background:var(--bg,#0f0f0e);color:var(--fg,#eeebe4);padding:0 3vw;box-sizing:border-box">
+<SiteHeader current="work" />
+
+<section style="padding:12vh 0 6vh">
+<a href={url('/#work')} style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6);margin-bottom:5vh">← All work</a>
+<div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:32px">
+<h1 style="margin:0 0 0 -0.04em;font-size:clamp(34px,11vw,200px);font-weight:600;line-height:0.88;letter-spacing:-0.055em;overflow-wrap:break-word">{d.title}</h1>
+<span style="font-size:14px;color:var(--mute,#b3afa6);padding-bottom:1vw">{pad(i + 1)} / {pad(projects.length)}</span>
+</div>
+<p style="margin:4vh 0 0;max-width:680px;font-size:clamp(19px,1.7vw,26px);line-height:1.45;text-wrap:pretty">{d.summary}</p>
+</section>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:24px 1.5vw;padding:3.5vh 0;border-top:1px solid var(--line,rgba(238,235,228,0.14));border-bottom:1px solid var(--line,rgba(238,235,228,0.14))">
+{details.map(([k, v]) => (
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:14px;color:var(--mute,#b3afa6)">{k}</span><span style="font-size:17px">{v}</span></div>
+))}
+</div>
+
+{d.cover && (
+<figure style="margin:6vh 0 0">
+<picture>
+{d.cover.avif && <source srcset={url('/' + d.cover.avif)} type="image/avif">}
+<img src={url('/' + d.cover.src)} alt={d.cover.alt} width={d.cover.width} height={d.cover.height} decoding="async" style="display:block;width:100%;height:auto">
+</picture>
+</figure>
+)}
+
+<div class="prose case" style="max-width:1200px;margin:12vh auto 0;font-size:19px;line-height:1.65;color:#e4e0d8;text-wrap:pretty">
+<Content />
+</div>
+
+<div style="max-width:1200px;margin:10vh auto 0;display:flex;flex-direction:column;gap:10vh">
+{d.video && (
+<section class="case-row">
+<h2 class="case-h">Demo</h2>
+<div class="video" data-video={d.video} data-title={`${d.title} demo video`}>
+<button type="button" class="video-play" aria-label={`Play the ${d.title} demo video`}>
+{d.cover && <img src={url('/' + d.cover.src)} alt="" loading="lazy" decoding="async">}
+<span class="video-btn">▶ Play demo</span>
+</button>
+</div>
+</section>
+)}
+
+{d.results.length > 0 && (
+<section style="display:flex;flex-direction:column;gap:4vh">
+<h2 class="case-h">Result</h2>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px 1.5vw;border-top:1px solid var(--line,rgba(238,235,228,0.14));padding-top:4vh">
+{d.results.map((r) => (
+<div style="display:flex;flex-direction:column;gap:10px"><span style="font-size:clamp(48px,6vw,96px);font-weight:600;letter-spacing:-0.05em;line-height:1">{r.value}</span><span style="font-size:16px;line-height:1.5;color:var(--mute,#b3afa6)">{r.label}</span></div>
+))}
+</div>
+</section>
+)}
+
+{d.links.length > 0 && (
+<div style="display:flex;flex-wrap:wrap;gap:12px">
+{d.links.map((l, k) => (
+<a href={external(l.href) ? l.href : url(l.href)} class={k === 0 ? 'btn-solid' : 'btn-line'} target={external(l.href) ? '_blank' : undefined} rel={external(l.href) ? 'noopener' : undefined}>{l.label}</a>
+))}
+</div>
+)}
+</div>
+
+{next && (
+<a href={projectUrl(next)} style="display:flex;flex-direction:column;gap:12px;margin-top:16vh;padding:5vh 0;border-top:1px solid var(--line,rgba(238,235,228,0.14))">
+<span style="font-size:14px;color:var(--mute,#b3afa6)">Next project →</span>
+<span style="font-size:clamp(40px,7vw,120px);font-weight:600;letter-spacing:-0.05em;line-height:0.95">{next.data.title}</span>
+</a>
+)}
+
+<footer style="display:flex;justify-content:space-between;gap:16px;margin-top:10vh;padding:6vh 0 24px;border-top:1px solid var(--line,rgba(238,235,228,0.14));font-size:13px;color:var(--mute,#b3afa6)">
+<span>© 2026 Alban Billiette</span>
+<a href={url('/')}>Back to home ↑</a>
+</footer>
+</div>
+<script src="../../scripts/note.js"></script>
+<script src="../../scripts/project.js"></script>
+</Base>
