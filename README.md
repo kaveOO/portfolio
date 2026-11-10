@@ -61,8 +61,9 @@ note; converted to WebP and lazy-loaded at build time), and figures with caption
 (`rack.jpg` is a file in `public/images/`, served as-is, not converted. Prefer the
 Markdown image syntax when you can: those images get optimized.)
 
-The seven notes marked `draft: true` are placeholders from the design. Write them
-or delete them.
+The two notes were brought over from kaveo.dev; their images are in
+`src/content/notes/images/`. The "Now" line on the Notes page is in
+`src/pages/notes/index.astro`.
 
 ## Adding a project case study
 

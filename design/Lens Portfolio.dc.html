@@ -22,6 +22,19 @@ a{color:inherit;text-decoration:none;}
 a:hover{color:var(--accent,#6e95ff);}
 a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff);outline-offset:6px;border-radius:2px;}
 ::selection{background:var(--accent,#6e95ff);color:#fff;}
+html:has([data-loader].ld-on:not(.out)){overflow:hidden;}
+[data-loader]{clip-path:inset(0 0 0 0);transition:clip-path .95s cubic-bezier(.76,0,.24,1) .25s;animation:ldfail .4s ease 5s forwards;}
+[data-loader].ld-on{animation:none;}
+@keyframes ldfail{to{opacity:0;visibility:hidden;}}
+[data-loader] .ldi{transition:transform .6s cubic-bezier(.5,0,.75,0),opacity .45s ease;}
+[data-loader].out{clip-path:inset(0 0 100% 0);pointer-events:none;}
+[data-loader].out .ldi{transform:translate3d(0,-28px,0);opacity:0;}
+.ldl{display:block;overflow:hidden;padding-bottom:0.06em;}
+.ldin{display:block;animation:ldin .9s cubic-bezier(.25,1,.5,1) both;}
+@keyframes ldin{from{transform:translate3d(0,112%,0);}to{transform:none;}}
+.ldn{font-size:9vw;font-weight:600;letter-spacing:-0.055em;line-height:0.86;font-variant-numeric:tabular-nums;}
+@media (max-width:760px){.ldn{font-size:22vw;}.ldtop{font-size:13px !important;}}
+@media (prefers-reduced-motion:reduce){[data-loader],[data-loader] .ldi{transition:none;}.ldin{animation:none;}}
 </style>
 <script>window.__abWait = 1;</script>
 <script src="transitions.js"></script>
@@ -31,6 +44,15 @@ a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff)
 <a data-nav="about" href="#about" style="position:fixed;left:12px;top:-64px;z-index:50;padding:12px 16px;background:var(--fg,#eeebe4);color:var(--bg,#0f0f0e);font-size:14px;border-radius:4px" style-focus="top:12px">Skip to content</a>
 <div data-spacer="" style="height:100vh"></div>
 <canvas data-glass="" aria-hidden="true" style="position:fixed;left:0;top:0;width:10px;height:10px;pointer-events:none;z-index:5;opacity:0"></canvas>
+<div data-loader="" aria-hidden="true" style="position:fixed;left:0;top:0;right:0;bottom:0;z-index:4;display:flex;flex-direction:column;justify-content:flex-end;padding:0 3vw 3vw;box-sizing:border-box;background:var(--bg,#0f0f0e);color:var(--fg,#eeebe4)">
+<div class="ldi" style="display:flex;flex-direction:column;gap:2vw">
+<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px">
+<span class="ldl" style="flex:none"><span class="ldin ldn" data-ld-n="" style="animation-delay:180ms">000</span></span>
+<span class="ldtop" style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-size:14px;line-height:1.4;text-align:right;color:var(--mute,#b3afa6);padding-bottom:0.6vw"><span class="ldl"><span class="ldin" style="animation-delay:90ms">Kernel and game security engineer</span></span><span>Loading</span></span>
+</div>
+<div style="position:relative;height:1px;background:var(--line,rgba(238,235,228,0.14));overflow:hidden"><span data-ld-bar="" style="position:absolute;left:0;top:0;width:100%;height:100%;background:var(--fg,#eeebe4);transform:scaleX(0);transform-origin:left"></span></div>
+</div>
+</div>
 <header style="position:fixed;top:0;left:0;right:0;z-index:4;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;column-gap:16px;padding:22px 3vw;font-size:14px;color:var(--fg,#eeebe4)">
 <a data-nav="top" data-lens="" href="#" style="justify-self:start;display:inline-block;font-weight:600;color:var(--fg,#eeebe4)">Alban Billiette</a>
 <nav style="display:flex;gap:clamp(16px,2.4vw,36px)">
@@ -40,7 +62,7 @@ a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff)
 <a data-nav="contact" data-lens="" href="#contact" style="display:inline-block;color:var(--fg,#eeebe4)" style-hover="opacity:0.6">Contact</a>
 </nav>
 <div style="justify-self:end;display:flex;align-items:center;gap:clamp(16px,2.4vw,36px)">
-<a data-lens="" href="#" style="display:inline-block;color:var(--accent,#6e95ff)" style-hover="opacity:0.6" download="Alban-Billiette-CV.pdf" aria-label="Download CV (PDF)">Download CV ↓</a>
+<a data-lens="" href="Alban-Billiette-CV.pdf" style="display:inline-block;color:var(--accent,#6e95ff)" style-hover="opacity:0.6" download="Alban-Billiette-CV.pdf" aria-label="Download CV (PDF)">Download CV ↓</a>
 </div>
 </header>
 <div data-sbar="" aria-hidden="true" style="position:fixed;top:0;right:0;bottom:0;width:16px;z-index:30;touch-action:none">
@@ -61,7 +83,7 @@ a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff)
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px;margin-bottom:4vh">
 <div data-rg="" data-rg-delay="0.7" style="max-width:340px;display:flex;flex-direction:column;align-items:flex-start;gap:18px">
 <span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--accent,#6e95ff)">Kernel and game security engineer</span>
-<p data-rv="" data-lens="" style="margin:0;font-size:17px;line-height:1.55;font-weight:400">I write kernel code for Windows and Linux and work on game security. I also build full-stack web apps.</p>
+<p data-rv="" data-lens="" style="margin:0;font-size:17px;line-height:1.55;font-weight:400">I write Windows kernel drivers, reverse-engineer anti-cheats and build my own x86 kernel. I also ship full-stack products end to end.</p>
 </div>
 <div data-rg="" data-rg-delay="0.9" style="display:flex;align-items:center;gap:14px">
 <span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Scroll</span>
@@ -74,7 +96,7 @@ a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff)
 <section data-sec="about" style="position:relative;background:var(--bg,#0f0f0e);min-height:90vh;padding:14vh 3vw 10vh;box-sizing:border-box;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:1.5vw;align-content:center">
 <div data-rg="" style="grid-column:1 / -1;margin-bottom:6vh"><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">About</span></div>
 <p data-rg="" style="grid-column:1 / span 9;margin:0;font-size:clamp(28px,4.1vw,76px);line-height:1.12;letter-spacing:-0.022em;font-weight:400">
-<span data-rv="" data-lens="" style="display:inline-block">I’m</span> <span data-rv="" data-lens="" style="display:inline-block">a</span> <span data-rv="" data-lens="" style="display:inline-block">systems</span> <span data-rv="" data-lens="" style="display:inline-block">engineer.</span> <span data-rv="" data-lens="" style="display:inline-block">I</span> <span data-rv="" data-lens="" style="display:inline-block">write</span> <span data-rv="" data-lens="" style="display:inline-block">kernel</span> <span data-rv="" data-lens="" style="display:inline-block">code</span> <span data-rv="" data-lens="" style="display:inline-block">for</span> <span data-rv="" data-lens="" style="display:inline-block">Windows</span> <span data-rv="" data-lens="" style="display:inline-block">and</span> <span data-rv="" data-lens="" style="display:inline-block">Linux.</span> <span data-rv="" data-lens="" style="display:inline-block">Most</span> <span data-rv="" data-lens="" style="display:inline-block">of</span> <span data-rv="" data-lens="" style="display:inline-block">my</span> <span data-rv="" data-lens="" style="display:inline-block">work</span> <span data-rv="" data-lens="" style="display:inline-block">is</span> <span data-rv="" data-lens="" style="display:inline-block">in</span> <span data-rv="" data-lens="" style="display:inline-block">game</span> <span data-rv="" data-lens="" style="display:inline-block">security,</span> <span data-rv="" data-lens="" style="display:inline-block">on</span> <span data-rv="" data-lens="" style="display:inline-block">anti-cheat</span> <span data-rv="" data-lens="" style="display:inline-block">and</span> <span data-rv="" data-lens="" style="display:inline-block">detection,</span> <span data-rv="" data-lens="" style="display:inline-block">and</span> <span data-rv="" data-lens="" style="display:inline-block">that</span> <span data-rv="" data-lens="" style="display:inline-block">means</span> <span data-rv="" data-lens="" style="display:inline-block">a</span> <span data-rv="" data-lens="" style="display:inline-block">lot</span> <span data-rv="" data-lens="" style="display:inline-block">of</span> <span data-rv="" data-lens="" style="display:inline-block">reverse</span> <span data-rv="" data-lens="" style="display:inline-block">engineering.</span> <span data-rv="" data-lens="" style="display:inline-block">I</span> <span data-rv="" data-lens="" style="display:inline-block">also</span> <span data-rv="" data-lens="" style="display:inline-block">build</span> <span data-rv="" data-lens="" style="display:inline-block">full-stack</span> <span data-rv="" data-lens="" style="display:inline-block">web</span> <span data-rv="" data-lens="" style="display:inline-block">apps</span> <span data-rv="" data-lens="" style="display:inline-block">when</span> <span data-rv="" data-lens="" style="display:inline-block">a</span> <span data-rv="" data-lens="" style="display:inline-block">project</span> <span data-rv="" data-lens="" style="display:inline-block">needs</span> <span data-rv="" data-lens="" style="display:inline-block">one.</span>
+<span data-rv="" data-lens="" style="display:inline-block">I’m</span> <span data-rv="" data-lens="" style="display:inline-block">a</span> <span data-rv="" data-lens="" style="display:inline-block">systems</span> <span data-rv="" data-lens="" style="display:inline-block">programmer</span> <span data-rv="" data-lens="" style="display:inline-block">based</span> <span data-rv="" data-lens="" style="display:inline-block">in</span> <span data-rv="" data-lens="" style="display:inline-block">Warsaw.</span> <span data-rv="" data-lens="" style="display:inline-block">I</span> <span data-rv="" data-lens="" style="display:inline-block">started</span> <span data-rv="" data-lens="" style="display:inline-block">with</span> <span data-rv="" data-lens="" style="display:inline-block">x86</span> <span data-rv="" data-lens="" style="display:inline-block">assembly</span> <span data-rv="" data-lens="" style="display:inline-block">and</span> <span data-rv="" data-lens="" style="display:inline-block">Windows</span> <span data-rv="" data-lens="" style="display:inline-block">kernel</span> <span data-rv="" data-lens="" style="display:inline-block">drivers,</span> <span data-rv="" data-lens="" style="display:inline-block">and</span> <span data-rv="" data-lens="" style="display:inline-block">most</span> <span data-rv="" data-lens="" style="display:inline-block">of</span> <span data-rv="" data-lens="" style="display:inline-block">my</span> <span data-rv="" data-lens="" style="display:inline-block">time</span> <span data-rv="" data-lens="" style="display:inline-block">now</span> <span data-rv="" data-lens="" style="display:inline-block">goes</span> <span data-rv="" data-lens="" style="display:inline-block">into</span> <span data-rv="" data-lens="" style="display:inline-block">game</span> <span data-rv="" data-lens="" style="display:inline-block">security:</span> <span data-rv="" data-lens="" style="display:inline-block">reverse</span> <span data-rv="" data-lens="" style="display:inline-block">engineering</span> <span data-rv="" data-lens="" style="display:inline-block">kernel-level</span> <span data-rv="" data-lens="" style="display:inline-block">anti-cheats</span> <span data-rv="" data-lens="" style="display:inline-block">like</span> <span data-rv="" data-lens="" style="display:inline-block">BattlEye</span> <span data-rv="" data-lens="" style="display:inline-block">and</span> <span data-rv="" data-lens="" style="display:inline-block">EAC.</span> <span data-rv="" data-lens="" style="display:inline-block">I</span> <span data-rv="" data-lens="" style="display:inline-block">also</span> <span data-rv="" data-lens="" style="display:inline-block">ship</span> <span data-rv="" data-lens="" style="display:inline-block">full-stack</span> <span data-rv="" data-lens="" style="display:inline-block">products</span> <span data-rv="" data-lens="" style="display:inline-block">end</span> <span data-rv="" data-lens="" style="display:inline-block">to</span> <span data-rv="" data-lens="" style="display:inline-block">end,</span> <span data-rv="" data-lens="" style="display:inline-block">from</span> <span data-rv="" data-lens="" style="display:inline-block">the</span> <span data-rv="" data-lens="" style="display:inline-block">React</span> <span data-rv="" data-lens="" style="display:inline-block">frontend</span> <span data-rv="" data-lens="" style="display:inline-block">to</span> <span data-rv="" data-lens="" style="display:inline-block">the</span> <span data-rv="" data-lens="" style="display:inline-block">Linux</span> <span data-rv="" data-lens="" style="display:inline-block">server</span> <span data-rv="" data-lens="" style="display:inline-block">under</span> <span data-rv="" data-lens="" style="display:inline-block">it.</span> <span data-rv="" data-lens="" style="display:inline-block">I</span> <span data-rv="" data-lens="" style="display:inline-block">study</span> <span data-rv="" data-lens="" style="display:inline-block">at</span> <span data-rv="" data-lens="" style="display:inline-block">42</span> <span data-rv="" data-lens="" style="display:inline-block">Warsaw.</span>
 </p>
 <div data-ach="" style="grid-column:1 / span 9;margin-top:10vh">
 <div data-rg="" style="margin-bottom:3vh"><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Achievements</span></div>
@@ -82,24 +104,24 @@ a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff)
 <div data-rg="" style="display:grid;grid-template-columns:minmax(56px,8vw) minmax(0,1fr);column-gap:2vw;align-items:baseline;padding:2.6vh 0">
 <span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">2026</span>
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 24px;min-width:0">
-<span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(20px,1.9vw,30px);font-weight:500;letter-spacing:-0.02em;line-height:1.2">1st place, AI track</span>
-<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Northlake Hackathon</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(20px,1.9vw,30px);font-weight:500;letter-spacing:-0.02em;line-height:1.2">1st place, booking system track</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Codaro × Google for Startups Hackathon</span>
 </div>
 </div>
 <div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
 <div data-rg="" style="display:grid;grid-template-columns:minmax(56px,8vw) minmax(0,1fr);column-gap:2vw;align-items:baseline;padding:2.6vh 0">
-<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">2025</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">2026</span>
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 24px;min-width:0">
-<span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(20px,1.9vw,30px);font-weight:500;letter-spacing:-0.02em;line-height:1.2">Finalist</span>
-<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Open Data Challenge</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(20px,1.9vw,30px);font-weight:500;letter-spacing:-0.02em;line-height:1.2">Most innovative idea</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">42 Warsaw Hacks</span>
 </div>
 </div>
 <div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
 <div data-rg="" style="display:grid;grid-template-columns:minmax(56px,8vw) minmax(0,1fr);column-gap:2vw;align-items:baseline;padding:2.6vh 0">
-<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">2025</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">2026</span>
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:6px 24px;min-width:0">
-<span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(20px,1.9vw,30px);font-weight:500;letter-spacing:-0.02em;line-height:1.2">Talk at a local JavaScript meetup</span>
-<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">DevRiver Conf</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:clamp(20px,1.9vw,30px);font-weight:500;letter-spacing:-0.02em;line-height:1.2">Common Core completed</span>
+<span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">42 Le Havre</span>
 </div>
 </div>
 <div data-lens="" style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
@@ -114,19 +136,19 @@ a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff)
 </div>
 <div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
 <div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">Kernel</div>
-<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">C · C++ · Rust · KMDF · eBPF · WinDbg</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">C · C++ · x86-64 Assembly · Windows drivers · QEMU</div>
 </div>
 <div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
 <div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">Reversing</div>
-<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">IDA · Ghidra · WinDbg</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">IDA · x64dbg · Cheat Engine</div>
 </div>
 <div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
 <div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">Game security</div>
-<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">Anti-cheat · Detection</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">Anti-cheat research · BattlEye · EAC</div>
 </div>
 <div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
 <div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">Web</div>
-<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">React · Node</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">TypeScript · React · Fastify · FastAPI · PostgreSQL</div>
 </div>
 </div>
 </section>
@@ -141,7 +163,6 @@ a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff)
 <article style="flex:none;width:max(56vw,min(84vw,520px))">
 <div data-lens="panel" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p1,#29261f);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
 <picture><source srcset="images/assaultcube-dma.avif" type="image/avif"><img src="images/assaultcube-dma.webp" width="1920" height="1009" decoding="async" alt="AssaultCubeDMA running in AssaultCube: ESP boxes and distances around players, and a panel with the targeted player’s stats" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
-<span data-lens="" style="position:absolute;right:3%;bottom:-0.14em;font-size:min(30vh,22vw);font-weight:600;letter-spacing:-0.06em;line-height:1;white-space:nowrap">01</span>
 </div>
 <div data-esp="" aria-hidden="true" style="position:absolute;left:0;top:0;width:0;height:0;pointer-events:none;opacity:0;transform:scale(.97);transition:opacity .25s ease,transform .55s cubic-bezier(.34,1.56,.64,1)"><div style="position:absolute;inset:0;border:1px solid var(--accent,#6e95ff);opacity:.85"></div><div style="position:absolute;left:-1px;bottom:calc(100% + 6px);font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:11px;line-height:1.45;white-space:nowrap;color:var(--accent,#6e95ff)"><span>project · 2025</span><span style="opacity:.7"> · C++ · DMA · MemProcFS</span></div></div>
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 40px;margin-top:3.2vh">
@@ -155,29 +176,26 @@ a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff)
 </article>
 <article style="flex:none;width:max(56vw,min(84vw,520px))">
 <div data-lens="panel" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p2,#1f242a);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
-<span data-lens="" style="position:absolute;left:22px;top:18px;font-size:14px;white-space:nowrap">project screenshot · 1600 × 1000</span>
-<span data-lens="" style="position:absolute;right:3%;bottom:-0.14em;font-size:min(30vh,22vw);font-weight:600;letter-spacing:-0.06em;line-height:1;white-space:nowrap">02</span>
+<picture><source srcset="images/kaveos.avif" type="image/avif"><img src="images/kaveos.webp" width="1522" height="800" decoding="async" alt="kaveOS booted in VGA text mode: the kaveOS logo, a system panel (32-bit i386, GRUB multiboot, 12 virtual screens), keyboard shortcuts, the 16-colour palette and a shell prompt" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 40px;margin-top:3.2vh">
-<h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">Moth</h3>
+<h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">kaveOS</h3>
 <div style="max-width:380px;display:flex;flex-direction:column;gap:14px">
-<p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">Offline-first notes app with conflict-free sync across devices. Local database, background replication, end-to-end encryption.</p>
-<span data-lens="" style="display:block;font-size:14px;line-height:1.5;color:var(--fg,#eeebe4)">CRDT, Mobile, Sync</span>
-<div style="display:flex;gap:20px;font-size:15px"><a data-lens="" href="#" style="display:inline-block">Live ↗</a><a data-lens="" href="#" style="display:inline-block">Code ↗</a></div>
+<p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">A custom x86 operating system, written from scratch. An Assembly bootloader hands off through GRUB to a C kernel with memory segmentation, interrupt handling, VGA output and screen switching. Boots under QEMU.</p>
+<span data-lens="" style="display:block;font-size:14px;line-height:1.5;color:var(--fg,#eeebe4)">C, x86 Assembly, GRUB, QEMU</span>
+<div style="display:flex;gap:20px;font-size:15px"><a data-lens="" href="https://github.com/kaveOO/kaveOS" target="_blank" rel="noopener" style="display:inline-block">Code ↗</a></div>
 </div>
 </div>
 </article>
 <article style="flex:none;width:max(56vw,min(84vw,520px))">
 <div data-lens="panel" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p3,#23271e);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
-<span data-lens="" style="position:absolute;left:22px;top:18px;font-size:14px;white-space:nowrap">project screenshot · 1600 × 1000</span>
-<span data-lens="" style="position:absolute;right:3%;bottom:-0.14em;font-size:min(30vh,22vw);font-weight:600;letter-spacing:-0.06em;line-height:1;white-space:nowrap">03</span>
+<picture><source srcset="images/rustaveo.avif" type="image/avif"><img src="images/rustaveo.webp" width="1920" height="1009" decoding="async" alt="The Rustaveo web app: a Rust server map with team markers, and a panel listing an enemy team and who is online" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 40px;margin-top:3.2vh">
-<h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">Paperweight</h3>
+<h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">Rustaveo</h3>
 <div style="max-width:380px;display:flex;flex-direction:column;gap:14px">
-<p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">Evaluation harness for language-model features. Versioned test sets, side-by-side diffs and regression alerts in CI.</p>
-<span data-lens="" style="display:block;font-size:14px;line-height:1.5;color:var(--fg,#eeebe4)">LLM evals, Tooling, CI</span>
-<div style="display:flex;gap:20px;font-size:15px"><a data-lens="" href="#" style="display:inline-block">Live ↗</a><a data-lens="" href="#" style="display:inline-block">Code ↗</a></div>
+<p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">A paid companion SaaS for the game Rust that I built and ran solo. I reverse-engineered the Rust+ protocol to send raid alerts over Discord, Telegram, phone calls and web push. 80k lines of TypeScript, 680 tests on every merge, zero-downtime deploys.</p>
+<span data-lens="" style="display:block;font-size:14px;line-height:1.5;color:var(--fg,#eeebe4)">TypeScript, Fastify, PostgreSQL, React 19, Docker</span>
 </div>
 </div>
 </article>
@@ -225,13 +243,11 @@ a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff)
 <div aria-hidden="true"><span data-rv="" data-lens="" style="display:inline-block;white-space:nowrap">something</span></div>
 </div>
 <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:28px;margin-top:6vh">
-<div data-rg="" style="display:flex;flex-direction:column;gap:14px"><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Write to me</span><a data-rv="" data-lens="" href="mailto:hello@albanbilliette.dev" style="display:inline-block;font-size:clamp(22px,3.2vw,56px);font-weight:500;letter-spacing:-0.03em;line-height:1.15">hello@albanbilliette.dev</a><a data-rv="" data-lens="" href="#" style="display:inline-block;font-size:17px;color:var(--accent,#6e95ff)">Book a 20-min call →</a></div>
+<div data-rg="" style="display:flex;flex-direction:column;gap:14px"><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Write to me</span><a data-rv="" data-lens="" href="mailto:alban.billiette@gmail.com" style="display:inline-block;font-size:clamp(22px,3.2vw,56px);font-weight:500;letter-spacing:-0.03em;line-height:1.15">alban.billiette@gmail.com</a><span data-rv="" data-lens="" style="display:inline-block;font-size:17px;color:var(--mute,#b3afa6)">Warsaw · EU citizen · available full time</span></div>
 <div data-rg="" style="display:flex;flex-wrap:wrap;gap:12px 28px;font-size:15px">
-<a data-rv="" data-lens="" href="#" style="display:inline-block;color:var(--accent,#6e95ff)">Download CV (PDF)</a>
-<a data-rv="" data-lens="" href="#" style="display:inline-block">GitHub</a>
-<a data-rv="" data-lens="" href="#" style="display:inline-block">LinkedIn</a>
-<a data-rv="" data-lens="" href="#" style="display:inline-block">Are.na</a>
-<a data-rv="" data-lens="" href="#" style="display:inline-block">RSS</a>
+<a data-rv="" data-lens="" href="Alban-Billiette-CV.pdf" download="Alban-Billiette-CV.pdf" style="display:inline-block;color:var(--accent,#6e95ff)">Download CV (PDF)</a>
+<a data-rv="" data-lens="" href="https://github.com/kaveOO" target="_blank" rel="noopener" style="display:inline-block">GitHub</a>
+<a data-rv="" data-lens="" href="https://www.linkedin.com/in/kaveooo/" target="_blank" rel="noopener" style="display:inline-block">LinkedIn</a>
 </div>
 </div>
 </section>
@@ -400,8 +416,13 @@ void main(){
       const h = location.hash.slice(1);
       if (h && h !== 'top' && this.sec[h]) { const ty = Math.min(this.maxY, this.navTarget(h)); window.scrollTo(0, ty); this.y = this.prevY = ty; this.heroT -= 10000; this.sp = null; history.replaceState(null, '', location.pathname + location.search); }
       requestAnimationFrame(() => { window.__abReady = 1; }); };
-    (document.fonts ? document.fonts.ready : Promise.resolve()).then(go);
-    setTimeout(go, 1500);
+    this.go = go;
+    this.loader = this.q('[data-loader]');
+    let internal = false; try { internal = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
+    let seen = false; try { seen = sessionStorage.getItem('ab-loaded') === '1'; sessionStorage.setItem('ab-loaded', '1'); } catch (e) {}
+    if (this.loader && (internal || seen || location.hash || performance.now() > 4500)) { this.loader.remove(); this.loader = null; }
+    if (this.loader) this.startLoader();
+    else { (document.fonts ? document.fonts.ready : Promise.resolve()).then(go); setTimeout(go, 1500); }
     if (document.fonts) {
       this.onFonts = () => { if (!this.dead) this.layout(); };
       document.fonts.ready.then(this.onFonts);
@@ -412,12 +433,62 @@ void main(){
     this.raf = requestAnimationFrame(this.tick);
   }
 
+  static LOAD_MS = 1800; // shortest run of the loading counter, 000 to 100
+
+  // Loading state: the counter follows real stages (mounted, fonts, page loaded), with a 6 s safety net.
+  startLoader() {
+    const L = this.ld = { stage: 0.15, shown: 0, t0: performance.now(), pct: -1, done: false };
+    this.ldN = this.q('[data-ld-n]'); this.ldBar = this.q('[data-ld-bar]');
+    this.loader.classList.add('ld-on');
+    // Nothing behind the cover can be clicked or tabbed to until it lifts.
+    this.ldInert = Array.from(this.root.children).filter(el => el !== this.loader);
+    this.ldInert.forEach(el => { el.inert = true; });
+    this.ldTimers = [];
+    // Lift no matter what if the counter hasn't finished (e.g. the animation loop stopped).
+    this.ldHard = setTimeout(() => { if (!L.done) { L.done = true; this.liftLoader(); } }, 9000);
+    const at = v => { L.stage = Math.max(L.stage, v); };
+    const fonts = (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => at(0.6));
+    const loaded = new Promise(r => { if (document.readyState === 'complete') r(); else addEventListener('load', () => r(), { once: true }); }).then(() => at(0.8));
+    Promise.all([fonts, loaded]).then(() => { if (this.dead) return; this.layout(); setTimeout(() => at(1), 120); });
+    this.ldSafety = setTimeout(() => at(1), 6000);
+  }
+
+  loadTick() {
+    const L = this.ld; if (!L || L.done) return;
+    const now = performance.now(), el = now - L.t0, dt = Math.min(0.05, Math.max(0, (now - (L.last || now)) / 1000)); L.last = now;
+    // A steady eased run of LOAD_MS; real stages only cap it, so a fast load never jumps and a slow one creeps.
+    const a = Math.min(1, el / Component.LOAD_MS), run = a < 0.5 ? 4 * a * a * a : 1 - Math.pow(-2 * a + 2, 3) / 2;
+    const cap = L.stage >= 1 ? 1 : Math.min(0.92, L.stage + 0.2 * (1 - Math.exp(-el / 2500)));
+    const goal = this.rm ? cap : Math.min(cap, run);
+    if (this.rm) L.shown = goal;
+    else { let step = (goal - L.shown) * (1 - Math.exp(-dt * 9)); step = Math.min(step, dt * 0.9); L.shown += Math.max(0, step); }
+    if (goal >= 1 && L.shown > 0.997) L.shown = 1;
+    this.ldBar.style.transform = `scaleX(${L.shown.toFixed(4)})`;
+    const pct = Math.floor(L.shown * 100);
+    if (pct !== L.pct) { L.pct = pct; this.ldN.textContent = String(pct).padStart(3, '0'); }
+    if (L.shown >= 1) { L.done = true; this.liftLoader(); }
+  }
+
+  liftLoader() {
+    const el = this.loader; if (!el || this.dead) return;
+    clearTimeout(this.ldSafety); clearTimeout(this.ldHard);
+    const release = () => { (this.ldInert || []).forEach(n => { n.inert = false; }); this.ldInert = null; };
+    if (this.rm) { el.remove(); this.loader = null; release(); this.go(); return; }
+    const later = (fn, ms) => this.ldTimers.push(setTimeout(fn, ms));
+    later(() => {
+      el.classList.add('out'); release();
+      // Reveal the hero once the cover's lower edge has risen past the name, so the two never cross.
+      later(() => this.go(), 900);
+      later(() => { el.remove(); if (this.loader === el) this.loader = null; }, 1400);
+    }, 220);
+  }
+
   componentDidUpdate(prev) {
     if (prev.theme !== this.props.theme) { localStorage.removeItem('ab-theme'); this.applyTheme(); this.layout(); }
   }
 
   componentWillUnmount() {
-    this.dead = true; cancelAnimationFrame(this.raf); if (this.vhProbe) this.vhProbe.remove(); if (document.fonts && this.onFonts) document.fonts.removeEventListener('loadingdone', this.onFonts);
+    this.dead = true; cancelAnimationFrame(this.raf); clearTimeout(this.ldSafety); clearTimeout(this.ldHard); (this.ldTimers || []).forEach(clearTimeout); if (this.vhProbe) this.vhProbe.remove(); if (document.fonts && this.onFonts) document.fonts.removeEventListener('loadingdone', this.onFonts);
     removeEventListener('resize', this.onResize); removeEventListener('keydown', this.onKey); removeEventListener('mousemove', this.onMove);
     document.removeEventListener('mouseleave', this.onLeave); document.removeEventListener('focusin', this.onFocus);
     this.ro && this.ro.disconnect();
@@ -871,6 +942,7 @@ void main(){
   tick(now) {
     if (this.dead) return;
     this.raf = requestAnimationFrame(this.tick);
+    if (this.ld && !this.ld.done) this.loadTick();
     if (!this.W || !this.states) return;
     const dt = Math.min(64, now - (this.last || now)) || 16.67; this.last = now;
     const f = dt / 16.67, P = this.props, W = this.W, H = this.H;

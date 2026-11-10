@@ -160,8 +160,13 @@ void main(){
       const h = location.hash.slice(1);
       if (h && h !== 'top' && this.sec[h]) { const ty = Math.min(this.maxY, this.navTarget(h)); window.scrollTo(0, ty); this.y = this.prevY = ty; this.heroT -= 10000; this.sp = null; history.replaceState(null, '', location.pathname + location.search); }
       requestAnimationFrame(() => { window.__abReady = 1; }); };
-    (document.fonts ? document.fonts.ready : Promise.resolve()).then(go);
-    setTimeout(go, 1500);
+    this.go = go;
+    this.loader = this.q('[data-loader]');
+    let internal = false; try { internal = !!document.referrer && new URL(document.referrer).origin === location.origin; } catch (e) {}
+    let seen = false; try { seen = sessionStorage.getItem('ab-loaded') === '1'; sessionStorage.setItem('ab-loaded', '1'); } catch (e) {}
+    if (this.loader && (internal || seen || location.hash || performance.now() > 4500)) { this.loader.remove(); this.loader = null; }
+    if (this.loader) this.startLoader();
+    else { (document.fonts ? document.fonts.ready : Promise.resolve()).then(go); setTimeout(go, 1500); }
     if (document.fonts) {
       this.onFonts = () => { if (!this.dead) this.layout(); };
       document.fonts.ready.then(this.onFonts);
@@ -172,12 +177,62 @@ void main(){
     this.raf = requestAnimationFrame(this.tick);
   }
 
+  static LOAD_MS = 1800; // shortest run of the loading counter, 000 to 100
+
+  // Loading state: the counter follows real stages (mounted, fonts, page loaded), with a 6 s safety net.
+  startLoader() {
+    const L = this.ld = { stage: 0.15, shown: 0, t0: performance.now(), pct: -1, done: false };
+    this.ldN = this.q('[data-ld-n]'); this.ldBar = this.q('[data-ld-bar]');
+    this.loader.classList.add('ld-on');
+    // Nothing behind the cover can be clicked or tabbed to until it lifts.
+    this.ldInert = Array.from(this.root.children).filter(el => el !== this.loader);
+    this.ldInert.forEach(el => { el.inert = true; });
+    this.ldTimers = [];
+    // Lift no matter what if the counter hasn't finished (e.g. the animation loop stopped).
+    this.ldHard = setTimeout(() => { if (!L.done) { L.done = true; this.liftLoader(); } }, 9000);
+    const at = v => { L.stage = Math.max(L.stage, v); };
+    const fonts = (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => at(0.6));
+    const loaded = new Promise(r => { if (document.readyState === 'complete') r(); else addEventListener('load', () => r(), { once: true }); }).then(() => at(0.8));
+    Promise.all([fonts, loaded]).then(() => { if (this.dead) return; this.layout(); setTimeout(() => at(1), 120); });
+    this.ldSafety = setTimeout(() => at(1), 6000);
+  }
+
+  loadTick() {
+    const L = this.ld; if (!L || L.done) return;
+    const now = performance.now(), el = now - L.t0, dt = Math.min(0.05, Math.max(0, (now - (L.last || now)) / 1000)); L.last = now;
+    // A steady eased run of LOAD_MS; real stages only cap it, so a fast load never jumps and a slow one creeps.
+    const a = Math.min(1, el / Lens.LOAD_MS), run = a < 0.5 ? 4 * a * a * a : 1 - Math.pow(-2 * a + 2, 3) / 2;
+    const cap = L.stage >= 1 ? 1 : Math.min(0.92, L.stage + 0.2 * (1 - Math.exp(-el / 2500)));
+    const goal = this.rm ? cap : Math.min(cap, run);
+    if (this.rm) L.shown = goal;
+    else { let step = (goal - L.shown) * (1 - Math.exp(-dt * 9)); step = Math.min(step, dt * 0.9); L.shown += Math.max(0, step); }
+    if (goal >= 1 && L.shown > 0.997) L.shown = 1;
+    this.ldBar.style.transform = `scaleX(${L.shown.toFixed(4)})`;
+    const pct = Math.floor(L.shown * 100);
+    if (pct !== L.pct) { L.pct = pct; this.ldN.textContent = String(pct).padStart(3, '0'); }
+    if (L.shown >= 1) { L.done = true; this.liftLoader(); }
+  }
+
+  liftLoader() {
+    const el = this.loader; if (!el || this.dead) return;
+    clearTimeout(this.ldSafety); clearTimeout(this.ldHard);
+    const release = () => { (this.ldInert || []).forEach(n => { n.inert = false; }); this.ldInert = null; };
+    if (this.rm) { el.remove(); this.loader = null; release(); this.go(); return; }
+    const later = (fn, ms) => this.ldTimers.push(setTimeout(fn, ms));
+    later(() => {
+      el.classList.add('out'); release();
+      // Reveal the hero once the cover's lower edge has risen past the name, so the two never cross.
+      later(() => this.go(), 900);
+      later(() => { el.remove(); if (this.loader === el) this.loader = null; }, 1400);
+    }, 220);
+  }
+
   setTheme(theme) {
     if (theme !== this.props.theme) { this.props = { ...this.props, theme }; localStorage.removeItem('ab-theme'); this.applyTheme(); this.layout(); }
   }
 
   destroy() {
-    this.dead = true; cancelAnimationFrame(this.raf); if (this.vhProbe) this.vhProbe.remove(); if (document.fonts && this.onFonts) document.fonts.removeEventListener('loadingdone', this.onFonts);
+    this.dead = true; cancelAnimationFrame(this.raf); clearTimeout(this.ldSafety); clearTimeout(this.ldHard); (this.ldTimers || []).forEach(clearTimeout); if (this.vhProbe) this.vhProbe.remove(); if (document.fonts && this.onFonts) document.fonts.removeEventListener('loadingdone', this.onFonts);
     removeEventListener('resize', this.onResize); removeEventListener('keydown', this.onKey); removeEventListener('mousemove', this.onMove);
     document.removeEventListener('mouseleave', this.onLeave); document.removeEventListener('focusin', this.onFocus);
     this.ro && this.ro.disconnect();
@@ -631,6 +686,7 @@ void main(){
   tick(now) {
     if (this.dead) return;
     this.raf = requestAnimationFrame(this.tick);
+    if (this.ld && !this.ld.done) this.loadTick();
     if (!this.W || !this.states) return;
     const dt = Math.min(64, now - (this.last || now)) || 16.67; this.last = now;
     const f = dt / 16.67, P = this.props, W = this.W, H = this.H;
