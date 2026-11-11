@@ -136,14 +136,13 @@ const pad = (n: number) => String(n).padStart(2, '0');
 <div data-track="" style="position:absolute;top:calc(max(19vh,90px) + 26px);left:0;display:flex;gap:5vw;padding:0 3vw;will-change:transform">
 <article class="proj">
 <div data-lens="panel" class="shot" style="position:relative;aspect-ratio:1920 / 1009;overflow:hidden;background-color:var(--p1,#29261f);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
-<picture><source srcset="images/assaultcube-dma.avif" type="image/avif"><img src="images/assaultcube-dma.webp" width="1920" height="1009" decoding="async" alt="AssaultCubeDMA running in AssaultCube: ESP boxes and distances around players, and a panel with the targeted player’s stats" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
+<picture><source srcset="images/rustaveo.avif" type="image/avif"><img src="images/rustaveo.webp" width="1920" height="1009" decoding="async" alt="The Rustaveo web app: a Rust server map with team markers, and a panel listing an enemy team and who is online" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
 <div class="info">
-<h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">AssaultCubeDMA</h3>
+<h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">Rustaveo</h3>
 <div class="desc">
-<p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">An external cheat for AssaultCube that reads game memory through a PCIe DMA card instead of the OS. I reversed the player structures in IDA Pro and drew the ESP overlay with ImGui.</p>
-<span data-lens="" style="display:block;font-size:14px;line-height:1.5;color:var(--fg,#eeebe4)">C++, DMA, MemProcFS, IDA Pro, ImGui</span>
-<div style="display:flex;gap:20px;font-size:15px"><a data-lens="" href="work/assaultcube-dma/" style="display:inline-block">Case study →</a><a data-lens="" href="https://www.youtube.com/watch?v=T_itQoNx3rk" target="_blank" rel="noopener" style="display:inline-block">Demo ↗</a><a data-lens="" href="https://github.com/kaveOO/AssaultCubeDMA" target="_blank" rel="noopener" style="display:inline-block">Code ↗</a></div>
+<p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">A paid companion SaaS for the game Rust, built and run solo. I reverse-engineered the Rust+ protocol to send raid alerts to Discord, Telegram, phone calls and web push.</p>
+<span data-lens="" style="display:block;font-size:14px;line-height:1.5;color:var(--fg,#eeebe4)">TypeScript, Fastify, PostgreSQL, React 19, Docker</span>
 </div>
 </div>
 </article>
@@ -162,13 +161,14 @@ const pad = (n: number) => String(n).padStart(2, '0');
 </article>
 <article class="proj">
 <div data-lens="panel" class="shot" style="position:relative;aspect-ratio:1920 / 1009;overflow:hidden;background-color:var(--p3,#23271e);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
-<picture><source srcset="images/rustaveo.avif" type="image/avif"><img src="images/rustaveo.webp" width="1920" height="1009" decoding="async" alt="The Rustaveo web app: a Rust server map with team markers, and a panel listing an enemy team and who is online" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
+<picture><source srcset="images/assaultcube-dma.avif" type="image/avif"><img src="images/assaultcube-dma.webp" width="1920" height="1009" decoding="async" alt="AssaultCubeDMA running in AssaultCube: ESP boxes and distances around players, and a panel with the targeted player’s stats" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
 <div class="info">
-<h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">Rustaveo</h3>
+<h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">AssaultCubeDMA</h3>
 <div class="desc">
-<p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">A paid companion SaaS for the game Rust, built and run solo. I reverse-engineered the Rust+ protocol to send raid alerts to Discord, Telegram, phone calls and web push.</p>
-<span data-lens="" style="display:block;font-size:14px;line-height:1.5;color:var(--fg,#eeebe4)">TypeScript, Fastify, PostgreSQL, React 19, Docker</span>
+<p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">An external cheat for AssaultCube that reads game memory through a PCIe DMA card instead of the OS. I reversed the player structures in IDA Pro and drew the ESP overlay with ImGui.</p>
+<span data-lens="" style="display:block;font-size:14px;line-height:1.5;color:var(--fg,#eeebe4)">C++, DMA, MemProcFS, IDA Pro, ImGui</span>
+<div style="display:flex;gap:20px;font-size:15px"><a data-lens="" href="work/assaultcube-dma/" style="display:inline-block">Case study →</a><a data-lens="" href="https://www.youtube.com/watch?v=T_itQoNx3rk" target="_blank" rel="noopener" style="display:inline-block">Demo ↗</a><a data-lens="" href="https://github.com/kaveOO/AssaultCubeDMA" target="_blank" rel="noopener" style="display:inline-block">Code ↗</a></div>
 </div>
 </div>
 </article>

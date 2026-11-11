@@ -9,6 +9,17 @@ a:hover{color:var(--accent,#6e95ff);}
 .skip:focus{top:12px !important;}
 a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff);outline-offset:6px;border-radius:2px;}
 ::selection{background:var(--accent,#6e95ff);color:#fff;}
+/* Phones: tighter vertical rhythm, shorter pinned sections, and a header that content slides under cleanly. */
+@media (max-width:699px){
+header{background:linear-gradient(var(--bg,#0f0f0e) 62%,rgba(15,15,14,0));padding-bottom:30px !important;}
+[data-sec="top"]{height:auto !important;padding-top:118px !important;padding-bottom:6vh !important;}
+[data-sec="about"]{min-height:0 !important;padding-top:5vh !important;padding-bottom:6vh !important;}
+[data-sec="about"] [data-ach]{margin-top:5vh !important;}
+[data-sec="stack"]{height:140vh !important;}
+[data-sec="work"]{height:155vh !important;}
+[data-sec="writing"]{padding-top:6vh !important;padding-bottom:5vh !important;}
+[data-sec="contact"]{padding-top:6vh !important;}
+}
 /* Work cards. Stacked (screenshot over text) by default; side by side on wide screens. */
 .proj{flex:none;width:max(56vw,min(84vw,520px));}
 .shot{width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));}

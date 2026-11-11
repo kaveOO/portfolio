@@ -436,7 +436,7 @@ void main(){
       let fh = rvl.offsetHeight;
       if (wm && cs0.offsetHeight + fh > H) { wm.style.display = 'none'; fh = rvl.offsetHeight; }
       if (mqRow && cs0.offsetHeight + fh > H) mqRow.style.display = 'none';
-      rsp0.style.height = fh + 'px'; cs0.style.minHeight = Math.max(H - fh, 0) + 'px';
+      rsp0.style.height = fh + 'px'; cs0.style.minHeight = mob ? '0px' : Math.max(H - fh, 0) + 'px';
     }
     const name = this.q('[data-name]');
     if (name && !name.getAttribute('aria-label')) { name.setAttribute('aria-label', 'Alban Billiette'); Array.from(name.children).forEach(c => c.setAttribute('aria-hidden', 'true')); }
