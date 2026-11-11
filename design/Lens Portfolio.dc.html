@@ -22,6 +22,12 @@ a{color:inherit;text-decoration:none;}
 a:hover{color:var(--accent,#6e95ff);}
 a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff);outline-offset:6px;border-radius:2px;}
 ::selection{background:var(--accent,#6e95ff);color:#fff;}
+@media (min-width:900px) and (min-aspect-ratio:5/4){
+.proj{width:min(84vw,max(66vw,800px)) !important;display:flex;align-items:flex-end;gap:2.6vw;}
+.proj .shot{flex:none;width:min(calc(min(84vw,max(66vw,800px)) - 300px - 2.6vw),calc((100vh - max(19vh,90px) - 26px - 8vh) * 1.903)) !important;}
+.proj .info{flex:none;width:300px !important;margin-top:0 !important;flex-direction:column;flex-wrap:nowrap !important;justify-content:flex-end;gap:14px !important;}
+.proj .info > div{flex:none !important;max-width:none !important;}
+}
 html:has([data-loader].ld-on:not(.out)){overflow:hidden;}
 [data-loader]{clip-path:inset(0 0 0 0);transition:clip-path .95s cubic-bezier(.76,0,.24,1) .25s;animation:ldfail .4s ease 5s forwards;}
 [data-loader].ld-on{animation:none;}
@@ -153,18 +159,18 @@ html:has([data-loader].ld-on:not(.out)){overflow:hidden;}
 </div>
 </section>
 
-<section data-sec="work" style="position:relative;background:var(--bg,#0f0f0e);height:170vh">
+<section data-sec="work" style="position:relative;background:var(--bg,#0f0f0e);height:185vh">
 <div data-pin="" style="position:absolute;top:0;left:0;width:100%;height:100vh;overflow:hidden">
 <div style="position:absolute;top:13vh;left:3vw;right:3vw;display:flex;justify-content:space-between">
 <div data-rg=""><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Work</span></div>
 <div data-rg=""><span data-rv="" data-lens="" data-work-count="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">01 / 03</span></div>
 </div>
 <div data-track="" style="position:absolute;top:calc(max(19vh,90px) + 26px);left:0;display:flex;gap:5vw;padding:0 3vw;will-change:transform">
-<article style="flex:none;width:max(56vw,min(84vw,520px))">
-<div data-lens="panel" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p1,#29261f);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
+<article class="proj" style="flex:none;width:max(56vw,min(84vw,520px))">
+<div data-lens="panel" class="shot" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p1,#29261f);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
 <picture><source srcset="images/assaultcube-dma.avif" type="image/avif"><img src="images/assaultcube-dma.webp" width="1920" height="1009" decoding="async" alt="AssaultCubeDMA running in AssaultCube: ESP boxes and distances around players, and a panel with the targeted player’s stats" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
+<div class="info" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
 <h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">AssaultCubeDMA</h3>
 <div style="flex:1 1 240px;max-width:380px;display:flex;flex-direction:column;gap:14px">
 <p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">An external cheat for AssaultCube that reads game memory through a PCIe DMA card instead of the OS. I reversed the player structures in IDA Pro and drew the ESP overlay with ImGui.</p>
@@ -173,11 +179,11 @@ html:has([data-loader].ld-on:not(.out)){overflow:hidden;}
 </div>
 </div>
 </article>
-<article style="flex:none;width:max(56vw,min(84vw,520px))">
-<div data-lens="panel" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p2,#1f242a);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
+<article class="proj" style="flex:none;width:max(56vw,min(84vw,520px))">
+<div data-lens="panel" class="shot" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p2,#1f242a);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
 <picture><source srcset="images/kaveos.avif" type="image/avif"><img src="images/kaveos.webp" width="1522" height="800" decoding="async" alt="kaveOS booted in VGA text mode: the kaveOS logo, a system panel (32-bit i386, GRUB multiboot, 12 virtual screens), keyboard shortcuts, the 16-colour palette and a shell prompt" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
+<div class="info" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
 <h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">kaveOS</h3>
 <div style="flex:1 1 240px;max-width:380px;display:flex;flex-direction:column;gap:14px">
 <p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">A hobby x86 kernel written from scratch. An Assembly bootloader hands off through GRUB to a C kernel with interrupts, VGA output and 12 virtual screens.</p>
@@ -186,11 +192,11 @@ html:has([data-loader].ld-on:not(.out)){overflow:hidden;}
 </div>
 </div>
 </article>
-<article style="flex:none;width:max(56vw,min(84vw,520px))">
-<div data-lens="panel" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p3,#23271e);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
+<article class="proj" style="flex:none;width:max(56vw,min(84vw,520px))">
+<div data-lens="panel" class="shot" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p3,#23271e);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
 <picture><source srcset="images/rustaveo.avif" type="image/avif"><img src="images/rustaveo.webp" width="1920" height="1009" decoding="async" alt="The Rustaveo web app: a Rust server map with team markers, and a panel listing an enemy team and who is online" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
+<div class="info" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
 <h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">Rustaveo</h3>
 <div style="flex:1 1 240px;max-width:380px;display:flex;flex-direction:column;gap:14px">
 <p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">A paid companion SaaS for the game Rust, built and run solo. I reverse-engineered the Rust+ protocol to send raid alerts to Discord, Telegram, phone calls and web push.</p>
@@ -1007,7 +1013,7 @@ void main(){
     // Soft clamp: pinned sections slow into the pin and speed out of it, instead of stopping dead.
     const smax = (a, b, k) => { const h = Math.max(k - Math.abs(a - b), 0) / k; return Math.max(a, b) + h * h * k / 4; };
     const smin = (a, b, k) => -smax(-a, -b, k);
-    for (const k in this.sec) { const s = this.sec[k]; if (s.pin) { const R = s.h - H, kk = Math.max(1, Math.min(H * 0.22, R * 0.45)); s.off = smin(smax(y - s.top, 0, kk), R, kk); s.pin.style.transform = `translate3d(0,${s.off.toFixed(2)}px,0)`; } }
+    for (const k in this.sec) { const s = this.sec[k]; if (s.pin) { const R = s.h - H, kk = Math.max(1, Math.min(H * 0.22, R * 0.45)); s.kk = kk; s.off = smin(smax(y - s.top, 0, kk), R, kk); s.pin.style.transform = `translate3d(0,${s.off.toFixed(2)}px,0)`; } }
 
     const st = this.sec.stack;
     if (st) {
@@ -1024,7 +1030,10 @@ void main(){
     }
     const wk = this.sec.work;
     if (wk && this.track) {
-      const p = cl((wk.off || 0) / Math.max(1, wk.h - H), 0, 1);
+      // Slide progress: 0 when the pin starts and 1 just before it ends, with a short hold at each end
+      // (first project fully in view on arrival, last one fully in view before the section leaves).
+      const R = wk.h - H, q = ((wk.off || 0) - (wk.kk || 0) / 4) / Math.max(1, R - (wk.kk || 0) / 2), lead = 0.12;
+      const p = cl(smin(smax(q - lead, 0, 0.14) / (1 - 2 * lead), 1, 0.14), 0, 1);
       const tx = -p * Math.max(0, this.trackW - W);
       this.track.style.transform = `translate3d(${tx}px,0,0)`;
       const inPin = y >= wk.top - H * 0.3 && y <= wk.top + wk.h - H * 0.7;

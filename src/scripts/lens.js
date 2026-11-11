@@ -752,7 +752,7 @@ void main(){
     // Soft clamp: pinned sections slow into the pin and speed out of it, instead of stopping dead.
     const smax = (a, b, k) => { const h = Math.max(k - Math.abs(a - b), 0) / k; return Math.max(a, b) + h * h * k / 4; };
     const smin = (a, b, k) => -smax(-a, -b, k);
-    for (const k in this.sec) { const s = this.sec[k]; if (s.pin) { const R = s.h - H, kk = Math.max(1, Math.min(H * 0.22, R * 0.45)); s.off = smin(smax(y - s.top, 0, kk), R, kk); s.pin.style.transform = `translate3d(0,${s.off.toFixed(2)}px,0)`; } }
+    for (const k in this.sec) { const s = this.sec[k]; if (s.pin) { const R = s.h - H, kk = Math.max(1, Math.min(H * 0.22, R * 0.45)); s.kk = kk; s.off = smin(smax(y - s.top, 0, kk), R, kk); s.pin.style.transform = `translate3d(0,${s.off.toFixed(2)}px,0)`; } }
 
     const st = this.sec.stack;
     if (st) {
@@ -769,7 +769,10 @@ void main(){
     }
     const wk = this.sec.work;
     if (wk && this.track) {
-      const p = cl((wk.off || 0) / Math.max(1, wk.h - H), 0, 1);
+      // Slide progress: 0 when the pin starts and 1 just before it ends, with a short hold at each end
+      // (first project fully in view on arrival, last one fully in view before the section leaves).
+      const R = wk.h - H, q = ((wk.off || 0) - (wk.kk || 0) / 4) / Math.max(1, R - (wk.kk || 0) / 2), lead = 0.12;
+      const p = cl(smin(smax(q - lead, 0, 0.14) / (1 - 2 * lead), 1, 0.14), 0, 1);
       const tx = -p * Math.max(0, this.trackW - W);
       this.track.style.transform = `translate3d(${tx}px,0,0)`;
       const inPin = y >= wk.top - H * 0.3 && y <= wk.top + wk.h - H * 0.7;

@@ -127,18 +127,18 @@ const pad = (n: number) => String(n).padStart(2, '0');
 </div>
 </section>
 
-<section data-sec="work" style="position:relative;background:var(--bg,#0f0f0e);height:170vh">
+<section data-sec="work" style="position:relative;background:var(--bg,#0f0f0e);height:185vh">
 <div data-pin="" style="position:absolute;top:0;left:0;width:100%;height:100vh;overflow:hidden">
 <div style="position:absolute;top:13vh;left:3vw;right:3vw;display:flex;justify-content:space-between">
 <div data-rg=""><span data-rv="" data-lens="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">Work</span></div>
 <div data-rg=""><span data-rv="" data-lens="" data-work-count="" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6)">01 / 03</span></div>
 </div>
 <div data-track="" style="position:absolute;top:calc(max(19vh,90px) + 26px);left:0;display:flex;gap:5vw;padding:0 3vw;will-change:transform">
-<article style="flex:none;width:max(56vw,min(84vw,520px))">
-<div data-lens="panel" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p1,#29261f);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
+<article class="proj" style="flex:none;width:max(56vw,min(84vw,520px))">
+<div data-lens="panel" class="shot" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p1,#29261f);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
 <picture><source srcset="images/assaultcube-dma.avif" type="image/avif"><img src="images/assaultcube-dma.webp" width="1920" height="1009" decoding="async" alt="AssaultCubeDMA running in AssaultCube: ESP boxes and distances around players, and a panel with the targeted player’s stats" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
+<div class="info" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
 <h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">AssaultCubeDMA</h3>
 <div style="flex:1 1 240px;max-width:380px;display:flex;flex-direction:column;gap:14px">
 <p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">An external cheat for AssaultCube that reads game memory through a PCIe DMA card instead of the OS. I reversed the player structures in IDA Pro and drew the ESP overlay with ImGui.</p>
@@ -147,11 +147,11 @@ const pad = (n: number) => String(n).padStart(2, '0');
 </div>
 </div>
 </article>
-<article style="flex:none;width:max(56vw,min(84vw,520px))">
-<div data-lens="panel" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p2,#1f242a);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
+<article class="proj" style="flex:none;width:max(56vw,min(84vw,520px))">
+<div data-lens="panel" class="shot" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p2,#1f242a);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
 <picture><source srcset="images/kaveos.avif" type="image/avif"><img src="images/kaveos.webp" width="1522" height="800" decoding="async" alt="kaveOS booted in VGA text mode: the kaveOS logo, a system panel (32-bit i386, GRUB multiboot, 12 virtual screens), keyboard shortcuts, the 16-colour palette and a shell prompt" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
+<div class="info" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
 <h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">kaveOS</h3>
 <div style="flex:1 1 240px;max-width:380px;display:flex;flex-direction:column;gap:14px">
 <p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">A hobby x86 kernel written from scratch. An Assembly bootloader hands off through GRUB to a C kernel with interrupts, VGA output and 12 virtual screens.</p>
@@ -160,11 +160,11 @@ const pad = (n: number) => String(n).padStart(2, '0');
 </div>
 </div>
 </article>
-<article style="flex:none;width:max(56vw,min(84vw,520px))">
-<div data-lens="panel" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p3,#23271e);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
+<article class="proj" style="flex:none;width:max(56vw,min(84vw,520px))">
+<div data-lens="panel" class="shot" style="position:relative;aspect-ratio:1920 / 1009;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));overflow:hidden;background-color:var(--p3,#23271e);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
 <picture><source srcset="images/rustaveo.avif" type="image/avif"><img src="images/rustaveo.webp" width="1920" height="1009" decoding="async" alt="The Rustaveo web app: a Rust server map with team markers, and a panel listing an enemy team and who is online" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
-<div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
+<div class="info" style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)))">
 <h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">Rustaveo</h3>
 <div style="flex:1 1 240px;max-width:380px;display:flex;flex-direction:column;gap:14px">
 <p data-lens="" style="margin:0;font-size:16px;line-height:1.62;color:var(--mute,#b3afa6)">A paid companion SaaS for the game Rust, built and run solo. I reverse-engineered the Rust+ protocol to send raid alerts to Discord, Telegram, phone calls and web push.</p>
