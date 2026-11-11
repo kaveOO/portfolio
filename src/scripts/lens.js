@@ -21,12 +21,14 @@ float sdBox(vec2 p,vec2 b,float r){vec2 q=abs(p)-b+vec2(r);return length(max(q,0
 float sdTri(vec2 p,float r){const float k=1.7320508;p.x=abs(p.x)-r;p.y=p.y+r/k;if(p.x+k*p.y>0.)p=vec2(p.x-k*p.y,-k*p.x-p.y)/2.;p.x-=clamp(p.x,-2.*r,0.);return -length(p)*sign(p.y);}
 float mapBase(vec2 p){
   p=rot2(uRot)*p;
-  float r=min(uR,min(uB.x,uB.y));
-  float d1=sdBox(p,uB,r);
+  float R0=min(uB.x,uB.y);
+  float d1=sdBox(p,uB,R0);
   if(uTri<0.001)return d1;
-  float s=max(uB.x,uB.y)*1.18;float rr=s*0.16;
-  float d2=sdTri(vec2(p.x,-p.y),s-rr*1.732)-rr;
-  return mix(d1,d2,uTri);
+  float e=uTri*uTri*(3.-2.*uTri);
+  float s=max(uB.x,uB.y)*1.18;
+  float rc=mix(R0,s*0.16,e),hs=max(mix(0.,s*(1.-0.16*1.7320508),e),0.001);
+  float d2=sdTri(vec2(p.x,-p.y),hs)-rc;
+  return mix(d1,d2,smoothstep(0.,0.06,uTri));
 }
 float map(vec2 p){
   float d=mapBase(p);
@@ -133,7 +135,9 @@ void main(){
   col=mix(col,vec3(1.),clamp(uFlash*(0.08*h+0.5*rim+0.25*bev),0.,1.));
   col=mix(col,uAcc+vec3(0.06),uFill*0.72*(0.35+0.65*h));
   col=mix(col,vec3(1.),uFill*(rim*0.35+exp(-dot(sq,sq))*0.25*h));
-  if(uTri<0.999)col=mix(sphereCol(f,p,d,g,mn),col,uTri);
+  if(uTri<0.999)col=mix(sphereCol(f,p,d,g,mn),col,smoothstep(0.2,0.8,uTri));
+  float mt=4.*uTri*(1.-uTri);
+  col=mix(col,vec3(1.),clamp(mt*(rim*0.45+bev*0.2*max(lit,0.)),0.,1.));
   if(uFill>0.001){vec2 hq=(p/mn-vec2(-0.32,-0.38))/vec2(0.22,0.16);col=mix(col,uAcc,uFill);}
   float a=clamp(0.5-d,0.,1.);
   gl_FragColor=vec4(col*a+oc*(1.-a),a+oa*(1.-a));
@@ -233,7 +237,7 @@ void main(){
 
   destroy() {
     this.dead = true; cancelAnimationFrame(this.raf); clearTimeout(this.ldSafety); clearTimeout(this.ldHard); (this.ldTimers || []).forEach(clearTimeout); if (this.vhProbe) this.vhProbe.remove(); if (document.fonts && this.onFonts) document.fonts.removeEventListener('loadingdone', this.onFonts);
-    removeEventListener('resize', this.onResize); removeEventListener('keydown', this.onKey); removeEventListener('mousemove', this.onMove);
+    removeEventListener('resize', this.onResize); removeEventListener('keydown', this.onKey); removeEventListener('mousemove', this.onMove); removeEventListener('wheel', this.onWheel);
     document.removeEventListener('mouseleave', this.onLeave); document.removeEventListener('focusin', this.onFocus);
     this.ro && this.ro.disconnect();
     (this.navEls || []).forEach(el => el.removeEventListener('click', this.onNav));
@@ -254,9 +258,21 @@ void main(){
     this.onLeave = () => { this.mouse.x = 0; this.mouse.y = 0; this.mouse.px = null; };
     addEventListener('resize', this.onResize);
     addEventListener('mousemove', this.onMove);
+    // Smooth wheel: take the wheel input ourselves and ease toward it, instead of easing on top of the
+    // browser's own wheel animation. Keyboard, scrollbar and links keep scrolling natively.
+    this.onWheel = e => {
+      // Leave pinch-zoom and sideways swipes (trackpad back/forward) to the browser.
+      if (e.ctrlKey || e.defaultPrevented || this.coarse || this.rm || Math.abs(e.deltaX) > Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      if (this.ld && !this.ld.done) return;
+      let d = e.deltaY; if (e.deltaMode === 1) d *= 40; else if (e.deltaMode === 2) d *= this.H;
+      if (!this.vActive) { this.vTarget = this.y; this.vActive = true; this.vSet = null; }
+      this.vTarget = Math.max(0, Math.min(this.maxY, this.vTarget + d));
+    };
+    addEventListener('wheel', this.onWheel, { passive: false });
     document.addEventListener('mouseleave', this.onLeave);
     this.ro = new ResizeObserver(() => this.layout()); this.ro.observe(this.content);
-    this.onFocus = e => { const el = e.target; if (!this.content.contains(el)) return; const r = el.getBoundingClientRect(); if (r.top < 80 || r.bottom > this.H - 40) window.scrollTo(0, Math.max(0, r.top + this.y - this.H * 0.4)); };
+    this.onFocus = e => { const el = e.target; if (this.revealEl && this.revealEl.contains(el)) { window.scrollTo(0, this.maxY); return; } if (!this.content.contains(el)) return; const r = el.getBoundingClientRect(); if (r.top < 80 || r.bottom > this.H - 40) window.scrollTo(0, Math.max(0, r.top + this.y - this.H * 0.4)); };
     document.addEventListener('focusin', this.onFocus);
     this.sbar = this.q('[data-sbar]'); this.sthumb = this.q('[data-sthumb]');
     if (this.sbar) {
@@ -316,7 +332,8 @@ void main(){
   navTarget(k) {
     const s = this.sec[k], H = this.H;
     if (!s || k === 'top') return 0;
-    if (k === 'about') return s.top + s.h / 2 - H / 2;
+    // Centre About, but never so far down that its label tucks under the fixed header.
+    if (k === 'about') return Math.min(s.top + s.h / 2 - H / 2, s.top - H * 0.06);
     if (k === 'writing') return s.top + H * 0.05;
     if (k === 'contact') return this.maxY - (this.revealH || 0);
     return s.top;
@@ -422,19 +439,15 @@ void main(){
       return d;
     });
     this.words = this.qa('[data-word]').map(el => ({ el, h: el.offsetHeight, kids: Array.from(el.querySelectorAll('[data-lens]')) }));
+    this.words.forEach(w => { w.el.style.willChange = 'transform'; w.kids.forEach(k => { k.style.willChange = 'opacity'; }); });
     this.track = this.q('[data-track]'); this.panels = this.track ? Array.from(this.track.querySelectorAll('[data-lens="panel"]')) : [];
+    this.panels.forEach(pl => { pl.style.willChange = 'transform'; });
     this.bioWords = this.qa('[data-sec="about"] p[data-rg] [data-rv]');
+    this.bioWords.forEach(w => { w.style.willChange = 'opacity'; let t = 0, n = w; while (n && n !== this.content) { t += n.offsetTop; n = n.offsetParent; } w._docTop = t; });
     this.revealEl = this.q('[data-reveal]'); this.revealLens = this.revealEl ? Array.from(this.revealEl.querySelectorAll('[data-lens]')) : [];
     const rsp = this.q('[data-reveal-space]'); this.revealH = rsp ? rsp.offsetHeight : 0;
     if (this.track) { this.trackW = this.track.scrollWidth; this.cardC = Array.from(this.track.children).map(a => a.offsetLeft + a.offsetWidth / 2); }
     if (this.panels[0]) { const p = this.panels[0]; this.panelY = this.track.offsetTop + p.offsetTop + p.offsetHeight / 2; this.panelX = this.track.offsetLeft + p.offsetLeft + p.offsetWidth * 0.82; }
-    this.esp = this.qa('[data-esp]').map(el => {
-      const p = el.parentElement.querySelector('[data-lens="panel"]'), pad = this.mobile ? 6 : 10, st = el.style;
-      st.left = (p.offsetLeft - pad) + 'px'; st.top = (p.offsetTop - pad) + 'px';
-      st.width = (p.offsetWidth + pad * 2) + 'px'; st.height = (p.offsetHeight + pad * 2) + 'px';
-      if (this.rm) st.transition = 'none';
-      return { el, p, on: false };
-    });
     (this.rows || []).forEach(r => { r.top = r.el.getBoundingClientRect().top + this.y; r.h = r.el.offsetHeight; });
     const y = this.y;
     const capMid = (el, d) => (d.lh - (d.asc + d.desc)) / 2 + d.asc - d.cap;
@@ -482,7 +495,7 @@ void main(){
     const st = [
       { a: 0, b: H * 0.05, f: () => { const hb = this.heroBox, R = this.heroR || m * (this.mobile ? .1 : .12); return { x: hb ? hb.x : W * .62, y: hb ? hb.y : H * .45, bw: R, bh: R, r: R, tri: 0, rot: 0, mag: 1.14, glow: 0 }; } },
       { a: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) - H * .1, b: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) + H * .1, f: () => { const b = this.bioBox, yy = b ? Math.min(H * .68, Math.max(H * .32, b.mid - this.y)) : H * .5; return { x: this.mobile ? W * .97 : (b ? b.x : W * .85), y: yy, bw: m * (this.mobile ? .07 : .1), bh: m * (this.mobile ? .07 : .1), r: m * (this.mobile ? .07 : .1), tri: 0, rot: 0, mag: 1.12, glow: 0 }; } },
-      { a: S.stack.top, b: S.stack.top + S.stack.h - H, f: p => ({ x: W * .5, y: H * .5, bw: m * .18, bh: m * .18, r: m * .03, tri: 1, rot: -0.2 + p * 1.1 + 2.0944 * (p < 0.4 ? (p / 0.4) * (p / 0.4) * (3 - 2 * p / 0.4) : 1), mag: 1.02, glow: 0 }) },
+      { a: S.stack.top, b: S.stack.top + S.stack.h - H, f: p => ({ x: W * .5, y: H * .5, bw: m * .18, bh: m * .18, r: m * .03, tri: 1, rot: p * 2.0944, mag: 1.02, glow: 0 }) },
       { a: S.work.top, b: S.work.top + S.work.h - H, f: p => ({ x: Math.min(W * .5, this.panelX || W * .5), y: this.panelY || H * .45, bw: m * .125, bh: m * .125, r: m * .125, tri: 0, rot: Math.PI, mag: 1.35, glow: 0 }) },
       { a: c(S.writing) - H * .12, b: c(S.writing) + H * .12, f: () => { const R = m * (this.mobile ? .07 : .095) * (1 + .14 * (this.hoverAmt || 0)); return { x: W * .97 - R * 1.1, y: this.hoverY == null ? H * .5 : this.hoverY, bw: R, bh: R, r: R, tri: 0, rot: Math.PI, mag: 1.16 + .1 * (this.hoverAmt || 0), glow: 1 + .8 * (this.hoverAmt || 0) }; } },
       { a: this.maxY - (this.revealH || 0), b: this.maxY, f: p => ({ x: this.contactX || W * .6, y: (this.contactY || H * .5) + (1 - p) * (this.revealH || 0), bw: this.dotR || m * .065, bh: this.dotR || m * .065, r: this.dotR || m * .065, tri: 0, rot: Math.PI, mag: 1.2, glow: .35 }) }
@@ -497,7 +510,13 @@ void main(){
     const o = {}; let act = false;
     keys.forEach(k => {
       const s = this.sp[k] || (this.sp[k] = { v: G[k], u: 0 });
-      s.u += (G[k] - s.v) * 0.11 * f; s.u *= Math.pow(0.76, f); s.v += s.u * f;
+      if (k === 'tri' || k === 'rot' || k === 'r' || k === 'mag') {
+        const w = 9, t = f / 60, e = Math.exp(-w * t), x = s.v - G[k], kk = (s.u + w * x) * t;
+        s.v = G[k] + (x + kk) * e; s.u = (s.u - w * kk) * e;
+        if (Math.abs(s.v - G[k]) > 1e-3) act = true;
+        o[k] = s.v; return;
+      }
+      for (let i = 0, n = Math.max(1, Math.ceil(f / 0.25)), sf = f / n; i < n; i++) { s.u += (G[k] - s.v) * 0.11 * sf; s.u *= Math.exp(-0.5 * sf); s.v += s.u * sf; }
       if (Math.abs(s.u) > 0.01) act = true;
       o[k] = s.v;
     });
@@ -511,7 +530,7 @@ void main(){
     const f = this._f || 1, s = this.st || (this.st = { v: 0, u: 0 });
     if (this.rm) return 0;
     const tgt = Math.min(Math.abs(this.vel || 0) * 0.0045, 0.2);
-    s.u += (tgt - s.v) * 0.08 * f; s.u *= Math.pow(0.8, f); s.v += s.u * f;
+    for (let i = 0, n = Math.max(1, Math.ceil(f / 0.25)), sf = f / n; i < n; i++) { s.u += (tgt - s.v) * 0.08 * sf; s.u *= Math.pow(0.8, sf); s.v += s.u * sf; }
     return Math.max(-0.12, Math.min(0.25, s.v));
   }
 
@@ -574,15 +593,25 @@ void main(){
     if (d.bw > 0) { c.strokeStyle = d.bc; c.lineWidth = d.bw; this.rr(x + d.bw / 2, y + d.bw / 2, w - d.bw, h - d.bw, d.br - d.bw / 2); c.stroke(); }
     if (!d.text) return;
     let s = d.el.textContent; if (!s || !s.trim()) return; s = s.trim(); if (d.upper) s = s.toUpperCase();
-    c.font = d.font; try { c.letterSpacing = d.ls; } catch (e) {} c.fillStyle = d.color;
-    const cw = w - d.pl - d.pr - 2 * d.bw, cx = x + d.pl + d.bw, cy = y + d.pt + d.bw;
-    if (d._s !== s || Math.abs((d._w || 0) - cw) > 1) { d._lines = this.wrap(s, cw + 2); d._s = s; d._w = cw; }
-    const pad = (d.lh - (d.asc + d.desc)) / 2 + d.asc;
-    d._lines.forEach((ln, i) => {
-      let lx = cx;
-      if (d.align === 'center' || d.align === 'right' || d.align === 'end') { const lw = c.measureText(ln).width; lx = d.align === 'center' ? cx + (cw - lw) / 2 : cx + cw - lw; }
-      c.fillText(ln, lx, cy + i * d.lh + pad);
-    });
+    const dpr = this.texDpr || this.dpr, key = s + '|' + Math.round(w) + '|' + Math.round(h) + '|' + dpr;
+    if (d._ck !== key) {
+      // Rasterize this element's text once into its own bitmap; every later frame is a single drawImage.
+      const t = this.tc; t.font = d.font; try { t.letterSpacing = d.ls; } catch (e) {}
+      const cw = w - d.pl - d.pr - 2 * d.bw;
+      if (d._s !== s || Math.abs((d._w || 0) - cw) > 1) { d._lines = this.wrap(s, cw + 2); d._s = s; d._w = cw; }
+      const px = d.fs * 0.5, cv = d._cv || (d._cv = document.createElement('canvas')), cc = cv.getContext('2d');
+      cv.width = Math.max(1, Math.ceil((w + px * 2) * dpr)); cv.height = Math.max(1, Math.ceil((h + px * 2) * dpr));
+      cc.setTransform(dpr, 0, 0, dpr, px * dpr, px * dpr);
+      cc.font = d.font; try { cc.letterSpacing = d.ls; } catch (e) {} cc.fillStyle = d.color;
+      const cx = d.pl + d.bw, cy = d.pt + d.bw, pad = (d.lh - (d.asc + d.desc)) / 2 + d.asc;
+      d._lines.forEach((ln, i) => {
+        let lx = cx;
+        if (d.align === 'center' || d.align === 'right' || d.align === 'end') { const lw = cc.measureText(ln).width; lx = d.align === 'center' ? cx + (cw - lw) / 2 : cx + cw - lw; }
+        cc.fillText(ln, lx, cy + i * d.lh + pad);
+      });
+      d._ck = key; d._cp = px;
+    }
+    c.drawImage(d._cv, x - d._cp, y - d._cp, w + d._cp * 2, h + d._cp * 2);
   }
 
   drawPanel(d, r, op) {
@@ -646,7 +675,10 @@ void main(){
     const fx = 1 - Math.min(1, Math.max(0, (this.y - (this.maxY - (this.revealH || 0) - this.H * 0.35)) / (this.H * 0.35)));
     let cx = G.x + sweep + ms.sx * 18 * fx, cy = G.y + (ms.sy * 13 + (this.rm ? 0 : Math.sin(t * 0.9) * 4)) * fx - (1 - drop) * this.H * 0.2;
     if (lock > 0 && this.contactX != null) { const ex = this.contactX, ey = this.contactY + (this.maxY - this.y); cx += (ex - cx) * lock; cy += (ey - cy) * lock; }
-    const rot = G.rot + ms.sx * 0.08 + Math.sin(t * 0.45) * 0.015 + ee * Math.PI * 2;
+    const lt = this.rm ? 0 : Math.max(-0.2, Math.min(0.2, (this.vel || 0) * 0.012)) * G.tri;
+    this.lean = (this.lean || 0) + (lt - (this.lean || 0)) * (1 - Math.pow(0.88, this._f || 1));
+    if (Math.abs(this.lean) > 0.001) this.active = true;
+    const rot = G.rot + this.lean + ms.sx * 0.08 + Math.sin(t * 0.45) * 0.015 + ee * Math.PI * 2;
     const lf = this._f || 1, tr = this.trans, Rb = Math.min(bw, bh);
     let tox = 0, toy = 0, tr2 = 0;
     if (tr && !this.rm) { const len = Math.hypot(tr.dx, tr.dy); if (len > Rb * .5) { const sp = Math.sin(Math.PI * tr.t); tox = -tr.dx / len * Rb * 1.7 * sp; toy = -tr.dy / len * Rb * 1.7 * sp; tr2 = Rb * .5 * Math.min(1, sp * 1.8) * (1 - G.tri); } }
@@ -678,7 +710,9 @@ void main(){
     gl.uniform1f(u.uDark, 1);
     gl.uniform2f(u.uTilt, ms.sx * 22, ms.sy * 22);
     gl.uniform1f(u.uFlash, Math.max(this.flash || 0, ek < 1 ? Math.sin(ek * Math.PI) * 1.5 : 0)); gl.uniform1f(u.uQ, this.coarse ? 0 : 1);
-    gl.uniform1f(u.uFill, 1 - fx); gl.uniform1f(u.uR2, this.br2 > .5 ? this.br2 : 0); gl.uniform2f(u.uOff, this.box, this.boy); gl.uniform1f(u.uWob, this.wob); gl.uniform1f(u.uTime, this.rm ? 0 : now / 1000);
+    gl.uniform1f(u.uFill, 1 - fx); gl.uniform1f(u.uR2, this.br2 > .5 ? this.br2 : 0); // The trailing drop stays joined to the lens (never a separate ball) and is pulled back in as it shrinks.
+    const ab = Math.min(1, (this.br2 || 0) / Math.max(1, Rb * 0.3)), ol = Math.hypot(this.box, this.boy) * ab, om = Rb * 0.8 + (this.br2 || 0) * 0.5, oc2 = ol > om ? om / ol : 1;
+    gl.uniform2f(u.uOff, this.box * ab * oc2, this.boy * ab * oc2); gl.uniform1f(u.uWob, this.wob); gl.uniform1f(u.uTime, this.rm ? 0 : now / 1000);
     gl.uniform3fv(u.uBg, this.bgRGB); gl.uniform3fv(u.uAcc, this.accRGB);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
@@ -690,11 +724,23 @@ void main(){
     if (!this.W || !this.states) return;
     const dt = Math.min(64, now - (this.last || now)) || 16.67; this.last = now;
     const f = dt / 16.67, P = this.props, W = this.W, H = this.H;
-    if (this.gliding) { this.y = Math.min(window.scrollY, this.maxY); }
-    let lerp = 0.3 - 0.28 * (P.inertia ?? 0.7); if (this.coarse) lerp = 1; if (this.rm) lerp = 1;
-    const target = Math.min(window.scrollY, this.maxY);
-    this.y += (target - this.y) * (1 - Math.pow(1 - lerp, f));
-    if (Math.abs(target - this.y) < 0.05) this.y = target;
+    if (this.gliding) { this.y = this.ty = Math.min(window.scrollY, this.maxY); }
+    let lerp = 0.3 - 0.28 * (P.inertia ?? 0.86); if (this.coarse) lerp = 1; if (this.rm) lerp = 1;
+    const sy = Math.min(window.scrollY, this.maxY);
+    // Something else scrolled since our last write (keys, scrollbar, a nav link): follow it instead.
+    if (this.vActive && (this.gliding || (this.vSet != null && Math.abs(sy - this.vSet) > 2))) this.vActive = false;
+    const target = this.vActive ? this.vTarget : sy;
+    if (lerp >= 1) { this.y = this.ty = target; }
+    else {
+      // Two smoothing stages in series: a quick 120 ms one so movement starts at once with no kick, then
+      // the long glide. Successive wheel notches overlap into one continuous motion instead of pulses.
+      const t = dt / 1000, glide = -1 / (60 * Math.log(1 - lerp));
+      if (this.ty == null) this.ty = this.y;
+      this.ty += (target - this.ty) * (1 - Math.exp(-t / 0.12));
+      this.y += (this.ty - this.y) * (1 - Math.exp(-t / glide));
+    }
+    if (Math.abs(target - this.y) < 0.05 && Math.abs(target - this.ty) < 0.05) this.y = this.ty = target;
+    if (this.vActive) { window.scrollTo(0, this.y); this.vSet = Math.min(window.scrollY, this.maxY); if (this.y === target) this.vActive = false; }
     this.active = this.springActive || Math.abs(target - this.y) > 0.05 || (this.flash || 0) > 0.002;
     this.textAnim = false;
     const y = this.y, vel = (y - this.prevY) / f; this.prevY = y; this.vel = vel; this._f = f;
@@ -703,11 +749,14 @@ void main(){
 
     const gr = this.groups.map(g => g.el.getBoundingClientRect());
     this.content.style.transform = `translate3d(0,${-y}px,0)`;
-    for (const k in this.sec) { const s = this.sec[k]; if (s.pin) s.pin.style.transform = `translate3d(0,${cl(y - s.top, 0, s.h - H)}px,0)`; }
+    // Soft clamp: pinned sections slow into the pin and speed out of it, instead of stopping dead.
+    const smax = (a, b, k) => { const h = Math.max(k - Math.abs(a - b), 0) / k; return Math.max(a, b) + h * h * k / 4; };
+    const smin = (a, b, k) => -smax(-a, -b, k);
+    for (const k in this.sec) { const s = this.sec[k]; if (s.pin) { const R = s.h - H, kk = Math.max(1, Math.min(H * 0.22, R * 0.45)); s.off = smin(smax(y - s.top, 0, kk), R, kk); s.pin.style.transform = `translate3d(0,${s.off.toFixed(2)}px,0)`; } }
 
     const st = this.sec.stack;
     if (st) {
-      const p = cl((y - st.top) / (st.h - H), 0, 1), n = this.words.length, s0 = p * (n - 1 + 0.7) - 0.35, fl = Math.floor(s0), e3 = x => x * x * (3 - 2 * x), fr = s0 - fl, shift = fl + fr + (e3(fr) - fr) * 0.8;
+      const p = cl((st.off || 0) / Math.max(1, st.h - H), 0, 1), n = this.words.length, s0 = p * (n - 1 + 0.7) - 0.35, fl = Math.floor(s0), e3 = x => x * x * (3 - 2 * x), fr = s0 - fl, shift = s0;
       this.stackShift = shift;
       this.words.forEach((w, i) => {
         const rel = i - shift;
@@ -720,15 +769,10 @@ void main(){
     }
     const wk = this.sec.work;
     if (wk && this.track) {
-      const p = cl((y - wk.top) / (wk.h - H), 0, 1);
+      const p = cl((wk.off || 0) / Math.max(1, wk.h - H), 0, 1);
       const tx = -p * Math.max(0, this.trackW - W);
       this.track.style.transform = `translate3d(${tx}px,0,0)`;
       const inPin = y >= wk.top - H * 0.3 && y <= wk.top + wk.h - H * 0.7;
-      (this.esp || []).forEach(b => {
-        const r = b.p.getBoundingClientRect(), vis = (Math.min(r.right, W) - Math.max(r.left, 0)) / Math.max(1, r.width);
-        const on = inPin && r.top < H && r.bottom > 0 && vis > 0.6;
-        if (on !== b.on) { b.on = on; b.el.style.opacity = on ? '1' : '0'; b.el.style.transform = on ? 'none' : 'scale(.97)'; }
-      });
       let fl = 0; if (inPin && !this.rm) (this.cardC || []).forEach(c => { const d = (tx + c - W * 0.5) / (W * 0.05); fl = Math.max(fl, Math.exp(-d * d)); });
       this.flash = (this.flash || 0) + (fl - (this.flash || 0)) * 0.2 * f;
       const txt = pad(Math.round(p * (this.panels.length - 1)) + 1) + ' / ' + pad(this.panels.length);
@@ -740,7 +784,8 @@ void main(){
     this.rows.forEach((r, i) => { const rt = this.hover === i ? W * 0.03 : 0; if (Math.abs(rt - r.x) > 0.05) this.textAnim = true; r.x += (rt - r.x) * 0.12 * f; r.w.style.transform = `translate3d(${r.x.toFixed(2)}px,0,0)`; });
     const hr = this.rows[this.hover];
     let hy = H * 0.5;
-    if (hr) hy = hr.top + hr.h / 2 - y; else if (this.rows.length) { let bd = 1e9; this.rows.forEach(r => { const cy = r.top + r.h / 2 - y, dd = Math.abs(cy - H * 0.5); if (dd < bd) { bd = dd; hy = cy; } }); }
+    // Without hover, ride a weighted blend of the rows near the centre: it slides row to row instead of jumping.
+    if (hr) hy = hr.top + hr.h / 2 - y; else if (this.rows.length) { let sw = 0, sy2 = 0; this.rows.forEach(r => { const cy = r.top + r.h / 2 - y, q = (cy - H * 0.5) / (H * 0.18), w = Math.exp(-q * q) + 1e-6; sw += w; sy2 += w * cy; }); hy = sy2 / sw; }
     hy = Math.min(H * 0.75, Math.max(H * 0.25, hy));
     this.hoverY = this.hoverY == null ? hy : this.hoverY + (hy - this.hoverY) * 0.08 * f;
     this.hoverAmt = (this.hoverAmt || 0) + ((hr ? 1 : 0) - (this.hoverAmt || 0)) * 0.08 * f;
@@ -760,9 +805,9 @@ void main(){
     }
     if (this.cue) this.cue.style.transform = `translate3d(0,${((now / 1800) % 1) * 200 - 100}%,0)`;
     const mpx = this.mouse.px, mpy = this.mouse.py;
-    if (this.bioWords) this.bioWords.forEach(w => { const r = w.getBoundingClientRect(), o = Math.round((0.18 + 0.82 * cl((H * 0.82 - r.top) / (H * 0.32), 0, 1)) * 100) / 100; if (w._sc !== o) { w._sc = o; w.style.opacity = o; w._op = o; } });
+    if (this.bioWords) this.bioWords.forEach(w => { const top = w._docTop - y, o = Math.round((0.18 + 0.82 * cl((H * 0.82 - top) / (H * 0.32), 0, 1)) * 100) / 100; if (w._sc !== o) { w._sc = o; w.style.opacity = o; w._op = o; } });
     if (this.revealEl) {
-      const rs = this.revealH || 1, rv = cl((y - (this.maxY - rs)) / rs, 0, 1);
+      const rs = this.revealH || 1, rl = cl((y - (this.maxY - rs)) / rs, 0, 1), rv = rl * rl * (3 - 2 * rl);
       this.revealEl.style.transform = `translate3d(0,${((1 - rv) * rs * 0.45).toFixed(1)}px,0)`;
       const o = rv > 0.005 ? 1 : 0; this.revealLens.forEach(el => { el._op = o; });
     }
@@ -773,7 +818,7 @@ void main(){
 
 const root = document.querySelector('[data-root]');
 if (root) {
-  const lens = new Lens(root, { theme: 'dark', refraction: 1, aberration: 1, inertia: 0.7 });
+  const lens = new Lens(root, { theme: 'dark', refraction: 1, aberration: 1, inertia: 0.86 });
   lens.mount();
   window.lens = lens;
 }

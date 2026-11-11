@@ -4,6 +4,7 @@
 import transitionsUrl from '../scripts/transitions.js?url';
 import mobileNavUrl from '../scripts/mobile-nav.js?url';
 import scrollbarUrl from '../scripts/scrollbar.js?url';
+import { url } from '../lib/paths';
 
 interface Props {
   title: string;
@@ -34,6 +35,7 @@ const {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
+<link rel="icon" type="image/svg+xml" href={url('/favicon.svg')}>
 {description && <meta name="description" content={description}>}
 {noindex && <meta name="robots" content="noindex">}
 <link rel="preconnect" href="https://fonts.googleapis.com">
