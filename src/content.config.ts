@@ -23,7 +23,9 @@ const projects = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: z.object({
     title: z.string(),
-    // Position among the case studies (1 = first); also sets the "01 / 03" counter and "Next project".
+    // Show the title in capitals where it stands alone (heading, tab, Next project). The text stays as written.
+    caps: z.boolean().default(false),
+    // Position among the case studies (1 = first); also sets the case-study "01 / 03" counter (out of the highest order) and "Next project".
     order: z.number(),
     // One or two sentences under the title; also the page description.
     summary: z.string(),

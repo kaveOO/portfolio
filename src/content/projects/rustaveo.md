@@ -1,5 +1,6 @@
 ---
-title: RUSTAVEO
+title: Rustaveo
+caps: true
 order: 1
 year: 2026
 context: Paid SaaS, built and run solo
@@ -35,7 +36,7 @@ A full product, from the protocol connection to billing, that I designed, built,
 
 ## How it fits together
 
-A browser can't speak the Rust+ protocol, so Rustaveo is a backend that holds the game connections, and a web app that talks to it. The connection itself uses the open-source [rustplus.js](https://github.com/liamcottle/rustplus.js) client for the reverse-engineered Rust+ protocol. Everything around it is mine.
+A browser can't speak the Rust+ protocol, so Rustaveo is a backend that holds the game connections, and a web app that talks to it. The connection itself uses the open-source <a href="https://github.com/liamcottle/rustplus.js" target="_blank" rel="noopener">rustplus.js</a> client for the reverse-engineered Rust+ protocol. Everything around it is mine.
 
 ```text
 Browser (React + Vite)
