@@ -839,7 +839,8 @@ void main(){
     this.groups.forEach((g, i) => {
       const r = gr[i];
       if (g.hero) { if (this.heroOn && !g.on) this.setGroup(g, true, now); }
-      else if (!g.on) { if (this.heroOn && r.top < H * 0.9 && r.bottom > 0) this.setGroup(g, true, now); }
+      // Reveal once it rises past 90% of the screen, or as soon as it is fully on screen (a nav jump can stop just short of that line).
+      else if (!g.on) { if (this.heroOn && (r.top < H * 0.9 || r.bottom <= H) && r.bottom > 0) this.setGroup(g, true, now); }
       else if (r.top > H * 1.02) this.setGroup(g, false, now);
       g.items.forEach(el => { if (this.updItem(el, now)) { this.active = true; this.textAnim = true; } });
     });
