@@ -184,7 +184,7 @@ html:has([data-loader].ld-on:not(.out)){overflow:hidden;}
 <div data-track="" style="position:absolute;top:calc(max(19vh,90px) + 26px);left:0;display:flex;gap:5vw;padding:0 3vw;will-change:transform">
 <article class="proj">
 <div data-lens="panel" class="shot" style="position:relative;aspect-ratio:1920 / 1009;overflow:hidden;background-color:var(--p1,#29261f);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
-<picture><source srcset="images/rustaveo.avif" type="image/avif"><img src="images/rustaveo.webp" width="1920" height="1009" decoding="async" alt="The Rustaveo web app: a Rust server map with team markers, and a panel listing an enemy team and who is online" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
+<picture><source srcset="images/rustaveo-1100.avif 1100w, images/rustaveo.avif 1920w" sizes="(max-width:699px) 86vw, 70vw" type="image/avif"><img src="images/rustaveo.webp" srcset="images/rustaveo-1100.webp 1100w, images/rustaveo.webp 1920w" sizes="(max-width:699px) 86vw, 70vw" width="1920" height="1009" decoding="async" alt="The Rustaveo web app: a Rust server map with team markers, and a panel listing an enemy team and who is online" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
 <div class="info">
 <h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">Rustaveo</h3>
@@ -209,7 +209,7 @@ html:has([data-loader].ld-on:not(.out)){overflow:hidden;}
 </article>
 <article class="proj">
 <div data-lens="panel" class="shot" style="position:relative;aspect-ratio:1920 / 1009;overflow:hidden;background-color:var(--p3,#23271e);background-image:repeating-linear-gradient(135deg,var(--line,rgba(238,235,228,0.14)) 0 1px,transparent 1px 12px)">
-<picture><source srcset="images/assaultcube-dma.avif" type="image/avif"><img src="images/assaultcube-dma.webp" width="1920" height="1009" decoding="async" alt="AssaultCubeDMA running in AssaultCube: ESP boxes and distances around players, and a panel with the targeted player’s stats" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
+<picture><source srcset="images/assaultcube-dma-1100.avif 1100w, images/assaultcube-dma.avif 1920w" sizes="(max-width:699px) 86vw, 70vw" type="image/avif"><img src="images/assaultcube-dma.webp" srcset="images/assaultcube-dma-1100.webp 1100w, images/assaultcube-dma.webp 1920w" sizes="(max-width:699px) 86vw, 70vw" width="1920" height="1009" decoding="async" alt="AssaultCubeDMA running in AssaultCube: ESP boxes and distances around players, and a panel with the targeted player’s stats" style="position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;display:block"></picture>
 </div>
 <div class="info">
 <h3 data-lens="" style="margin:0;font-size:clamp(24px,2.5vw,40px);font-weight:500;letter-spacing:-0.025em;line-height:1.1">AssaultCubeDMA</h3>
@@ -981,6 +981,8 @@ void main(){
     const sweep = (1 - es) * (this.W * 0.1 - G.x) * Math.max(0, 1 - this.y / (this.H * 0.5));
     const fx = 1 - Math.min(1, Math.max(0, (this.y - (this.maxY - (this.revealH || 0) - this.H * 0.35)) / (this.H * 0.35)));
     let cx = G.x + sweep + ms.sx * 18 * fx, cy = G.y + (ms.sy * 13 + (this.rm ? 0 : Math.sin(t * 0.9) * 4)) * fx - (1 - drop) * this.H * 0.2;
+    // Phones: keep the whole lens on screen (desktop positions can sit at the very edge of a narrow screen).
+    if (this.mobile) { const er = Math.max(bw, bh) * 1.05 + 4; cx = Math.max(er, Math.min(this.W - er, cx)); }
     if (lock > 0 && this.contactX != null) { const ex = this.contactX, ey = this.contactY + (this.maxY - this.y); cx += (ex - cx) * lock; cy += (ey - cy) * lock; }
     const lt = this.rm ? 0 : Math.max(-0.2, Math.min(0.2, (this.vel || 0) * 0.012)) * G.tri;
     this.lean = (this.lean || 0) + (lt - (this.lean || 0)) * (1 - Math.pow(0.88, this._f || 1));

@@ -704,6 +704,8 @@ void main(){
     const sweep = (1 - es) * (this.W * 0.1 - G.x) * Math.max(0, 1 - this.y / (this.H * 0.5));
     const fx = 1 - Math.min(1, Math.max(0, (this.y - (this.maxY - (this.revealH || 0) - this.H * 0.35)) / (this.H * 0.35)));
     let cx = G.x + sweep + ms.sx * 18 * fx, cy = G.y + (ms.sy * 13 + (this.rm ? 0 : Math.sin(t * 0.9) * 4)) * fx - (1 - drop) * this.H * 0.2;
+    // Phones: keep the whole lens on screen (desktop positions can sit at the very edge of a narrow screen).
+    if (this.mobile) { const er = Math.max(bw, bh) * 1.05 + 4; cx = Math.max(er, Math.min(this.W - er, cx)); }
     if (lock > 0 && this.contactX != null) { const ex = this.contactX, ey = this.contactY + (this.maxY - this.y); cx += (ex - cx) * lock; cy += (ey - cy) * lock; }
     const lt = this.rm ? 0 : Math.max(-0.2, Math.min(0.2, (this.vel || 0) * 0.012)) * G.tri;
     this.lean = (this.lean || 0) + (lt - (this.lean || 0)) * (1 - Math.pow(0.88, this._f || 1));
