@@ -26,8 +26,8 @@ const countLabel = String(notes.length).padStart(2, '0') + (notes.length === 1 ?
 
 <div style="height:1px;background:var(--line,rgba(238,235,228,0.14))"></div>
 {notes.map((n) => (
-<a data-tag={n.data.tag} href={noteUrl(n)} class="row" style="display:grid;grid-template-columns:minmax(84px,12vw) minmax(0,1fr);column-gap:2vw;align-items:baseline;padding:3.4vh 0;border-bottom:1px solid var(--line,rgba(238,235,228,0.14));transition:color .25s">
-<span style="font-size:14px;color:var(--mute,#b3afa6)">{monthYear(n.data.date)}</span>
+<a data-tag={n.data.tag} href={noteUrl(n)} class="row" style="display:grid;grid-template-columns:minmax(84px,12vw) minmax(0,1fr);column-gap:2vw;align-items:start;padding:3.4vh 0;border-bottom:1px solid var(--line,rgba(238,235,228,0.14));transition:color .25s">
+<span style="font-size:14px;line-height:calc(clamp(26px,3.4vw,58px) * 1.08);color:var(--mute,#b3afa6)">{monthYear(n.data.date)}</span>
 <span style="display:flex;flex-direction:column;gap:10px;min-width:0">
 <span style="font-size:clamp(26px,3.4vw,58px);font-weight:500;letter-spacing:-0.03em;line-height:1.08;text-wrap:pretty">{n.data.title}{n.data.draft && <span class="draft">Draft</span>}</span>
 <span style="font-size:14px;color:var(--mute,#b3afa6)">{n.data.tag} · {readingMinutes(n)} min</span>
