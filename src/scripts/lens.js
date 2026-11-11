@@ -183,6 +183,34 @@ void main(){
 
   static LOAD_MS = 1800; // shortest run of the loading counter, 000 to 100
 
+  // Small math helpers, shared (not re-created every frame).
+  static cl(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  static pad(n) { return String(n).padStart(2, '0'); }
+  // Smooth max/min: exact outside a k-wide band, rounded inside it (continuous speed, no corners).
+  static smax(a, b, k) { const h = Math.max(k - Math.abs(a - b), 0) / k; return Math.max(a, b) + h * h * k / 4; }
+  static smin(a, b, k) { return -Lens.smax(-a, -b, k); }
+
+  // Scroll position at which the Work slide brings this card fully into view (centred when possible).
+  workYFor(card) {
+    const wk = this.sec.work; if (!wk || !this.track) return null;
+    const travel = Math.max(0, this.trackW - this.W); if (!travel) return wk.top;
+    const want = Lens.cl((this.track.offsetLeft + card.offsetLeft + card.offsetWidth / 2 - this.W / 2) / travel, 0, 1);
+    // Earliest scroll position (from the pin start on) where the slide has reached the card.
+    let lo = wk.top, hi = wk.top + wk.h;
+    for (let i = 0; i < 40; i++) { const mid = (lo + hi) / 2; if (this.pinState(wk, mid).p < want - 1e-4) lo = mid; else hi = mid; }
+    return Math.min(this.maxY, Math.max(0, hi));
+  }
+
+  // A pinned section at scroll y: its eased pin offset, and its inner progress p (0..1). p is 0 when the
+  // pin starts and 1 just before it ends, with a short hold at each end, so the first and last states are
+  // fully in view. Used by the render loop and by keyboard focus, so both agree.
+  pinState(s, y) {
+    const H = this.H, R = s.h - H, kk = Math.max(1, Math.min(H * 0.22, R * 0.45));
+    const off = Lens.smin(Lens.smax(y - s.top, 0, kk), R, kk);
+    const q = (off - kk / 4) / Math.max(1, R - kk / 2), lead = 0.12, k = 0.14;
+    return { off, p: Lens.cl(Lens.smin(Lens.smax(q - lead, 0, k) / (1 - 2 * lead), 1, k), 0, 1) };
+  }
+
   // Loading state: the counter follows real stages (mounted, fonts, page loaded), with a 6 s safety net.
   startLoader() {
     const L = this.ld = { stage: 0.15, shown: 0, t0: performance.now(), pct: -1, done: false };
@@ -272,7 +300,9 @@ void main(){
     addEventListener('wheel', this.onWheel, { passive: false });
     document.addEventListener('mouseleave', this.onLeave);
     this.ro = new ResizeObserver(() => this.layout()); this.ro.observe(this.content);
-    this.onFocus = e => { const el = e.target; if (this.revealEl && this.revealEl.contains(el)) { window.scrollTo(0, this.maxY); return; } if (!this.content.contains(el)) return; const r = el.getBoundingClientRect(); if (r.top < 80 || r.bottom > this.H - 40) window.scrollTo(0, Math.max(0, r.top + this.y - this.H * 0.4)); };
+    this.onFocus = e => { const el = e.target; if (this.revealEl && this.revealEl.contains(el)) { window.scrollTo(0, this.maxY); return; } if (!this.content.contains(el)) return;
+      const card = this.track && el.closest && el.closest('.proj'); if (card) { const ty = this.workYFor(card); if (ty != null) { window.scrollTo(0, ty); return; } }
+      const r = el.getBoundingClientRect(); if (r.top < 80 || r.bottom > this.H - 40) window.scrollTo(0, Math.max(0, r.top + this.y - this.H * 0.4)); };
     document.addEventListener('focusin', this.onFocus);
     this.sbar = this.q('[data-sbar]'); this.sthumb = this.q('[data-sthumb]');
     if (this.sbar) {
@@ -446,7 +476,7 @@ void main(){
     this.bioWords.forEach(w => { w.style.willChange = 'opacity'; let t = 0, n = w; while (n && n !== this.content) { t += n.offsetTop; n = n.offsetParent; } w._docTop = t; });
     this.revealEl = this.q('[data-reveal]'); this.revealLens = this.revealEl ? Array.from(this.revealEl.querySelectorAll('[data-lens]')) : [];
     const rsp = this.q('[data-reveal-space]'); this.revealH = rsp ? rsp.offsetHeight : 0;
-    if (this.track) { this.trackW = this.track.scrollWidth; this.cardC = Array.from(this.track.children).map(a => a.offsetLeft + a.offsetWidth / 2); }
+    if (this.track) { this.trackW = this.track.scrollWidth; this.cardC = this.panels.map(pl => pl.offsetLeft + pl.offsetWidth / 2); }
     if (this.panels[0]) { const p = this.panels[0]; this.panelY = this.track.offsetTop + p.offsetTop + p.offsetHeight / 2; this.panelX = this.track.offsetLeft + p.offsetLeft + p.offsetWidth * 0.82; }
     (this.rows || []).forEach(r => { r.top = r.el.getBoundingClientRect().top + this.y; r.h = r.el.offsetHeight; });
     const y = this.y;
@@ -745,18 +775,16 @@ void main(){
     this.textAnim = false;
     const y = this.y, vel = (y - this.prevY) / f; this.prevY = y; this.vel = vel; this._f = f;
     const ms = this.mouse; ms.sx += (ms.x - ms.sx) * 0.06 * f; ms.sy += (ms.y - ms.sy) * 0.06 * f;
-    const cl = (v, a, b) => Math.max(a, Math.min(b, v)), pad = n => String(n).padStart(2, '0');
+    const cl = Lens.cl, pad = Lens.pad;
 
     const gr = this.groups.map(g => g.el.getBoundingClientRect());
     this.content.style.transform = `translate3d(0,${-y}px,0)`;
-    // Soft clamp: pinned sections slow into the pin and speed out of it, instead of stopping dead.
-    const smax = (a, b, k) => { const h = Math.max(k - Math.abs(a - b), 0) / k; return Math.max(a, b) + h * h * k / 4; };
-    const smin = (a, b, k) => -smax(-a, -b, k);
-    for (const k in this.sec) { const s = this.sec[k]; if (s.pin) { const R = s.h - H, kk = Math.max(1, Math.min(H * 0.22, R * 0.45)); s.kk = kk; s.off = smin(smax(y - s.top, 0, kk), R, kk); s.pin.style.transform = `translate3d(0,${s.off.toFixed(2)}px,0)`; } }
+    // Pinned sections ease into and out of the pin (see pinState) instead of stopping dead.
+    for (const k in this.sec) { const s = this.sec[k]; if (s.pin) { const ps = this.pinState(s, y); s.off = ps.off; s.p = ps.p; s.pin.style.transform = `translate3d(0,${ps.off.toFixed(2)}px,0)`; } }
 
     const st = this.sec.stack;
     if (st) {
-      const p = cl((st.off || 0) / Math.max(1, st.h - H), 0, 1), n = this.words.length, s0 = p * (n - 1 + 0.7) - 0.35, fl = Math.floor(s0), e3 = x => x * x * (3 - 2 * x), fr = s0 - fl, shift = s0;
+      const p = st.p || 0, n = this.words.length, shift = p * (n - 1);
       this.stackShift = shift;
       this.words.forEach((w, i) => {
         const rel = i - shift;
@@ -769,10 +797,7 @@ void main(){
     }
     const wk = this.sec.work;
     if (wk && this.track) {
-      // Slide progress: 0 when the pin starts and 1 just before it ends, with a short hold at each end
-      // (first project fully in view on arrival, last one fully in view before the section leaves).
-      const R = wk.h - H, q = ((wk.off || 0) - (wk.kk || 0) / 4) / Math.max(1, R - (wk.kk || 0) / 2), lead = 0.12;
-      const p = cl(smin(smax(q - lead, 0, 0.14) / (1 - 2 * lead), 1, 0.14), 0, 1);
+      const p = wk.p || 0;
       const tx = -p * Math.max(0, this.trackW - W);
       this.track.style.transform = `translate3d(${tx}px,0,0)`;
       const inPin = y >= wk.top - H * 0.3 && y <= wk.top + wk.h - H * 0.7;

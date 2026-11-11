@@ -97,8 +97,8 @@ const latest = (await getNotes()).slice(0, 3);
 const pad = (n: number) => String(n).padStart(2, '0');
 ---
 <Base
-  title="Alban Billiette — Kernel and game security engineer"
-  description="I write kernel code for Windows and Linux and work on game security. I also build full-stack web apps."
+  title="Alban Billiette — Game security and full-stack developer"
+  description="Systems programmer and student at 42 Warsaw, working on game security and full-stack development: anti-cheat reverse engineering, Windows kernel drivers and full-stack products."
   waitForReady
   scrollbar={{false}}
 >
