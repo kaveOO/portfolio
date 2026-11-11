@@ -13,9 +13,20 @@ Astro is pinned to 7.4.1: 7.4.2+ needs Node 22.23.4 or newer.
 
 ## Deploying
 
-Hosted on Vercel, connected to this GitHub repo: every push to `main` deploys, and
-other branches get preview URLs. Vercel detects Astro on its own (build `npm run
-build`, output `dist/`); `engines.node` in `package.json` pins Node 22.
+Hosted on Cloudflare Pages, connected to this GitHub repo: every push to `main`
+deploys to production, and other branches get preview URLs.
+
+Pages project settings (Settings → Builds & deployments):
+
+| Setting | Value |
+| --- | --- |
+| Framework preset | Astro |
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+
+Node is pinned by `.node-version` (22.22.3), which Pages reads; Astro 7.4.1
+needs Node 22. `public/_headers` sets caching for the hashed `/_astro/` files and
+two security headers. `dist/404.html` is served automatically for unknown paths.
 
 The site is served at the domain root. Internal links go through `url()` from
 `src/lib/paths.ts`, so moving under a sub-path only needs `base` in `astro.config.mjs`.
