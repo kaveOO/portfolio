@@ -525,7 +525,7 @@ void main(){
     const st = [
       { a: 0, b: H * 0.05, f: () => { const hb = this.heroBox, R = this.heroR || m * (this.mobile ? .1 : .12); return { x: hb ? hb.x : W * .62, y: hb ? hb.y : H * .45, bw: R, bh: R, r: R, tri: 0, rot: 0, mag: 1.14, glow: 0 }; } },
       { a: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) - H * .1, b: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) + H * .1, f: () => { const b = this.bioBox, yy = b ? Math.min(H * .68, Math.max(H * .32, b.mid - this.y)) : H * .5; return { x: this.mobile ? W * .97 : (b ? b.x : W * .85), y: yy, bw: m * (this.mobile ? .07 : .1), bh: m * (this.mobile ? .07 : .1), r: m * (this.mobile ? .07 : .1), tri: 0, rot: 0, mag: 1.12, glow: 0 }; } },
-      { a: S.stack.top, b: S.stack.top + S.stack.h - H, f: p => ({ x: W * .5, y: H * .5, bw: m * .18, bh: m * .18, r: m * .03, tri: 1, rot: p * 2.0944, mag: 1.02, glow: 0 }) },
+      { a: S.stack.top, b: S.stack.top + S.stack.h - H, f: p => ({ x: W * .5, y: H * .5, bw: m * (this.mobile ? .12 : .18), bh: m * (this.mobile ? .12 : .18), r: m * .03, tri: 1, rot: p * 2.0944, mag: 1.02, glow: 0 }) },
       { a: S.work.top, b: S.work.top + S.work.h - H, f: p => ({ x: Math.min(W * .5, this.panelX || W * .5), y: this.panelY || H * .45, bw: m * .125, bh: m * .125, r: m * .125, tri: 0, rot: Math.PI, mag: 1.35, glow: 0 }) },
       { a: c(S.writing) - H * .12, b: c(S.writing) + H * .12, f: () => { const R = m * (this.mobile ? .07 : .095) * (1 + .14 * (this.hoverAmt || 0)); return { x: W * .97 - R * 1.1, y: this.hoverY == null ? H * .5 : this.hoverY, bw: R, bh: R, r: R, tri: 0, rot: Math.PI, mag: 1.16 + .1 * (this.hoverAmt || 0), glow: 1 + .8 * (this.hoverAmt || 0) }; } },
       { a: this.maxY - (this.revealH || 0), b: this.maxY, f: p => ({ x: this.contactX || W * .6, y: (this.contactY || H * .5) + (1 - p) * (this.revealH || 0), bw: this.dotR || m * .065, bh: this.dotR || m * .065, r: this.dotR || m * .065, tri: 0, rot: Math.PI, mag: 1.2, glow: .35 }) }
@@ -608,6 +608,18 @@ void main(){
     if (c.roundRect && r > 0) c.roundRect(x, y, w, h, r); else c.rect(x, y, w, h);
   }
 
+  // The lines a text element actually renders as on the page: text, left offset and width of each line.
+  domLines(el) {
+    const tn = Array.from(el.childNodes).find(n => n.nodeType === 3 && n.textContent.trim()); if (!tn) return null;
+    const box = el.getBoundingClientRect(), txt = tn.textContent, rg = document.createRange(), re = /\S+/g, lines = []; let m, cur = null;
+    while ((m = re.exec(txt))) {
+      rg.setStart(tn, m.index); rg.setEnd(tn, m.index + m[0].length); const r = rg.getClientRects()[0]; if (!r) continue;
+      if (!cur || Math.abs(r.top - cur.top) > r.height * 0.5) { cur = { top: r.top, left: r.left, right: r.right, s: m[0] }; lines.push(cur); }
+      else { cur.s += ' ' + m[0]; cur.right = r.right; }
+    }
+    return lines.length ? lines.map(l => ({ s: l.s, x: l.left - box.left, w: l.right - l.left, top: l.top - box.top })) : null;
+  }
+
   wrap(s, w) {
     const c = this.tc;
     if (c.measureText(s).width <= w) return [s];
@@ -634,7 +646,11 @@ void main(){
       cc.setTransform(dpr, 0, 0, dpr, px * dpr, px * dpr);
       cc.font = d.font; try { cc.letterSpacing = d.ls; } catch (e) {} cc.fillStyle = d.color;
       const cx = d.pl + d.bw, cy = d.pt + d.bw, pad = (d.lh - (d.asc + d.desc)) / 2 + d.asc;
-      d._lines.forEach((ln, i) => {
+      const dl = this.domLines(d.el);
+      if (dl) {
+        // Same breaks, positions and widths as the page; maxWidth keeps a line from running wider than it renders.
+        dl.forEach(l => { const ln = d.upper ? l.s.toUpperCase() : l.s; cc.fillText(ln, l.x, l.top + d.asc, l.w + 1); });
+      } else d._lines.forEach((ln, i) => {
         let lx = cx;
         if (d.align === 'center' || d.align === 'right' || d.align === 'end') { const lw = cc.measureText(ln).width; lx = d.align === 'center' ? cx + (cw - lw) / 2 : cx + cw - lw; }
         cc.fillText(ln, lx, cy + i * d.lh + pad);
@@ -790,7 +806,7 @@ void main(){
       this.stackShift = shift;
       this.words.forEach((w, i) => {
         const rel = i - shift;
-        w.el.style.transform = `translate3d(0,${H * 0.5 + rel * H * 0.5 - w.h / 2}px,0)`;
+        w.el.style.transform = `translate3d(0,${H * 0.5 + rel * H * (this.mobile ? 0.3 : 0.5) - w.h / 2}px,0)`;
         const o = cl(1 - Math.abs(rel) * 0.8, 0.1, 1);
         w.kids.forEach(kd => { kd._op = o; kd.style.opacity = o; });
       });
