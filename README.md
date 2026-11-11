@@ -27,6 +27,8 @@ Pages project settings (Settings → Builds & deployments):
 Node is pinned by `.node-version` (22.22.3), which Pages reads; Astro 7.4.1
 needs Node 22. `public/_headers` sets caching for the hashed `/_astro/` files and
 two security headers. `dist/404.html` is served automatically for unknown paths.
+`public/_redirects` sends the old kaveo.dev blog URLs (`/posts/…`, `/tags/…`,
+`/about/`) to the matching notes, the Notes page or the About section.
 
 The site is served at the domain root. Internal links go through `url()` from
 `src/lib/paths.ts`, so moving under a sub-path only needs `base` in `astro.config.mjs`.

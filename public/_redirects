@@ -1,0 +1,16 @@
+# Cloudflare Pages redirects (https://developers.cloudflare.com/pages/configuration/redirects/).
+# Old kaveo.dev blog URLs, from before the portfolio moved to this domain, sent to their new homes.
+# First matching rule wins, so specific posts come before the catch-alls.
+
+/posts/ThreadHijacking.md/        /notes/thread-hijacking/       301
+/posts/ThreadHijacking.md         /notes/thread-hijacking/       301
+/posts/IntroductionToDrivers.md/  /notes/first-windows-driver/   301
+/posts/IntroductionToDrivers.md   /notes/first-windows-driver/   301
+/posts/*                          /notes/                        301
+/posts                            /notes/                        301
+
+/tags/*                           /notes/                        301
+/tags                             /notes/                        301
+
+/about/                           /#about                        301
+/about                            /#about                        301
