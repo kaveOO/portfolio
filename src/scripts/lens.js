@@ -486,7 +486,7 @@ void main(){
       const nr = name.getBoundingClientRect();
       const capTop = nr.top + y + capMid(name, d);
       const lts = Array.from(name.querySelectorAll('[data-rv]')), iSp = lts.filter(el => el.textContent === 'i').pop();
-      const hR = this.m * (mob ? .125 : .15); this.heroR = hR;
+      const hR = this.m * (mob ? .075 : .085); this.heroR = hR;
       const bI = lts.findIndex(el => el.textContent === 'B');
       if (bI >= 0 && lts[bI + 2]) {
         const bS = lts[bI], lS = lts[bI + 2], x0 = bS.getBoundingClientRect().left, x1 = lS.getBoundingClientRect().right;
@@ -523,11 +523,11 @@ void main(){
     const W = this.W, H = this.H, m = this.m, S = this.sec;
     const c = s => s.top + s.h / 2 - H / 2;
     const st = [
-      { a: 0, b: H * 0.05, f: () => { const hb = this.heroBox, R = this.heroR || m * (this.mobile ? .1 : .12); return { x: hb ? hb.x : W * .62, y: hb ? hb.y : H * .45, bw: R, bh: R, r: R, tri: 0, rot: 0, mag: 1.14, glow: 0 }; } },
-      { a: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) - H * .1, b: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) + H * .1, f: () => { const b = this.bioBox, yy = b ? Math.min(H * .68, Math.max(H * .32, b.mid - this.y)) : H * .5; return { x: this.mobile ? W * .97 : (b ? b.x : W * .85), y: yy, bw: m * (this.mobile ? .07 : .1), bh: m * (this.mobile ? .07 : .1), r: m * (this.mobile ? .07 : .1), tri: 0, rot: 0, mag: 1.12, glow: 0 }; } },
-      { a: S.stack.top, b: S.stack.top + S.stack.h - H, f: p => ({ x: W * .5, y: H * .5, bw: m * (this.mobile ? .12 : .18), bh: m * (this.mobile ? .12 : .18), r: m * .03, tri: 1, rot: p * 2.0944, mag: 1.02, glow: 0 }) },
-      { a: S.work.top, b: S.work.top + S.work.h - H, f: p => ({ x: Math.min(W * .5, this.panelX || W * .5), y: this.panelY || H * .45, bw: m * .125, bh: m * .125, r: m * .125, tri: 0, rot: Math.PI, mag: 1.35, glow: 0 }) },
-      { a: c(S.writing) - H * .12, b: c(S.writing) + H * .12, f: () => { const R = m * (this.mobile ? .07 : .095) * (1 + .14 * (this.hoverAmt || 0)); return { x: W * .97 - R * 1.1, y: this.hoverY == null ? H * .5 : this.hoverY, bw: R, bh: R, r: R, tri: 0, rot: Math.PI, mag: 1.16 + .1 * (this.hoverAmt || 0), glow: 1 + .8 * (this.hoverAmt || 0) }; } },
+      { a: 0, b: H * 0.05, f: () => { const hb = this.heroBox, R = this.heroR || m * (this.mobile ? .075 : .085); return { x: hb ? hb.x : W * .62, y: hb ? hb.y : H * .45, bw: R, bh: R, r: R, tri: 0, rot: 0, mag: 1.1, glow: 0 }; } },
+      { a: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) - H * .1, b: (this.bioBox ? this.bioBox.mid - H / 2 : c(S.about)) + H * .1, f: () => { const b = this.bioBox, yy = b ? Math.min(H * .68, Math.max(H * .32, b.mid - this.y)) : H * .5; return { x: this.mobile ? W * .97 : (b ? b.x : W * .85), y: yy, bw: m * (this.mobile ? .05 : .06), bh: m * (this.mobile ? .05 : .06), r: m * (this.mobile ? .05 : .06), tri: 0, rot: 0, mag: 1.08, glow: 0 }; } },
+      { a: S.stack.top, b: S.stack.top + S.stack.h - H, f: p => ({ x: W * .5, y: H * .5, bw: m * (this.mobile ? .08 : .1), bh: m * (this.mobile ? .08 : .1), r: m * .02, tri: 1, rot: p * 2.0944, mag: 1.02, glow: 0 }) },
+      { a: S.work.top, b: S.work.top + S.work.h - H, f: p => ({ x: Math.min(W * .5, this.panelX || W * .5), y: this.panelY || H * .45, bw: m * .07, bh: m * .07, r: m * .07, tri: 0, rot: Math.PI, mag: 1.15, glow: 0 }) },
+      { a: c(S.writing) - H * .12, b: c(S.writing) + H * .12, f: () => { const R = m * (this.mobile ? .05 : .055) * (1 + .14 * (this.hoverAmt || 0)); return { x: W * .97 - R * 1.1, y: this.hoverY == null ? H * .5 : this.hoverY, bw: R, bh: R, r: R, tri: 0, rot: Math.PI, mag: 1.1 + .06 * (this.hoverAmt || 0), glow: .5 + .5 * (this.hoverAmt || 0) }; } },
       { a: this.maxY - (this.revealH || 0), b: this.maxY, f: p => ({ x: this.contactX || W * .6, y: (this.contactY || H * .5) + (1 - p) * (this.revealH || 0), bw: this.dotR || m * .065, bh: this.dotR || m * .065, r: this.dotR || m * .065, tri: 0, rot: Math.PI, mag: 1.2, glow: .35 }) }
     ];
     for (let i = 1; i < st.length; i++) { st[i].a = Math.max(st[i].a, st[i - 1].b); st[i].b = Math.max(st[i].b, st[i].a); }
@@ -719,7 +719,7 @@ void main(){
     const ks = this.heroOn && !this.rm ? Math.min(1, Math.max(0, (now - this.heroT - 900) / 2600)) : 1, es = ks < 0.5 ? 4 * ks * ks * ks : 1 - Math.pow(-2 * ks + 2, 3) / 2;
     const sweep = (1 - es) * (this.W * 0.1 - G.x) * Math.max(0, 1 - this.y / (this.H * 0.5));
     const fx = 1 - Math.min(1, Math.max(0, (this.y - (this.maxY - (this.revealH || 0) - this.H * 0.35)) / (this.H * 0.35)));
-    let cx = G.x + sweep + ms.sx * 18 * fx, cy = G.y + (ms.sy * 13 + (this.rm ? 0 : Math.sin(t * 0.9) * 4)) * fx - (1 - drop) * this.H * 0.2;
+    let cx = G.x + sweep + ms.sx * 18 * fx, cy = G.y + (ms.sy * 13 + (this.rm ? 0 : Math.sin(t * 0.9) * 2)) * fx - (1 - drop) * this.H * 0.2;
     // Phones: keep the whole lens on screen (desktop positions can sit at the very edge of a narrow screen).
     if (this.mobile) { const er = Math.max(bw, bh) * 1.05 + 4; cx = Math.max(er, Math.min(this.W - er, cx)); }
     if (lock > 0 && this.contactX != null) { const ex = this.contactX, ey = this.contactY + (this.maxY - this.y); cx += (ex - cx) * lock; cy += (ey - cy) * lock; }
