@@ -1,7 +1,7 @@
 ---
 title: Rustaveo
 caps: true
-order: 1
+order: 4
 year: 2026
 context: Paid SaaS, built and run solo
 role: Solo (product, backend, frontend, infrastructure)
