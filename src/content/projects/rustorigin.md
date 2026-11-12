@@ -6,15 +6,15 @@ year: 2026
 context: Game security, for my own network of modded Rust servers
 role: "Anti-cheat design and engineering: client, server and review tooling"
 tags: [Anti-cheat, Windows internals, C#, .NET, Win32, Oxide, Harmony, Node.js]
-summary: "A custom anti-cheat for my own Rust servers, which run a build with no EasyAntiCheat. A client-side anti-cheat in the launcher catches injected code, memory readers, kernel drivers and overlays; the server catches recoil scripts and aimbots; and a review panel turns it all into bans. 320 bans in its last 30 days."
+summary: "A custom anti-cheat for my own Rust servers, which run a build with no EasyAntiCheat. A client-side anti-cheat in the launcher catches injected code, memory readers, kernel drivers and overlays; the server catches recoil scripts and aimbots; and a review panel turns it all into bans. 318 bans in its last 30 days."
 cover:
   src: images/rustorigin.webp
   avif: images/rustorigin.avif
-  alt: "The Rustorigin admin panel, anti-cheat page, with player names hidden: real launcher findings from live players, including an unsigned module, unsigned kernel drivers, a kernel driver loaded from a user folder, a program with read/write access to game memory and a patched game file"
+  alt: "The Rustorigin admin panel, staff statistics for the last 30 days: 318 bans, 18 inspections and 10 mutes, with a chart of bans per day that peaks at 47 on 3 November"
   width: 1920
   height: 1009
 results:
-  - value: "320"
+  - value: "318"
     label: bans in the last 30 days, across both servers
   - value: "97"
     label: ban-evasion accounts caught on the same PC as a banned player
@@ -104,7 +104,12 @@ The first versions flagged real players, me included. Version 3.0 is a rework dr
 
 Numbers from the live panel, in November 2026:
 
-- **320 bans in 30 days.** 75 were automatic, when the launcher found a known cheat injected into the game. 84 came from the ban-evasion check. Staff issued the rest by hand, from cases, reports and in-game checks.
+<figure>
+<picture><source srcset="/images/rustorigin-bans-1100.avif 1100w, /images/rustorigin-bans.avif 1920w" sizes="(max-width:699px) 94vw, 1200px" type="image/avif"><img src="/images/rustorigin-bans.webp" srcset="/images/rustorigin-bans-1100.webp 1100w, /images/rustorigin-bans.webp 1920w" sizes="(max-width:699px) 94vw, 1200px" width="1920" height="1009" loading="lazy" decoding="async" alt="The ban log in the Rustorigin admin panel: 2 bans today, 86 in the last 7 days and 269 active, with bans from the injection check, the ban-evasion check and staff, for reasons such as banned by anticheat, banned by evasion and cheating. Player and staff names and Steam IDs are blurred."></picture>
+<figcaption>The ban log in the panel. Player and staff names and Steam IDs are replaced and blurred.</figcaption>
+</figure>
+
+- **318 bans in 30 days.** 76 were automatic, when the launcher found a known cheat injected into the game. 84 came from the ban-evasion check. Staff issued the rest by hand, from cases, reports and in-game checks.
 - **97 ban-evasion accounts** banned because they played from the same PC as an account that was already banned.
 - **1,187 cases opened in six weeks, 629 of them closed as false alarms.** A flag only starts a review, and more than half of the reviews ended with nobody banned. That's the system working as designed, not noise reaching players.
 
