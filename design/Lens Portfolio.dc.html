@@ -24,8 +24,11 @@ a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff)
 ::selection{background:var(--accent,#6e95ff);color:#fff;}
 /* Phones, upright or sideways (a short touch screen): tighter vertical rhythm, shorter pinned sections, and a header
    that content slides under cleanly. */
+/* The header fades to the page colour, so the big Stack titles and anything else scrolling up pass under it
+   cleanly instead of colliding with the links. Its faded edge lets clicks through to the page. */
+header{background:linear-gradient(var(--bg,#0f0f0e) 62%,rgba(15,15,14,0));padding-bottom:30px !important;pointer-events:none;}
+header a,header button{pointer-events:auto;}
 @media (max-width:699px),(max-height:500px) and (pointer:coarse){
-header{background:linear-gradient(var(--bg,#0f0f0e) 62%,rgba(15,15,14,0));padding-bottom:30px !important;}
 [data-sec="top"]{height:auto !important;padding-top:118px !important;padding-bottom:6vh !important;}
 [data-sec="about"]{min-height:0 !important;padding-top:5vh !important;padding-bottom:6vh !important;}
 [data-sec="about"] [data-ach]{margin-top:5vh !important;}
@@ -49,9 +52,19 @@ header{padding-top:14px !important;padding-bottom:22px !important;}
 .info .desc{flex:1 1 240px;max-width:380px;display:flex;flex-direction:column;gap:14px;}
 @media (min-width:900px) and (min-aspect-ratio:5/4),(max-height:500px) and (pointer:coarse) and (min-aspect-ratio:5/4){
 .proj{--card:min(84vw,max(66vw,800px));width:var(--card);display:flex;align-items:flex-end;gap:2.6vw;}
-.proj .shot{flex:none;width:min(calc(var(--card) - 300px - 2.6vw),calc((100vh - max(19vh,90px) - 26px - 8vh) * 1.903));}
-.proj .info{flex:none;width:300px;margin-top:0;flex-direction:column;flex-wrap:nowrap;justify-content:flex-end;gap:14px;}
+.proj .shot{flex:none;width:min(calc(var(--card) - var(--info,300px) - 2.6vw),calc((100vh - max(19vh,90px) - 26px - 8vh) * 1.903));}
+.proj .info{flex:none;width:var(--info,300px);margin-top:0;flex-direction:column;flex-wrap:nowrap;justify-content:flex-end;gap:14px;}
 .proj .info .desc{flex:none;max-width:none;}
+}
+/* Large monitors: the big type and the screenshots grow with the screen, so the small text and the Work card's
+   text column grow with it too (from their 1920px size, capped), keeping the proportions seen at 1440-1920. */
+@media (min-width:1921px){
+[style*="font-size:14px"]{font-size:clamp(14px,0.73vw,20px) !important;}
+[style*="font-size:15px"]{font-size:clamp(15px,0.78vw,21px) !important;}
+[style*="font-size:16px"]{font-size:clamp(16px,0.833vw,22px) !important;}
+[style*="font-size:17px"]{font-size:clamp(17px,0.885vw,24px) !important;}
+.proj{--info:clamp(300px,15.6vw,440px);}
+[data-sec="top"] [style*="max-width:340px"]{max-width:min(17.7vw,480px) !important;}
 }
 /* Sideways phones: a wider text column, so the description takes fewer lines on the short screen. */
 @media (max-height:500px) and (pointer:coarse) and (min-aspect-ratio:5/4){
