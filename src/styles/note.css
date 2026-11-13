@@ -7,6 +7,8 @@ a:focus-visible{outline:2px solid var(--accent,#6e95ff);outline-offset:4px;borde
 
 /* Note body, written in Markdown. Values follow the Note design. */
 .prose > :first-child{margin-top:0;}
+/* Long unbroken names (GetThreadContext/WriteProcessMemory) wrap instead of widening the page on phones. */
+.prose{overflow-wrap:break-word;}
 .prose p{margin:0 0 1.35em;}
 .prose h2{margin:2.2em 0 0.7em;color:var(--fg,#eeebe4);font-size:clamp(25px,2.2vw,32px);font-weight:600;letter-spacing:-0.025em;line-height:1.15;scroll-margin-top:100px;}
 .prose h3{margin:1.8em 0 0.6em;color:var(--fg,#eeebe4);font-size:clamp(20px,1.6vw,24px);font-weight:600;letter-spacing:-0.02em;line-height:1.2;scroll-margin-top:100px;}

@@ -436,12 +436,38 @@ void main(){
     return d;
   }
 
+  // The Work section is one pinned screen that clips what doesn't fit, so on a short screen a card's links could
+  // fall off the bottom. Make each card fit what is actually visible (innerHeight: Safari's toolbars hide the rest):
+  // first a smaller screenshot, down to half its width, then a shorter description, cut at a word.
+  fitCards() {
+    const track = this.q('[data-track]'); if (!track) return;
+    const room = innerHeight - track.offsetTop - 14;
+    Array.from(track.querySelectorAll('.proj')).forEach(card => {
+      const shot = card.querySelector('.shot'), desc = card.querySelector('.desc p');
+      shot.style.width = '';
+      if (desc && desc.dataset.full) desc.textContent = desc.dataset.full;
+      if (card.offsetHeight <= room) return;
+      // stacked cards only: side by side, the text column sets the height and a smaller screenshot saves nothing
+      const w0 = shot.offsetWidth, stacked = getComputedStyle(card).display !== 'flex';
+      for (let i = 0; stacked && i < 6 && card.offsetHeight > room; i++) {
+        const k = Math.max(0.5, shot.offsetWidth / w0 - (card.offsetHeight - room) / shot.offsetHeight - 0.02);
+        shot.style.width = Math.round(w0 * k) + 'px'; if (k === 0.5) break;
+      }
+      if (card.offsetHeight <= room || !desc) return;
+      const full = desc.dataset.full || desc.textContent; desc.dataset.full = full;
+      const words = full.split(' '); let lo = 8, hi = words.length - 1;
+      while (lo < hi) { const mid = Math.ceil((lo + hi) / 2); desc.textContent = words.slice(0, mid).join(' ').replace(/[,;.:]$/, '') + '…'; if (card.offsetHeight <= room) lo = mid; else hi = mid - 1; }
+      desc.textContent = words.slice(0, lo).join(' ').replace(/[,;.:]$/, '') + '…';
+    });
+  }
+
   layout() {
     if (!this.root || this.dead) return;
     if (this.coarse && !this.vhProbe) { const pr = document.createElement('div'); pr.setAttribute('aria-hidden', 'true'); pr.style.cssText = 'position:fixed;left:0;top:0;width:0;height:100vh;visibility:hidden;pointer-events:none'; document.body.appendChild(pr); this.vhProbe = pr; }
     const W = innerWidth, H = this.coarse && this.vhProbe ? Math.max(this.vhProbe.offsetHeight, innerHeight) : innerHeight; this.W = W; this.H = H; this.m = Math.min(W * 1.15, H);
     this.dpr = this.coarse ? Math.min(devicePixelRatio || 1, 1.25) : Math.min(devicePixelRatio || 1, 1.75); this.mDirty = true;
-    const mob = W < 700; this.mobile = mob;
+    // Phone layout for narrow screens, but not for a phone held sideways: it has the width for the desktop layout.
+    const mob = W < 700 && !(this.coarse && innerHeight <= 500); this.mobile = mob;
     const rvl = this.q('[data-reveal]'), rsp0 = this.q('[data-reveal-space]'), cs0 = this.q('[data-sec="contact"]');
     if (rvl && rsp0 && cs0) {
       const wm = rvl.querySelector('[data-wordmark]'), mqRow = this.q('[data-marq]') && this.q('[data-marq]').parentElement;
@@ -466,8 +492,12 @@ void main(){
       if (w > 0) {
         let fs = W * 0.18 * avail / w; name.style.fontSize = fs + 'px';
         for (let i = 0; i < 3 && name.offsetWidth > avail + 0.5; i++) { fs *= avail / name.offsetWidth * 0.995; name.style.fontSize = fs + 'px'; }
+        // A phone held sideways: the name fills the width, which can push it below the short screen. Shrink it to fit.
+        const hero = this.q('[data-sec="top"]');
+        if (!mob && this.coarse && hero && hero.offsetHeight > innerHeight) { fs *= Math.max(0.5, 1 - (hero.offsetHeight - innerHeight) / name.offsetHeight); name.style.fontSize = fs + 'px'; }
       }
     }
+    this.fitCards();
     const ch = this.content.offsetHeight;
     this.spacer.style.height = ch + 'px'; this.maxY = Math.max(0, ch - H);
     this.sec = {};

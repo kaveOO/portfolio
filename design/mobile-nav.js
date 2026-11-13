@@ -1,11 +1,17 @@
 (function () {
   if (window.__abMN) return; window.__abMN = 1;
   var st = document.createElement('style');
-  st.textContent = '@media (max-width:699px){header a,header button{padding-top:13px !important;padding-bottom:13px !important;margin-top:-13px !important;margin-bottom:-13px !important;}header nav{gap:14px !important;}}';
+  // Phones, held upright or sideways (a short touch screen): taller header links. On any touch screen, small text links
+  // get a bigger invisible hit area (::after) so a thumb finds them, without moving the layout or the lens mirror.
+  var phone = '(max-width:699px),(max-height:500px) and (pointer:coarse)';
+  st.textContent = '@media ' + phone + '{header a,header button{padding-top:13px !important;padding-bottom:13px !important;margin-top:-13px !important;margin-bottom:-13px !important;}header nav{gap:14px !important;}}' +
+    '@media (pointer:coarse){header a,a.tap,[data-content] a,[data-reveal] a{position:relative;}' +
+    'header a::after,a.tap::after,[data-content] a::after,[data-reveal] a::after{content:"";position:absolute;inset:-12px -8px;}' +
+    'header a::after{inset:0 -7px;}header > a:first-child::after{inset:0 -24px 0 -3vw;}header a[download]::after{inset:0 -3vw 0 -10px;}}';
   document.head.appendChild(st);
   function upd() {
     var h = document.querySelector('header'); if (!h) return;
-    var mob = innerWidth < 700, links = h.querySelectorAll('a');
+    var mob = innerWidth < 700 && !(matchMedia('(pointer:coarse)').matches && innerHeight <= 500), links = h.querySelectorAll('a');
     for (var i = 0; i < links.length; i++) {
       var a = links[i], t = a.textContent.trim();
       if (!a.dataset.full && (t === 'Alban Billiette' || /CV/.test(t))) a.dataset.full = t;

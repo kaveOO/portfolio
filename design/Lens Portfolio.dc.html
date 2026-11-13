@@ -22,8 +22,9 @@ a{color:inherit;text-decoration:none;}
 a:hover{color:var(--accent,#6e95ff);}
 a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff);outline-offset:6px;border-radius:2px;}
 ::selection{background:var(--accent,#6e95ff);color:#fff;}
-/* Phones: tighter vertical rhythm, shorter pinned sections, and a header that content slides under cleanly. */
-@media (max-width:699px){
+/* Phones, upright or sideways (a short touch screen): tighter vertical rhythm, shorter pinned sections, and a header
+   that content slides under cleanly. */
+@media (max-width:699px),(max-height:500px) and (pointer:coarse){
 header{background:linear-gradient(var(--bg,#0f0f0e) 62%,rgba(15,15,14,0));padding-bottom:30px !important;}
 [data-sec="top"]{height:auto !important;padding-top:118px !important;padding-bottom:6vh !important;}
 [data-sec="about"]{min-height:0 !important;padding-top:5vh !important;padding-bottom:6vh !important;}
@@ -33,16 +34,30 @@ header{background:linear-gradient(var(--bg,#0f0f0e) 62%,rgba(15,15,14,0));paddin
 [data-sec="writing"]{padding-top:6vh !important;padding-bottom:5vh !important;}
 [data-sec="contact"]{padding-top:6vh !important;}
 }
+/* Phones held sideways: a slimmer header, and the hero and the Work cards moved up so they fit the short screen. */
+@media (max-height:500px) and (pointer:coarse){
+header{padding-top:14px !important;padding-bottom:22px !important;}
+[data-sec="top"]{padding-top:76px !important;}
+[data-sec="top"] > div:first-child{margin-bottom:3vh !important;}
+[data-sec="work"] [data-pin] > div:first-child{top:56px !important;}
+[data-track]{top:86px !important;}
+}
 /* Work cards. Stacked (screenshot over text) by default; side by side on wide screens. */
 .proj{flex:none;width:max(56vw,min(84vw,520px));}
 .shot{width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));}
 .info{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));}
 .info .desc{flex:1 1 240px;max-width:380px;display:flex;flex-direction:column;gap:14px;}
-@media (min-width:900px) and (min-aspect-ratio:5/4){
+@media (min-width:900px) and (min-aspect-ratio:5/4),(max-height:500px) and (pointer:coarse) and (min-aspect-ratio:5/4){
 .proj{--card:min(84vw,max(66vw,800px));width:var(--card);display:flex;align-items:flex-end;gap:2.6vw;}
 .proj .shot{flex:none;width:min(calc(var(--card) - 300px - 2.6vw),calc((100vh - max(19vh,90px) - 26px - 8vh) * 1.903));}
 .proj .info{flex:none;width:300px;margin-top:0;flex-direction:column;flex-wrap:nowrap;justify-content:flex-end;gap:14px;}
 .proj .info .desc{flex:none;max-width:none;}
+}
+/* Sideways phones: a wider text column, so the description takes fewer lines on the short screen. */
+@media (max-height:500px) and (pointer:coarse) and (min-aspect-ratio:5/4){
+.proj{--card:min(88vw,820px);}
+.proj .shot{width:calc(var(--card) - 360px - 2.6vw);}
+.proj .info{width:360px;}
 }
 html:has([data-loader].ld-on:not(.out)){overflow:hidden;}
 [data-loader]{clip-path:inset(0 0 0 0);transition:clip-path .95s cubic-bezier(.76,0,.24,1) .25s;animation:ldfail .4s ease 5s forwards;}
@@ -727,12 +742,38 @@ void main(){
     return d;
   }
 
+  // The Work section is one pinned screen that clips what doesn't fit, so on a short screen a card's links could
+  // fall off the bottom. Make each card fit what is actually visible (innerHeight: Safari's toolbars hide the rest):
+  // first a smaller screenshot, down to half its width, then a shorter description, cut at a word.
+  fitCards() {
+    const track = this.q('[data-track]'); if (!track) return;
+    const room = innerHeight - track.offsetTop - 14;
+    Array.from(track.querySelectorAll('.proj')).forEach(card => {
+      const shot = card.querySelector('.shot'), desc = card.querySelector('.desc p');
+      shot.style.width = '';
+      if (desc && desc.dataset.full) desc.textContent = desc.dataset.full;
+      if (card.offsetHeight <= room) return;
+      // stacked cards only: side by side, the text column sets the height and a smaller screenshot saves nothing
+      const w0 = shot.offsetWidth, stacked = getComputedStyle(card).display !== 'flex';
+      for (let i = 0; stacked && i < 6 && card.offsetHeight > room; i++) {
+        const k = Math.max(0.5, shot.offsetWidth / w0 - (card.offsetHeight - room) / shot.offsetHeight - 0.02);
+        shot.style.width = Math.round(w0 * k) + 'px'; if (k === 0.5) break;
+      }
+      if (card.offsetHeight <= room || !desc) return;
+      const full = desc.dataset.full || desc.textContent; desc.dataset.full = full;
+      const words = full.split(' '); let lo = 8, hi = words.length - 1;
+      while (lo < hi) { const mid = Math.ceil((lo + hi) / 2); desc.textContent = words.slice(0, mid).join(' ').replace(/[,;.:]$/, '') + '…'; if (card.offsetHeight <= room) lo = mid; else hi = mid - 1; }
+      desc.textContent = words.slice(0, lo).join(' ').replace(/[,;.:]$/, '') + '…';
+    });
+  }
+
   layout() {
     if (!this.root || this.dead) return;
     if (this.coarse && !this.vhProbe) { const pr = document.createElement('div'); pr.setAttribute('aria-hidden', 'true'); pr.style.cssText = 'position:fixed;left:0;top:0;width:0;height:100vh;visibility:hidden;pointer-events:none'; document.body.appendChild(pr); this.vhProbe = pr; }
     const W = innerWidth, H = this.coarse && this.vhProbe ? Math.max(this.vhProbe.offsetHeight, innerHeight) : innerHeight; this.W = W; this.H = H; this.m = Math.min(W * 1.15, H);
     this.dpr = this.coarse ? Math.min(devicePixelRatio || 1, 1.25) : Math.min(devicePixelRatio || 1, 1.75); this.mDirty = true;
-    const mob = W < 700; this.mobile = mob;
+    // Phone layout for narrow screens, but not for a phone held sideways: it has the width for the desktop layout.
+    const mob = W < 700 && !(this.coarse && innerHeight <= 500); this.mobile = mob;
     const rvl = this.q('[data-reveal]'), rsp0 = this.q('[data-reveal-space]'), cs0 = this.q('[data-sec="contact"]');
     if (rvl && rsp0 && cs0) {
       const wm = rvl.querySelector('[data-wordmark]'), mqRow = this.q('[data-marq]') && this.q('[data-marq]').parentElement;
@@ -757,8 +798,12 @@ void main(){
       if (w > 0) {
         let fs = W * 0.18 * avail / w; name.style.fontSize = fs + 'px';
         for (let i = 0; i < 3 && name.offsetWidth > avail + 0.5; i++) { fs *= avail / name.offsetWidth * 0.995; name.style.fontSize = fs + 'px'; }
+        // A phone held sideways: the name fills the width, which can push it below the short screen. Shrink it to fit.
+        const hero = this.q('[data-sec="top"]');
+        if (!mob && this.coarse && hero && hero.offsetHeight > innerHeight) { fs *= Math.max(0.5, 1 - (hero.offsetHeight - innerHeight) / name.offsetHeight); name.style.fontSize = fs + 'px'; }
       }
     }
+    this.fitCards();
     const ch = this.content.offsetHeight;
     this.spacer.style.height = ch + 'px'; this.maxY = Math.max(0, ch - H);
     this.sec = {};

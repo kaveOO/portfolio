@@ -9,8 +9,9 @@ a:hover{color:var(--accent,#6e95ff);}
 .skip:focus{top:12px !important;}
 a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff);outline-offset:6px;border-radius:2px;}
 ::selection{background:var(--accent,#6e95ff);color:#fff;}
-/* Phones: tighter vertical rhythm, shorter pinned sections, and a header that content slides under cleanly. */
-@media (max-width:699px){
+/* Phones, upright or sideways (a short touch screen): tighter vertical rhythm, shorter pinned sections, and a header
+   that content slides under cleanly. */
+@media (max-width:699px),(max-height:500px) and (pointer:coarse){
 header{background:linear-gradient(var(--bg,#0f0f0e) 62%,rgba(15,15,14,0));padding-bottom:30px !important;}
 [data-sec="top"]{height:auto !important;padding-top:118px !important;padding-bottom:6vh !important;}
 [data-sec="about"]{min-height:0 !important;padding-top:5vh !important;padding-bottom:6vh !important;}
@@ -20,16 +21,30 @@ header{background:linear-gradient(var(--bg,#0f0f0e) 62%,rgba(15,15,14,0));paddin
 [data-sec="writing"]{padding-top:6vh !important;padding-bottom:5vh !important;}
 [data-sec="contact"]{padding-top:6vh !important;}
 }
+/* Phones held sideways: a slimmer header, and the hero and the Work cards moved up so they fit the short screen. */
+@media (max-height:500px) and (pointer:coarse){
+header{padding-top:14px !important;padding-bottom:22px !important;}
+[data-sec="top"]{padding-top:76px !important;}
+[data-sec="top"] > div:first-child{margin-bottom:3vh !important;}
+[data-sec="work"] [data-pin] > div:first-child{top:56px !important;}
+[data-track]{top:86px !important;}
+}
 /* Work cards. Stacked (screenshot over text) by default; side by side on wide screens. */
 .proj{flex:none;width:max(56vw,min(84vw,520px));}
 .shot{width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));}
 .info{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px 32px;margin-top:3.2vh;width:min(100%,max(280px,calc((77vh - 296px) * 1.903)));}
 .info .desc{flex:1 1 240px;max-width:380px;display:flex;flex-direction:column;gap:14px;}
-@media (min-width:900px) and (min-aspect-ratio:5/4){
+@media (min-width:900px) and (min-aspect-ratio:5/4),(max-height:500px) and (pointer:coarse) and (min-aspect-ratio:5/4){
 .proj{--card:min(84vw,max(66vw,800px));width:var(--card);display:flex;align-items:flex-end;gap:2.6vw;}
 .proj .shot{flex:none;width:min(calc(var(--card) - 300px - 2.6vw),calc((100vh - max(19vh,90px) - 26px - 8vh) * 1.903));}
 .proj .info{flex:none;width:300px;margin-top:0;flex-direction:column;flex-wrap:nowrap;justify-content:flex-end;gap:14px;}
 .proj .info .desc{flex:none;max-width:none;}
+}
+/* Sideways phones: a wider text column, so the description takes fewer lines on the short screen. */
+@media (max-height:500px) and (pointer:coarse) and (min-aspect-ratio:5/4){
+.proj{--card:min(88vw,820px);}
+.proj .shot{width:calc(var(--card) - 360px - 2.6vw);}
+.proj .info{width:360px;}
 }
 html:has([data-loader].ld-on:not(.out)){overflow:hidden;}
 [data-loader]{clip-path:inset(0 0 0 0);transition:clip-path .95s cubic-bezier(.76,0,.24,1) .25s;animation:ldfail .4s ease 5s forwards;}
