@@ -15,6 +15,7 @@ a:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent,#6e95ff)
    cleanly instead of colliding with the links. Its faded edge lets clicks through to the page. */
 header{background:linear-gradient(var(--bg,#0f0f0e) 62%,rgba(15,15,14,0));padding-bottom:30px !important;pointer-events:none;}
 header a,header button{pointer-events:auto;}
+[data-content]{pointer-events:none;}[data-content] > *{pointer-events:auto;}[data-content] > [data-reveal-space]{pointer-events:none;}
 @media (max-width:699px),(max-height:500px) and (pointer:coarse){
 [data-sec="top"]{height:auto !important;padding-top:118px !important;padding-bottom:6vh !important;}
 [data-sec="about"]{min-height:0 !important;padding-top:5vh !important;padding-bottom:6vh !important;}

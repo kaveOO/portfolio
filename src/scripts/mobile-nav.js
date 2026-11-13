@@ -6,9 +6,11 @@
   // get a bigger invisible hit area (::after) so a thumb finds them, without moving the layout or the lens mirror.
   var phone = '(max-width:699px),(max-height:500px) and (pointer:coarse)';
   st.textContent = '@media ' + phone + '{header a,header button{padding-top:13px !important;padding-bottom:13px !important;margin-top:-13px !important;margin-bottom:-13px !important;}header nav{gap:14px !important;}}' +
-    '@media (pointer:coarse){header a,a.tap,[data-content] a,[data-reveal] a{position:relative;}' +
-    'header a::after,a.tap::after,[data-content] a::after,[data-reveal] a::after{content:"";position:absolute;inset:-12px -8px;}' +
-    'header a::after{inset:0 -7px;}header > a:first-child::after{inset:0 -24px 0 -3vw;}header a[download]::after{inset:0 -3vw 0 -10px;}}';
+    '@media (pointer:coarse){header a,a.tap,a[data-nav=top],[data-content] a,[data-reveal] a{position:relative;}' +
+    'header a::after,a.tap::after,a[data-nav=top]::after,[data-content] a::after,[data-reveal] a::after{content:"";position:absolute;inset:-12px -8px;}' +
+    'header a::after{inset:0 -7px;}header > a:first-child::after{inset:0 -24px 0 -3vw;}header a[download]::after{inset:0 -3vw 0 -10px;}}' +
+    // Tablets keep the desktop header, whose links are only 18px tall: stretch their hit areas 13px up and down.
+    '@media (pointer:coarse) and (min-width:700px) and (min-height:501px){header a::after,header > a:first-child::after,header a[download]::after{top:-13px;bottom:-13px;}}';
   document.head.appendChild(st);
   function upd() {
     var h = document.querySelector('header'); if (!h) return;
