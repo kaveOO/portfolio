@@ -55,9 +55,13 @@ and its children `auto`, so the footer links stay clickable through it.
   as plain non-module scripts so they run before first paint.
 - `src/pages/work/[slug].astro` + `src/styles/project.css`: case studies from `src/content/projects/*.md`.
   A cover `images/x.webp` gets a phone-sized `images/x-1100.webp` (and `.avif`) automatically when that file
-  exists in `public/images/`.
-- `src/pages/notes/` + `note.css`/`notes.css`: notes from `src/content/notes/*.md` (images live next to them
-  and get a srcset through `image: { layout: 'constrained' }`).
+  exists in `public/images/`. That list comes from `import.meta.glob` at build time: a relative `existsSync()`
+  worked locally but found nothing on the Cloudflare build, so don't check the disk at render time.
+- `src/pages/notes/` + `note.css`/`notes.css`: notes from `src/content/notes/*.md`. Their images live in
+  `src/content/notes/images/` and get a srcset through `image: { layout: 'constrained' }`. The Markdown hast
+  plugin `src/lib/note-images.mjs` (registered via `satteri()` in `astro.config.mjs`) makes them AVIF and
+  sets `sizes` to the 680px note column; change both together. Astro hands every Markdown image attribute to
+  `getImage()`, which is how the plugin works; raw `<img>` tags in a `.md` file are not optimized at all.
 - `src/pages/preview.astro`: unlinked design tool showing pages in phone frames.
 - Content fields are documented in `src/content.config.ts`. `draft: true` shows only in dev.
 - Internal links go through `url()` from `src/lib/paths.ts` so a future `base` path keeps working.
@@ -68,6 +72,11 @@ and its children `auto`, so the footer links stay clickable through it.
 Breakpoints used across the site: phone layout below 700px wide, and a phone held sideways is
 `(max-height:500px) and (pointer:coarse)` (it gets the phone treatment in places, the desktop layout on the
 home page). Touch screens get enlarged invisible `::after` hit areas on small links (`design/mobile-nav.js`).
+Tablets mostly get the desktop layout, with two page-specific breakpoints:
+- Case studies (`project.css`) use one column up to 960px wide, text capped at 680px: beside the 640px text
+  column, the heading column needs about 930px of page or headings split mid-word.
+- The notes' "On this page" sidebar shows from 1180px wide (`src/scripts/note.js`), so landscape iPads get it;
+  on touch screens its links get 39px rows (`note.css`).
 
 ## Writing rules for site content
 
