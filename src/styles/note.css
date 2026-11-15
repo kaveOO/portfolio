@@ -4,6 +4,13 @@ a:hover{color:var(--accent,#6e95ff);}
 a:focus-visible{outline:2px solid var(--accent,#6e95ff);outline-offset:4px;border-radius:2px;}
 ::selection{background:var(--accent,#6e95ff);color:#fff;}
 [hidden]{display:none !important;}
+/* "On this page" on touch screens (iPads in landscape, 1180px and up): the 12px gap becomes padding on each link,
+   so a finger gets a ~39px row instead of a 19px line with dead space between. */
+@media (pointer:coarse){
+  [data-toc] nav{gap:0 !important;}
+  [data-toc] nav > span{padding-bottom:10px;}
+  [data-toc] a{padding:10px 0;}
+}
 
 /* Note body, written in Markdown. Values follow the Note design. */
 .prose > :first-child{margin-top:0;}

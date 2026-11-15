@@ -9,15 +9,15 @@
 .case > h2:first-child + *{margin-top:0;}
 .case > figure,.case > p:has(> img){grid-column:1 / -1;}
 .case figure.code{min-width:0;}
-/* One column on phones, upright or sideways: beside the text, the heading column gets too narrow. */
-@media (max-width:760px),(max-height:500px) and (pointer:coarse){
+/* One column on phones and portrait tablets, and on sideways phones: beside the 640px text, the heading column
+   needs about 930px of page to stay readable (at 768px it was ~50px wide and split words: "Shi ppi ng it"). */
+@media (max-width:960px),(max-height:500px) and (pointer:coarse){
   .case{grid-template-columns:minmax(0,1fr);}
   .case > *,.case > h2{grid-column:1;}
   .case > h2 + *{margin-top:0;}
   .case > h2{margin-bottom:0.6em;}
-}
-/* Sideways phones are wide: keep the text to a readable line length; images still use the full width. */
-@media (max-height:500px) and (pointer:coarse){
+  /* Tablets and sideways phones are wide for one column: keep the text to a readable line length;
+     images still use the full width. */
   .case > :not(figure):not(p:has(> img)){max-width:680px;}
 }
 
