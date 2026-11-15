@@ -1,5 +1,10 @@
 {
   "name": "portfolio",
+  "description": "Alban Billiette's portfolio at kaveo.dev: an Astro site with a WebGL glass lens.",
+  "homepage": "https://kaveo.dev",
+  "repository": "github:kaveOO/portfolio",
+  "license": "MIT",
+  "author": "Alban Billiette",
   "type": "module",
   "private": true,
   "scripts": {
