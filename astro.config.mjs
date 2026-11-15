@@ -1,5 +1,7 @@
 import { defineConfig } from 'astro/config';
+import { satteri } from '@astrojs/markdown-satteri';
 import codeTheme from './src/lib/code-theme.mjs';
+import { noteImages } from './src/lib/note-images.mjs';
 
 export default defineConfig({
   // Hosted on Cloudflare Pages at the domain root. If it ever moves under a sub-path, set `base` here:
@@ -9,6 +11,7 @@ export default defineConfig({
   // Note images get a srcset, so a phone downloads a size near its screen instead of the 2560px original.
   image: { layout: 'constrained' },
   markdown: {
+    processor: satteri({ hastPlugins: [noteImages] }),
     shikiConfig: { theme: codeTheme },
   },
   vite: {

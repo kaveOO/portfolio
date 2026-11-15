@@ -9,6 +9,7 @@
     "sync:design": "python3 tools/sync-design.py"
   },
   "dependencies": {
+    "@astrojs/markdown-satteri": "0.4.4",
     "astro": "7.4.1"
   },
   "engines": {
