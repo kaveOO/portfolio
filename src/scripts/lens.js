@@ -556,13 +556,14 @@ void main(){
     if (hl) {
       const sp = hl.querySelector('[data-lens]'), d = this.cache(sp), r = hl.getBoundingClientRect();
       this.mc.font = d.font;
-      const im0 = this.mc.measureText('ı'), inkW = (im0.actualBoundingBoxRight != null) ? im0.actualBoundingBoxRight + im0.actualBoundingBoxLeft : d.fs * 0.136;
+      // Sized and placed from the font size and the page layout, not from canvas text metrics: Safari's canvas can
+      // measure this variable font differently from the page, which put the dot off the i's stem on iPhones.
+      const inkW = d.fs * 0.13; // the i stem is 0.13em wide in Host Grotesk 600
       const R = Math.max(d.fs * 0.06, inkW * 0.56) * (this.mobile ? 0.75 : 1); this.dotR = R; /* phones: a size smaller, the full one looked too big there */ const xh = this.mc.measureText('x').actualBoundingBoxAscent || d.fs * 0.53, ls = parseFloat(d.ls) || 0;
       const tn = sp.firstChild, ix = tn && tn.nodeType === 3 ? tn.textContent.indexOf('ı') : -1;
-      if (ix >= 0) { const rg = document.createRange(); rg.setStart(tn, ix); rg.setEnd(tn, ix + 1); const cr = rg.getBoundingClientRect(); const im = this.mc.measureText('ı'); this.contactX = (im.actualBoundingBoxRight != null) ? cr.left + (im.actualBoundingBoxRight - im.actualBoundingBoxLeft) / 2 : cr.left + (cr.width - ls) / 2; }
+      if (ix >= 0) { const rg = document.createRange(); rg.setStart(tn, ix); rg.setEnd(tn, ix + 1); const cr = rg.getBoundingClientRect(); this.contactX = cr.left + (cr.width - ls) / 2; }
       else this.contactX = r.left + sp.offsetWidth * 0.8;
       this.contactY = r.top + y - this.maxY + capMid(hl, d) + d.cap - xh - d.fs * 0.04 - R;
-      this.contactY = Math.max(this.contactY, 72 + R * 1.2);
     }
     (this.groups || []).forEach(g => {
       let lt = null, line = -1;
