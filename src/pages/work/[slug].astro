@@ -23,7 +23,8 @@ const details = [
   ['Year', d.year],
   ['Context', d.context],
   ['Role', d.role],
-  ['Tags', d.tags.join(' · ')],
+  // Non-breaking spaces keep each tag whole and its dot at the end of a line when the list wraps.
+  ['Tags', d.tags.map((t) => t.replace(/ /g, ' ')).join(' · ')],
 ].filter(([, v]) => v);
 const external = (href: string) => /^https?:/.test(href);
 // Names flagged `caps` show in capitals where they stand alone; the text itself stays as written.
@@ -74,7 +75,10 @@ const coverSizes = '(max-width:699px) 94vw, 90vw';
 <h2 class="case-h">Demo</h2>
 <div class="video" data-video={d.video} data-title={`${d.title} demo video`}>
 <button type="button" class="video-play" aria-label={`Play the ${d.title} demo video`}>
-{d.cover && <img src={url('/' + d.cover.src)} srcset={srcset(d.cover.src)} sizes={coverSizes} alt="" loading="lazy" decoding="async">}
+{d.cover && <picture>
+{d.cover.avif && <source srcset={srcset(d.cover.avif) || url('/' + d.cover.avif)} sizes={coverSizes} type="image/avif">}
+<img src={url('/' + d.cover.src)} srcset={srcset(d.cover.src)} sizes={coverSizes} alt="" loading="lazy" decoding="async">
+</picture>}
 <span class="video-btn">▶ Play demo</span>
 </button>
 </div>

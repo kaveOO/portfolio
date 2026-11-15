@@ -465,7 +465,8 @@ void main(){
     if (!this.root || this.dead) return;
     if (this.coarse && !this.vhProbe) { const pr = document.createElement('div'); pr.setAttribute('aria-hidden', 'true'); pr.style.cssText = 'position:fixed;left:0;top:0;width:0;height:100vh;visibility:hidden;pointer-events:none'; document.body.appendChild(pr); this.vhProbe = pr; }
     const W = innerWidth, H = this.coarse && this.vhProbe ? Math.max(this.vhProbe.offsetHeight, innerHeight) : innerHeight; this.W = W; this.H = H; this.m = Math.min(W * 1.15, H);
-    this.dpr = this.coarse ? Math.min(devicePixelRatio || 1, 1.25) : Math.min(devicePixelRatio || 1, 1.75); this.mDirty = true;
+    // The lens canvas only covers the lens itself (about 256px square on a phone), so phones can afford 2x: at 1.25x the blue dot looked soft on a 3x screen.
+    this.dpr = Math.min(devicePixelRatio || 1, this.coarse ? 2 : 1.75); this.mDirty = true;
     // Phone layout for narrow screens, but not for a phone held sideways: it has the width for the desktop layout.
     const mob = W < 700 && !(this.coarse && innerHeight <= 500); this.mobile = mob;
     const rvl = this.q('[data-reveal]'), rsp0 = this.q('[data-reveal-space]'), cs0 = this.q('[data-sec="contact"]');
@@ -556,7 +557,7 @@ void main(){
       const sp = hl.querySelector('[data-lens]'), d = this.cache(sp), r = hl.getBoundingClientRect();
       this.mc.font = d.font;
       const im0 = this.mc.measureText('ı'), inkW = (im0.actualBoundingBoxRight != null) ? im0.actualBoundingBoxRight + im0.actualBoundingBoxLeft : d.fs * 0.136;
-      const R = Math.max(d.fs * 0.06, inkW * 0.56); this.dotR = R; const xh = this.mc.measureText('x').actualBoundingBoxAscent || d.fs * 0.53, ls = parseFloat(d.ls) || 0;
+      const R = Math.max(d.fs * 0.06, inkW * 0.56) * (this.mobile ? 0.75 : 1); this.dotR = R; /* phones: a size smaller, the full one looked too big there */ const xh = this.mc.measureText('x').actualBoundingBoxAscent || d.fs * 0.53, ls = parseFloat(d.ls) || 0;
       const tn = sp.firstChild, ix = tn && tn.nodeType === 3 ? tn.textContent.indexOf('ı') : -1;
       if (ix >= 0) { const rg = document.createRange(); rg.setStart(tn, ix); rg.setEnd(tn, ix + 1); const cr = rg.getBoundingClientRect(); const im = this.mc.measureText('ı'); this.contactX = (im.actualBoundingBoxRight != null) ? cr.left + (im.actualBoundingBoxRight - im.actualBoundingBoxLeft) / 2 : cr.left + (cr.width - ls) / 2; }
       else this.contactX = r.left + sp.offsetWidth * 0.8;
