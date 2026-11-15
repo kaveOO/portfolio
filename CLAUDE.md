@@ -5,6 +5,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 Alban Billiette's portfolio at kaveo.dev: a static Astro 7.4.1 site (Node 22, pinned in `.node-version`).
 Cloudflare Pages builds and deploys every push to `main`, so a push is a release.
 
+The GitHub repo (kaveOO/portfolio) is public, history included. Anything committed stays readable in old commits
+even after it is replaced, so check screenshots and text against the writing rules below **before** committing:
+taking something out later means rewriting history and force-pushing.
+Code is MIT (`LICENSE`); the content is all rights reserved (`CONTENT-LICENSE.md` lists the paths). Content
+added in a new place needs adding to that list.
+
 ## Commands
 
 ```sh
