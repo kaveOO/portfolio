@@ -1,7 +1,6 @@
 ---
 // Project case study, from the "Project" design. Content comes from src/content/projects/<slug>.md.
 import { render } from 'astro:content';
-import { existsSync } from 'node:fs';
 import Base from '../../layouts/Base.astro';
 import SiteHeader from '../../components/SiteHeader.astro';
 import { url } from '../../lib/paths';
@@ -33,7 +32,10 @@ const capsStyle = d.caps ? 'text-transform:uppercase;' : '';
 // Number projects the way the home page does: by `order`, out of the highest order.
 const total = Math.max(...projects.map((p) => p.data.order));
 // Phones get the 1100px cover when one sits next to the full-size file (images/x.webp -> images/x-1100.webp).
-const small = (f?: string) => { if (!f) return undefined; const s = f.replace(/(\.\w+)$/, '-1100$1'); return existsSync(`public/${s}`) ? s : undefined; };
+// The list comes from Vite at build time (only the paths, nothing is imported), not from the disk at render
+// time: a relative existsSync() found nothing on the Cloudflare Pages build, so phones got the 1920px cover.
+const phoneCovers = new Set(Object.keys(import.meta.glob('/public/images/*-1100.*')).map((p) => p.replace(/^\/public\//, '')));
+const small = (f?: string) => { if (!f) return undefined; const s = f.replace(/(\.\w+)$/, '-1100$1'); return phoneCovers.has(s) ? s : undefined; };
 const srcset = (f?: string) => { const s = small(f); return f && s ? `${url('/' + s)} 1100w, ${url('/' + f)} 1920w` : undefined; };
 const coverSizes = '(max-width:699px) 94vw, 90vw';
 ---
