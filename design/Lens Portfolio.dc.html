@@ -38,6 +38,12 @@ header a,header button{pointer-events:auto;}
 [data-sec="writing"]{padding-top:6vh !important;padding-bottom:5vh !important;}
 [data-sec="contact"]{padding-top:6vh !important;}
 }
+/* Upright phones: note titles a size smaller and using the row's full width (the lens sits in the gap on the right on bigger screens). */
+@media (max-width:699px){
+[data-essay] [data-ewrap]{max-width:100% !important;}
+[data-essay] [data-ewrap] > span{font-size:clamp(24px,7.4vw,30px) !important;}
+[data-essay] > span{line-height:calc(clamp(24px,7.4vw,30px) * 1.06) !important;}
+}
 /* Phones held sideways: a slimmer header, and the hero and the Work cards moved up so they fit the short screen. */
 @media (max-height:500px) and (pointer:coarse){
 header{padding-top:14px !important;padding-bottom:22px !important;}
@@ -187,19 +193,19 @@ html:has([data-loader].ld-on:not(.out)){overflow:hidden;}
 </div>
 <div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
 <div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">Kernel</div>
-<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">C · C++ · x86-64 Assembly · Windows drivers · QEMU</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">C · C++ · x86-64 Assembly · Windows drivers · QEMU</div>
 </div>
 <div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
 <div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">Reversing</div>
-<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">IDA · x64dbg · Cheat Engine</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">IDA · x64dbg · Cheat Engine</div>
 </div>
 <div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
 <div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">Game security</div>
-<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">Anti-cheat research · BattlEye · EAC</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">Anti-cheat research · BattlEye · EAC</div>
 </div>
 <div data-word="" style="position:absolute;left:0;top:0;width:100%;text-align:center">
 <div data-lens="" style="font-size:min(11.5vw,24vh);font-weight:600;letter-spacing:-0.05em;line-height:1">Full stack</div>
-<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">TypeScript · React · Fastify · FastAPI · PostgreSQL</div>
+<div data-lens="" style="margin-top:2.4vh;font-size:clamp(16px,1.4vw,20px);color:var(--fg,#eeebe4)">TypeScript · React · Fastify · FastAPI · PostgreSQL</div>
 </div>
 </div>
 </section>

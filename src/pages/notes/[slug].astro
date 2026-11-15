@@ -31,7 +31,7 @@ const related = relatedNotes(note, notes);
 <div style="padding:9vh 0 6vh;max-width:980px">
 <a href={url('/notes/')} class="tap" style="display:inline-block;font-size:14px;color:var(--mute,#b3afa6);margin-bottom:5vh">← All notes</a>
 <div style="display:flex;flex-wrap:wrap;gap:6px 10px;font-size:15px;color:var(--mute,#b3afa6);margin-bottom:3vh">
-<span>{fullDate(note.data.date)}</span><span aria-hidden="true">·</span><span>{note.data.tag}</span><span aria-hidden="true">·</span><span>{readingMinutes(note)} min read</span>
+<span>{fullDate(note.data.date)}</span><span style="white-space:nowrap"><span aria-hidden="true">·</span>&nbsp; {note.data.tag}</span><span style="white-space:nowrap"><span aria-hidden="true">·</span>&nbsp; {readingMinutes(note)} min read</span>
 </div>
 <h1 style="margin:0;font-size:clamp(38px,5.6vw,92px);font-weight:600;line-height:1;letter-spacing:-0.04em;text-wrap:balance">{note.data.title}</h1>
 {note.data.description && <p style="margin:3.5vh 0 0;max-width:640px;font-size:clamp(19px,1.5vw,22px);line-height:1.5;color:#d6d2ca;text-wrap:pretty">{note.data.description}</p>}

@@ -25,6 +25,12 @@ header a,header button{pointer-events:auto;}
 [data-sec="writing"]{padding-top:6vh !important;padding-bottom:5vh !important;}
 [data-sec="contact"]{padding-top:6vh !important;}
 }
+/* Upright phones: note titles a size smaller and using the row's full width (the lens sits in the gap on the right on bigger screens). */
+@media (max-width:699px){
+[data-essay] [data-ewrap]{max-width:100% !important;}
+[data-essay] [data-ewrap] > span{font-size:clamp(24px,7.4vw,30px) !important;}
+[data-essay] > span{line-height:calc(clamp(24px,7.4vw,30px) * 1.06) !important;}
+}
 /* Phones held sideways: a slimmer header, and the hero and the Work cards moved up so they fit the short screen. */
 @media (max-height:500px) and (pointer:coarse){
 header{padding-top:14px !important;padding-bottom:22px !important;}

@@ -31,10 +31,11 @@ a:focus-visible{outline:2px solid var(--accent,#6e95ff);outline-offset:4px;borde
 .prose :not(pre) > code{font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:0.86em;padding:0.1em 0.35em;border-radius:4px;background:var(--code,rgba(238,235,228,0.05));color:var(--fg,#eeebe4);}
 
 /* Code blocks: Shiki output, framed by note.js. */
-.prose pre{margin:0 0 1.4em;padding:18px 22px;overflow-x:auto;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:14px;line-height:1.7;color:var(--fg,#eeebe4);background:var(--code,rgba(238,235,228,0.05)) !important;border:1px solid var(--line,rgba(238,235,228,0.14));}
+.prose pre{tab-size:4;margin:0 0 1.4em;padding:18px 22px;overflow-x:auto;font-family:'IBM Plex Mono',ui-monospace,monospace;font-size:14px;line-height:1.7;color:var(--fg,#eeebe4);background:var(--code,rgba(238,235,228,0.05)) !important;border:1px solid var(--line,rgba(238,235,228,0.14));}
 .prose figure.code{margin:0 0 1.4em;border:1px solid var(--line,rgba(238,235,228,0.14));background:var(--code,rgba(238,235,228,0.05));}
 .prose figure.code pre{margin:0;border:0;background:transparent !important;}
 .prose .code-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 10px 8px 22px;border-bottom:1px solid var(--line,rgba(238,235,228,0.14));font-size:13px;color:var(--mute,#b3afa6);}
 .prose .code-lang{font-family:'IBM Plex Mono',ui-monospace,monospace;}
 .prose .copy{font:inherit;font-size:13px;color:var(--mute,#b3afa6);background:none;border:0;padding:8px 12px;min-height:36px;cursor:pointer;border-radius:4px;}
+@media (pointer:coarse){.prose .copy{min-height:44px;}}
 .prose .copy:hover{background:rgba(238,235,228,0.06);}

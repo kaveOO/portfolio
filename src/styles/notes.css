@@ -5,3 +5,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent,#6e95ff);out
 ::selection{background:var(--accent,#6e95ff);color:#fff;}
 [hidden]{display:none !important;}
 .draft{display:inline-block;vertical-align:middle;margin-left:0.6em;padding:3px 9px;border:1px solid var(--line,rgba(238,235,228,0.14));border-radius:999px;font-size:12px;font-weight:400;letter-spacing:0;color:var(--mute,#b3afa6)}
+/* Narrow phones: the date goes above the title, so the title gets the full width instead of a thin column. */
+@media (max-width:480px){
+a.row{grid-template-columns:minmax(0,1fr) !important;row-gap:8px;}
+a.row > span:first-child{line-height:1.4 !important;}
+}

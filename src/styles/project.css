@@ -9,11 +9,16 @@
 .case > h2:first-child + *{margin-top:0;}
 .case > figure,.case > p:has(> img){grid-column:1 / -1;}
 .case figure.code{min-width:0;}
-@media (max-width:760px){
+/* One column on phones, upright or sideways: beside the text, the heading column gets too narrow. */
+@media (max-width:760px),(max-height:500px) and (pointer:coarse){
   .case{grid-template-columns:minmax(0,1fr);}
   .case > *,.case > h2{grid-column:1;}
   .case > h2 + *{margin-top:0;}
   .case > h2{margin-bottom:0.6em;}
+}
+/* Sideways phones are wide: keep the text to a readable line length; images still use the full width. */
+@media (max-height:500px) and (pointer:coarse){
+  .case > :not(figure):not(p:has(> img)){max-width:680px;}
 }
 
 /* Demo and Result sections reuse the same heading style. */

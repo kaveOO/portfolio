@@ -6,6 +6,8 @@ export default defineConfig({
   // internal links go through url() in src/lib/paths.ts and follow it.
   // The landing page relies on the spaces between inline word spans; keep HTML as written.
   compressHTML: false,
+  // Note images get a srcset, so a phone downloads a size near its screen instead of the 2560px original.
+  image: { layout: 'constrained' },
   markdown: {
     shikiConfig: { theme: codeTheme },
   },
